@@ -14,14 +14,15 @@
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: 2.25rem;
   margin-bottom: 0.75rem;
+  color: #1e293b;
 }
 
 .subtitle {
-  color: #64748b;
-  font-size: 1rem;
-  line-height: 1.7;
+  color: #475569;
+  font-size: 1.05rem;
+  line-height: 1.6;
 }
 
 /* ── Drop zone ───────────────────────── */
@@ -35,38 +36,39 @@
   gap: 1rem;
   cursor: default;
   transition: border-color 0.25s ease, background 0.25s ease;
-  border: 2px dashed var(--glass-border);
+  border: 2px dashed #cbd5e1;
+  background: #ffffff;
 }
 
 .dropZone.dragging {
   border-color: var(--accent-color);
-  background: rgba(59, 130, 246, 0.05);
+  background: #f1f5f9;
 }
 
 .uploadIcon {
-  font-size: 3rem;
+  font-size: 2.5rem;
   line-height: 1;
 }
 
 .dropText {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #e2e8f0;
+  color: #1e293b;
 }
 
 .orText {
   font-size: 0.875rem;
-  color: #475569;
+  color: #64748b;
 }
 
 .fileName {
   font-size: 0.95rem;
-  color: #93c5fd;
+  color: var(--accent-color);
   font-weight: 500;
-  background: rgba(59,130,246,0.1);
+  background: #f1f5f9;
   padding: 0.4rem 1rem;
   border-radius: 6px;
-  border: 1px solid rgba(59,130,246,0.2);
+  border: 1px solid #cbd5e1;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -79,18 +81,52 @@
 
 .error {
   width: 100%;
-  color: #fca5a5;
-  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  background: #fef2f2;
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid #fca5a5;
   font-size: 0.9rem;
+}
+
+/* ── Form Controls ───────────────────────── */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 560px;
+  margin-bottom: 1rem;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.languageSelect {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #0f172a;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.languageSelect:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(15, 76, 129, 0.1);
 }
 
 /* ── Hint ────────────────────────────── */
 .hint {
   text-align: center;
-  color: #475569;
+  color: #64748b;
   font-size: 0.8rem;
   margin-top: 0.75rem;
 }
@@ -127,4 +163,6 @@
   padding: 0.6rem 1rem;
   border-radius: 9999px;
   font-size: 0.8rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }

@@ -49,31 +49,31 @@ def build_fallback_chain() -> list:
         suffix = f" {idx+1}" if idx > 0 else ""
         chain += [
             {
-                "name":   f"Gemini 2.0 Flash{suffix}",
+                "name":   f"Gemini 3.5 Flash{suffix}",
                 "type":   "gemini",
-                "url":    f"{GEMINI_BASE}/gemini-2.0-flash:generateContent?key={key}",
+                "url":    f"{GEMINI_BASE}/gemini-3.5-flash:generateContent?key={key}",
             },
             {
-                "name":   f"Gemini 1.5 Flash{suffix}",
+                "name":   f"Gemini 2.5 Pro{suffix}",
                 "type":   "gemini",
-                "url":    f"{GEMINI_BASE}/gemini-1.5-flash:generateContent?key={key}",
+                "url":    f"{GEMINI_BASE}/gemini-2.5-pro:generateContent?key={key}",
             },
             {
-                "name":   f"Gemini 1.5 Pro{suffix}",
+                "name":   f"Gemini 2.5 Flash{suffix}",
                 "type":   "gemini",
-                "url":    f"{GEMINI_BASE}/gemini-1.5-pro:generateContent?key={key}",
+                "url":    f"{GEMINI_BASE}/gemini-2.5-flash:generateContent?key={key}",
             },
         ]
 
-    # 2️⃣  Groq (Llama 3) — free, very fast, OpenAI-compatible
+    # 2️⃣  Groq (OpenAI OSS)
     groq_keys = get_multiple_keys("GROQ_API_KEY")
     for idx, key in enumerate(groq_keys):
         suffix = f" {idx+1}" if idx > 0 else ""
         chain += [
             {
-                "name":  f"Groq Llama-3.3-70b{suffix}",
+                "name":  f"Groq GPT-OSS-120b{suffix}",
                 "type":  "openai_compat",
-                "model": "llama-3.3-70b-versatile",
+                "model": "openai/gpt-oss-120b",
                 "base":  "https://api.groq.com/openai/v1",
                 "key":   key,
             },
@@ -197,15 +197,15 @@ def call_llm_with_fallback(prompt: str) -> dict:
 # ─────────────────────────────────────────────
 #  MSME Analysis Prompt
 # ─────────────────────────────────────────────
-def build_prompt(contract_text: str) -> str:
+def build_prompt(contract_text: str, language: str = "English") -> str:
     return f"""
 You are an expert Indian corporate lawyer specializing in the MSME Development Act, 2006.
 
 Carefully analyze the following vendor contract. For each key clause:
-1. Identify the clause title and extract its text verbatim.
-2. Evaluate the risk level for the MSME vendor: Low, Medium, or High.
-3. Provide a plain-language explanation in simple terms, referencing specific sections of the MSME Development Act, 2006, the Indian Contract Act, 1872, or other relevant law wherever applicable.
-4. If the clause is risky (Medium or High), propose a specific, fair redline suggestion.
+1. Identify the clause title and extract its text verbatim (in English).
+2. Evaluate the risk level for the MSME vendor: Low, Medium, or High (in English).
+3. Provide a plain-language explanation in simple terms, referencing specific sections of the MSME Development Act, 2006, the Indian Contract Act, 1872, or other relevant law wherever applicable. Write this explanation in {language}.
+4. If the clause is risky (Medium or High), propose a specific, fair redline suggestion. Write this redline suggestion in {language}.
 
 Also compute an overall risk_score (0-100, where 100 is extremely risky for the MSME).
 
@@ -213,15 +213,15 @@ Respond ONLY with a single valid JSON object. Do not include any markdown, code 
 
 Format:
 {{
-  "summary": "2-3 sentence executive summary of the contract and its overall risk to the MSME vendor.",
+  "summary": "2-3 sentence executive summary of the contract and its overall risk to the MSME vendor, written in {language}.",
   "risk_score": <integer 0-100>,
   "clauses": [
     {{
       "title": "Payment Terms",
       "content": "Exact text of this clause from the contract.",
       "risk_level": "High",
-      "explanation": "Under Section 15 of the MSME Development Act, 2006, buyers must pay within 45 days. This clause mandates 90-day payment, which directly violates that provision and exposes the buyer to compound interest at 3x the RBI lending rate.",
-      "redline_suggestion": "Payment shall be made within 45 days of invoice date, as mandated by Section 15 of the Micro, Small and Medium Enterprises Development Act, 2006."
+      "explanation": "Explanation written in {language} about why it is risky...",
+      "redline_suggestion": "Suggested redline rewritten in {language}..."
     }}
   ]
 }}
@@ -250,6 +250,7 @@ def analyze_contract():
         return jsonify({"detail": "No file part in request. Send a multipart/form-data POST with key 'file'."}), 400
 
     file = request.files["file"]
+    language = request.form.get("language", "English")
 
     if not file.filename:
         return jsonify({"detail": "No file selected."}), 400
@@ -300,7 +301,7 @@ def analyze_contract():
 
     # ── Call AI with fallback chain ────────────
     try:
-        prompt = build_prompt(contract_text)
+        prompt = build_prompt(contract_text, language)
         result = call_llm_with_fallback(prompt)
         return jsonify(result)
     except Exception as e:

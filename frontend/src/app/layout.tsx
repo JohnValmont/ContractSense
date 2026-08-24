@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+const merriweather = Merriweather({ weight: ["300", "400", "700"], subsets: ["latin"], variable: "--font-serif" });
 
 export const metadata: Metadata = {
-  title: "ContractSense | AI MSME Contract Analyzer",
-  description: "AI-powered clause-risk analyzer for Indian MSME vendor contracts. Detects unfair terms, references the MSME Development Act 2006, and provides redline suggestions.",
-  keywords: ["MSME", "contract analysis", "AI", "vendor contract", "India", "legal tech"],
+  title: "ContractSense | Legal Risk Analysis Platform",
+  description: "Automated clause-risk analyzer for Indian MSME vendor contracts. Detects unfair terms, references the MSME Development Act 2006, and provides redline suggestions.",
+  keywords: ["MSME", "contract analysis", "vendor contract", "India", "legal tech", "compliance"],
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${outfit.variable}`}>
+      <body className={`${inter.variable} ${merriweather.variable}`}>
         <Navbar />
         {children}
       </body>

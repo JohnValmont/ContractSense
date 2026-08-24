@@ -1,196 +1,245 @@
 .container {
   min-height: 100vh;
-  padding: 3rem 2rem 6rem;
-  max-width: 1100px;
-  margin: 0 auto;
+  padding: 4rem 2rem 6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f8fafc;
 }
 
-/* ── Header ──────────────────────────── */
+.reportWrapper {
+  width: 100%;
+  max-width: 800px;
+  background: #ffffff;
+  padding: 3rem 4rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+/* ── Page header ── */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  border-bottom: 2px solid #cbd5e1;
+  padding-bottom: 1.5rem;
   margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
 }
 
 .title {
-  font-size: 2.25rem;
+  font-family: var(--font-serif), serif;
+  font-size: 2rem;
+  color: #0f172a;
 }
 
-/* ── Overview strip ──────────────────── */
+/* ── Risk overview strip ── */
 .overviewStrip {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.75rem 2rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
 }
 
-/* Risk meter */
 .meterWrap {
   flex: 1;
-  min-width: 240px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  max-width: 300px;
 }
 
 .meterLabel {
-  font-weight: 600;
   font-size: 0.9rem;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #334155;
 }
 
 .meterTrack {
-  height: 10px;
-  border-radius: 9999px;
-  background: rgba(255,255,255,0.06);
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
   overflow: hidden;
+  margin-bottom: 0.5rem;
 }
 
 .meterFill {
   height: 100%;
-  border-radius: 9999px;
-  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: 4px;
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .meterScore {
-  font-family: var(--font-outfit), sans-serif;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  line-height: 1;
+  font-family: var(--font-serif), serif;
 }
 
-/* Clause counts */
 .clauseCounts {
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .countBadge {
-  padding: 0.4rem 0.9rem;
+  padding: 0.4rem 1rem;
   border-radius: 9999px;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
-/* ── Summary ─────────────────────────── */
+/* ── Summary ── */
 .summary {
-  padding: 1.75rem 2rem;
-  margin-bottom: 2rem;
-  line-height: 1.8;
-  color: #cbd5e1;
+  padding: 1.5rem 2rem;
+  margin-bottom: 3rem;
+  background: #f1f5f9;
+  border-left: 4px solid var(--accent-color);
+  color: #334155;
+  font-size: 1.05rem;
+  line-height: 1.7;
 }
 
-/* ── Section labels ──────────────────── */
 .sectionLabel {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: #64748b;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
+  color: #64748b;
   margin-bottom: 0.5rem;
 }
 
-/* ── Clauses ─────────────────────────── */
+/* ── Clauses Grid ── */
 .clausesGrid {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  margin-bottom: 3rem;
+  gap: 2rem;
 }
 
 .clauseCard {
   padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.clauseCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
 }
 
 .clauseHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--glass-border);
-  flex-wrap: wrap;
 }
 
 .clauseTitle {
-  font-size: 1.2rem;
+  font-family: var(--font-serif), serif;
+  font-size: 1.25rem;
+  color: #1e293b;
 }
 
 .badge {
-  padding: 0.3rem 0.8rem;
-  border-radius: 9999px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  white-space: nowrap;
+  padding: 0.35rem 0.8rem;
+  border-radius: 9999px;
 }
 
-.badgeHigh   { background: rgba(239,68,68,0.15);  color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
-.badgeMedium { background: rgba(234,179,8,0.15);  color: #fde047; border: 1px solid rgba(234,179,8,0.3); }
-.badgeLow    { background: rgba(34,197,94,0.15);  color: #86efac; border: 1px solid rgba(34,197,94,0.3); }
+.badgeHigh {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.badgeMedium {
+  background: #fefce8;
+  color: #ca8a04;
+  border: 1px solid #fef08a;
+}
+
+.badgeLow {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
 
 .fieldLabel {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
   margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .originalContent {
-  background: rgba(0,0,0,0.25);
+  background: #f8fafc;
   padding: 1rem 1.25rem;
-  border-radius: 8px;
-  border-left: 3px solid #334155;
+  border-radius: 6px;
+  color: #475569;
   font-size: 0.95rem;
-  color: #94a3b8;
-  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  border-left: 3px solid #cbd5e1;
+  font-family: var(--font-serif), serif;
+  font-style: italic;
 }
 
 .explanation {
-  background: rgba(59,130,246,0.08);
+  background: #eff6ff;
   padding: 1rem 1.25rem;
-  border-radius: 8px;
-  border-left: 3px solid #3b82f6;
+  border-radius: 6px;
+  color: #1e3a8a;
   font-size: 0.95rem;
-  color: #bfdbfe;
-  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  border: 1px solid #bfdbfe;
 }
 
 .redline {
-  background: rgba(34,197,94,0.08);
+  background: #f0fdf4;
   padding: 1rem 1.25rem;
-  border-radius: 8px;
-  border-left: 3px solid #22c55e;
+  border-radius: 6px;
+  color: #166534;
   font-size: 0.95rem;
-  color: #bbf7d0;
-  line-height: 1.7;
+  border: 1px solid #bbf7d0;
+  font-weight: 500;
 }
 
-/* ── Bottom CTA ──────────────────────── */
+/* ── Bottom CTA ── */
 .bottomCta {
+  margin-top: 3rem;
   display: flex;
   gap: 1rem;
   justify-content: center;
-  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── Print Media ── */
+@media print {
+  body {
+    background-color: #ffffff;
+  }
+  .container {
+    padding: 0;
+    background-color: #ffffff;
+  }
+  .reportWrapper {
+    max-width: 100%;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  .bottomCta,
+  .header button,
+  nav {
+    display: none !important;
+  }
+  .clauseCard {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #cbd5e1;
+  }
 }

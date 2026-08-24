@@ -6,9 +6,10 @@ import styles from "./page.module.css";
 import Link from "next/link";
 
 export default function Dashboard() {
-  const [file,    setFile]    = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [language, setLanguage] = useState("English");
   const [loading, setLoading] = useState(false);
-  const [error,   setError]   = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const router = useRouter();
 
@@ -36,12 +37,13 @@ export default function Dashboard() {
   const handleDragLeave = () => setDragging(false);
 
   const handleUpload = async () => {
-    if (!file) { setError("Please select a PDF file first."); return; }
+    if (!file) { setError("Please select a PDF document first."); return; }
     setLoading(true);
     setError(null);
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("language", language);
 
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
@@ -68,11 +70,29 @@ export default function Dashboard() {
   return (
     <div className={styles.container}>
       <header className={`${styles.header} animate-fade-in`}>
-        <h1 className={styles.title}>Upload Your Contract</h1>
+        <h1 className={styles.title}>Contract Analysis Portal</h1>
         <p className={styles.subtitle}>
-          We'll extract every clause, score it against the MSME Development Act 2006, and give you redline suggestions — in under 30 seconds.
+          Upload your vendor agreement to extract key clauses, score compliance against the MSME Development Act 2006, and generate statutory redlines.
         </p>
       </header>
+
+      {/* Language Selector */}
+      <div className={`glass-panel animate-fade-in delay-100 ${styles.formGroup}`} style={{ padding: '1.5rem 2rem', background: '#fff', border: '1px solid #e2e8f0' }}>
+        <label htmlFor="language-select" className={styles.label}>Select Output Language</label>
+        <select 
+          id="language-select" 
+          className={styles.languageSelect}
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+        >
+          <option value="English">English</option>
+          <option value="Hindi">Hindi</option>
+          <option value="Bengali">Bengali</option>
+          <option value="Tamil">Tamil</option>
+          <option value="Telugu">Telugu</option>
+          <option value="Marathi">Marathi</option>
+        </select>
+      </div>
 
       {/* Drop zone */}
       <div
@@ -89,7 +109,7 @@ export default function Dashboard() {
           <div className={styles.fileName}>{file.name}</div>
         ) : (
           <>
-            <div className={styles.dropText}>Drag & drop your PDF here</div>
+            <div className={styles.dropText}>Drag & drop your PDF contract here</div>
             <div className={styles.orText}>or</div>
           </>
         )}
@@ -102,7 +122,7 @@ export default function Dashboard() {
           onChange={handleFileChange}
         />
         <label htmlFor="contract-upload" className="btn-secondary" style={{ cursor: "pointer" }}>
-          {file ? "Change File" : "Browse Files"}
+          {file ? "Change Document" : "Browse Files"}
         </label>
 
         {error && <div className={styles.error}>{error}</div>}
@@ -117,39 +137,39 @@ export default function Dashboard() {
           style={{
             width: "100%",
             padding: "1rem",
-            fontSize: "1rem",
-            opacity: (!file || loading) ? 0.55 : 1,
+            fontSize: "1.05rem",
+            opacity: (!file || loading) ? 0.65 : 1,
             cursor: (!file || loading) ? "not-allowed" : "pointer",
           }}
         >
           {loading ? (
             <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem" }}>
-              <span className={styles.spinner} /> Analyzing with AI…
+              <span className={styles.spinner} /> Processing Document...
             </span>
           ) : (
-            "⚡ Analyze Contract"
+            "Analyze Document"
           )}
         </button>
         <p className={styles.hint}>
-          🔒 Your file is processed in-memory and never stored.
+          🔒 Processed securely in-memory. Zero data retention policy.
         </p>
       </div>
 
       {/* Info cards */}
       <div className={`${styles.infoCards} animate-fade-in delay-300`}>
         {[
-          { icon: "🔍", text: "Clause extraction via pdfplumber OCR" },
-          { icon: "⚖️", text: "Risk scored against MSME Act 2006" },
-          { icon: "🤖", text: "Powered by Gemini 2.0 with 4-model fallback" },
+          { icon: "🔍", text: "Automated Clause Extraction" },
+          { icon: "⚖️", text: "MSME Act 2006 Compliance" },
+          { icon: "🛡️", text: "Multi-Model Fallback Architecture" },
         ].map((c) => (
           <div key={c.text} className={`glass-panel ${styles.infoCard}`}>
             <span>{c.icon}</span>
-            <span style={{ color: "#94a3b8", fontSize: "0.875rem" }}>{c.text}</span>
+            <span style={{ color: "#475569", fontSize: "0.875rem" }}>{c.text}</span>
           </div>
         ))}
       </div>
 
-      <Link href="/" style={{ color: "#3b82f6", fontSize: "0.9rem", marginTop: "1rem" }}>
+      <Link href="/" style={{ color: "var(--accent-color)", fontSize: "0.95rem", marginTop: "1rem", fontWeight: 500 }}>
         ← Back to Home
       </Link>
     </div>

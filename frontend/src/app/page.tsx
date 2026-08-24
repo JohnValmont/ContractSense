@@ -5,40 +5,40 @@ const features = [
   {
     icon: "🔍",
     title: "Smart Clause Extraction",
-    desc: "Upload any PDF contract. Our AI automatically extracts and categorises every key commercial and legal clause — payment terms, IP, liability, termination, and more.",
+    desc: "Upload any PDF contract. Our system automatically extracts and categorises every key commercial and legal clause — payment terms, IP, liability, termination, and more.",
   },
   {
     icon: "⚖️",
-    title: "MSME Act Risk Scoring",
-    desc: "Each clause is scored against the MSME Development Act, 2006, the Indian Contract Act, 1872, and industry benchmarks. Get a single risk score from 0–100.",
+    title: "MSME Act Compliance Scoring",
+    desc: "Each clause is evaluated against the MSME Development Act, 2006, the Indian Contract Act, 1872, and industry benchmarks to generate a standardized risk score.",
   },
   {
     icon: "✍️",
-    title: "AI Redline Suggestions",
-    desc: "Don't just identify risk — resolve it. Get plain-language redline rewrites with specific statutory references, ready to copy-paste into negotiations.",
+    title: "Automated Redlining",
+    desc: "Don't just identify risk — resolve it. Get plain-language redline rewrites with specific statutory references, ready to be incorporated into negotiations.",
   },
   {
-    icon: "🛡️",
-    title: "Multi-AI Fallback Chain",
-    desc: "Powered by Gemini 2.0 Flash as primary, with automatic fallback to Gemini 1.5 Flash → Gemini 1.5 Pro → GPT-4o. Zero downtime during API outages.",
+    icon: "🌐",
+    title: "Multi-Language Support",
+    desc: "Generate your compliance reports and redline suggestions in English or key regional Indian languages for better local stakeholder alignment.",
   },
   {
     icon: "🔒",
-    title: "Zero Data Retention",
-    desc: "Contracts are processed in-memory and never stored on our servers. Your sensitive commercial documents remain strictly confidential.",
+    title: "Strict Confidentiality",
+    desc: "Contracts are processed securely in-memory and are never stored on our servers. Your sensitive commercial documents remain strictly confidential.",
   },
   {
     icon: "⚡",
-    title: "Instant Analysis",
-    desc: "Results in under 30 seconds for most contracts. Export the full risk report as a structured JSON or view it in our interactive UI.",
+    title: "Instant Legal Analysis",
+    desc: "Comprehensive results in under 30 seconds for most contracts. Export the full risk report as a professional PDF or view it in our interactive UI.",
   },
 ];
 
 const steps = [
   { title: "Upload your contract", desc: "Drag and drop or browse a PDF — vendor agreements, purchase orders, service contracts, NDAs." },
-  { title: "AI extracts every clause", desc: "Our pipeline runs pdfplumber OCR + Gemini NLP to identify and categorise each clause in seconds." },
-  { title: "Risk is scored against MSME law", desc: "Clauses are benchmarked against the MSME Development Act, 2006, payment norms, and fair-trade standards." },
-  { title: "Get your redline report", desc: "Review clause-by-clause risk badges, read plain-language explanations, and copy suggested redlines." },
+  { title: "System extracts clauses", desc: "Our OCR and NLP pipeline identifies and categorises each clause systematically." },
+  { title: "Risk is evaluated against law", desc: "Clauses are benchmarked against the MSME Development Act, 2006, payment norms, and fair-trade standards." },
+  { title: "Download Professional Report", desc: "Review clause-by-clause risk badges, read plain-language explanations, and download a formal PDF memo." },
 ];
 
 export default function Home() {
@@ -48,9 +48,9 @@ export default function Home() {
       {/* ── Nav ──────────────────────────────── */}
       <nav className={styles.nav}>
         <span className={styles.logo}>ContractSense</span>
-        <span className={styles.navBadge}>MSME Hackathon 2026 · SW-59</span>
+        <span className={styles.navBadge}>Enterprise Legal Compliance</span>
         <Link href="/dashboard" className="btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.9rem" }}>
-          Try it Free →
+          Get Started
         </Link>
       </nav>
 
@@ -58,20 +58,20 @@ export default function Home() {
       <section className={`${styles.hero} animate-fade-in`}>
         <div className={styles.badge}>
           <span className={styles.dot}></span>
-          AI-Powered · MSME Development Act 2006 · Zero Retention
+          MSME Development Act 2006 Compliance · Zero Retention
         </div>
         <h1 className={styles.title}>
-          Know Every Risk in<br />Your Vendor Contract
+          Identify Every Risk in<br />Your Vendor Contracts
         </h1>
         <p className={styles.subtitle}>
-          ContractSense uses Gemini 2.0 AI to scan MSME vendor contracts, flag unfair clauses, cite the exact law that protects you, and generate redline suggestions in under 30 seconds.
+          ContractSense scans MSME vendor contracts, flags unfair clauses, cites the exact statutory protections, and generates formal redline suggestions in under 30 seconds.
         </p>
         <div className={styles.ctaRow}>
           <Link href="/dashboard" className="btn-primary">
-            Analyze a Contract →
+            Analyze a Contract
           </Link>
           <a href="#how-it-works" className="btn-secondary">
-            See How It Works
+            Learn More
           </a>
         </div>
       </section>
@@ -84,21 +84,17 @@ export default function Home() {
         </div>
         <div className={styles.stat}>
           <div className={styles.statValue}>&lt; 30s</div>
-          <div className={styles.statLabel}>Average analysis time</div>
+          <div className={styles.statLabel}>Average analysis turnaround</div>
         </div>
         <div className={styles.stat}>
-          <div className={styles.statValue}>3 AI</div>
-          <div className={styles.statLabel}>Models in fallback chain</div>
-        </div>
-        <div className={styles.stat}>
-          <div className={styles.statValue}>0</div>
-          <div className={styles.statLabel}>Documents stored on server</div>
+          <div className={styles.statValue}>100%</div>
+          <div className={styles.statLabel}>Data privacy (No retention)</div>
         </div>
       </div>
 
       {/* ── Features ─────────────────────────── */}
-      <h2 className={styles.sectionTitle}>Everything you need to negotiate fairly</h2>
-      <p className={styles.sectionSub}>Built specifically for Indian MSMEs navigating complex vendor agreements.</p>
+      <h2 className={styles.sectionTitle}>Equip your procurement team</h2>
+      <p className={styles.sectionSub}>Built specifically for Indian MSMEs navigating complex enterprise agreements.</p>
       <div className={`${styles.features} animate-fade-in delay-200`}>
         {features.map((f) => (
           <div key={f.title} className={`glass-panel ${styles.featureCard}`}>
@@ -110,7 +106,7 @@ export default function Home() {
       </div>
 
       {/* ── How it works ─────────────────────── */}
-      <h2 className={styles.sectionTitle} style={{ marginTop: "5rem" }} id="how-it-works">How it works</h2>
+      <h2 className={styles.sectionTitle} style={{ marginTop: "5rem" }} id="how-it-works">Process Overview</h2>
       <div className={`${styles.howItWorks} animate-fade-in delay-300`}>
         {steps.map((s, i) => (
           <div key={i} className={styles.step}>
@@ -125,15 +121,15 @@ export default function Home() {
 
       {/* ── CTA Banner ───────────────────────── */}
       <div className={`glass-panel ${styles.ctaBanner} animate-fade-in delay-300`}>
-        <h2>Ready to protect your business?</h2>
-        <p>Upload your first contract free. No login required for the demo.</p>
+        <h2>Ready to protect your commercial interests?</h2>
+        <p>Ensure regulatory compliance and fair trade terms with automated analysis.</p>
         <Link href="/dashboard" className="btn-primary">
-          Analyze My Contract →
+          Analyze a Document
         </Link>
       </div>
 
       <footer className={styles.footer}>
-        ContractSense · Built for MSME Hackathon SW-59 · Powered by Gemini 2.0 · Data never stored
+        ContractSense · Legal Tech Solutions · Strict Data Confidentiality
       </footer>
     </main>
   );
