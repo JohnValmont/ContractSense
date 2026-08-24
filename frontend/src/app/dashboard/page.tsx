@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import Link from "next/link";
 
-type Mode = "analyze" | "translate";
+type Mode = "analyze" | "translate" | "resources";
 
 export default function Dashboard() {
   const [mode, setMode] = useState<Mode>("analyze");
@@ -80,129 +80,159 @@ export default function Dashboard() {
   };
 
   return (
-    <div className={styles.container}>
-      <header className={`${styles.header} animate-fade-in`}>
-        <h1 className={styles.title}>⚖️ Legal Services Portal</h1>
-        <p className={styles.subtitle}>
-          Securely process your vendor agreements for statutory MSME compliance risk analysis or full-document translation.
-        </p>
-      </header>
-
-      {/* Mode Toggle */}
-      <div className={`${styles.modeToggle} animate-fade-in delay-100`}>
-        <button 
-          className={`${styles.modeBtn} ${mode === "analyze" ? styles.active : ""}`}
-          onClick={() => setMode("analyze")}
-        >
-          🔍 Risk Analysis
-        </button>
-        <button 
-          className={`${styles.modeBtn} ${mode === "translate" ? styles.active : ""}`}
-          onClick={() => setMode("translate")}
-        >
-          🌐 Full Translation
-        </button>
-      </div>
-
-      {/* Language Selector */}
-      <div className={`glass-panel animate-fade-in delay-100 ${styles.formGroup}`} style={{ padding: '1.5rem 2rem', background: '#fff', border: '1px solid #e2e8f0' }}>
-        <label htmlFor="language-select" className={styles.label}>
-          {mode === "analyze" ? "Output Language for Report & Redlines" : "Target Translation Language"}
-        </label>
-        <select 
-          id="language-select" 
-          className={styles.languageSelect}
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-        >
-          <option value="English">English</option>
-          <option value="Urdu">Urdu (اردو)</option>
-          <option value="Hindi">Hindi (हिंदी)</option>
-          <option value="Bengali">Bengali (বাংলা)</option>
-          <option value="Tamil">Tamil (தமிழ்)</option>
-          <option value="Telugu">Telugu (తెలుగు)</option>
-          <option value="Marathi">Marathi (मराठी)</option>
-        </select>
-      </div>
-
-      {/* Drop zone */}
-      <div
-        className={`glass-panel ${styles.dropZone} ${dragging ? styles.dragging : ""} animate-fade-in delay-100`}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-      >
-        <div className={styles.uploadIcon}>
-          {file ? "📄" : "🏛️"}
+    <div className={styles.layout}>
+      {/* ── Sidebar ──────────────────────────── */}
+      <aside className={styles.sidebar}>
+        <div className={styles.logo}>
+          ⚖️ ContractSense
         </div>
+        <nav className={styles.nav}>
+          <button 
+            className={`${styles.navItem} ${mode === "analyze" ? styles.active : ""}`}
+            onClick={() => setMode("analyze")}
+          >
+            <span className={styles.navIcon}>🔍</span> Statutory Risk Analysis
+          </button>
+          <button 
+            className={`${styles.navItem} ${mode === "translate" ? styles.active : ""}`}
+            onClick={() => setMode("translate")}
+          >
+            <span className={styles.navIcon}>🌐</span> Full Document Translation
+          </button>
+          <button 
+            className={`${styles.navItem} ${mode === "resources" ? styles.active : ""}`}
+            onClick={() => setMode("resources")}
+          >
+            <span className={styles.navIcon}>📚</span> Legal Resources Library
+          </button>
+        </nav>
+        
+        <div style={{ marginTop: "auto", paddingTop: "2rem" }}>
+          <Link href="/" style={{ color: "var(--text-muted)", fontSize: "0.9rem", fontWeight: 600 }}>
+            ← Return Home
+          </Link>
+        </div>
+      </aside>
 
-        {file ? (
-          <div className={styles.fileName}>{file.name}</div>
-        ) : (
-          <>
-            <div className={styles.dropText}>Drag & drop your PDF contract here</div>
-            <div className={styles.orText}>or</div>
-          </>
-        )}
-
-        <input
-          type="file"
-          accept="application/pdf"
-          id="contract-upload"
-          className={styles.fileInput}
-          onChange={handleFileChange}
-        />
-        <label htmlFor="contract-upload" className="btn-secondary" style={{ cursor: "pointer" }}>
-          {file ? "Change Document" : "Browse Files"}
-        </label>
-
-        {error && <div className={styles.error}>{error}</div>}
-      </div>
-
-      {/* Analyze button */}
-      <div className="animate-fade-in delay-200" style={{ width: "100%", maxWidth: "560px" }}>
-        <button
-          className="btn-primary"
-          onClick={handleUpload}
-          disabled={!file || loading}
-          style={{
-            width: "100%",
-            padding: "1rem",
-            fontSize: "1.05rem",
-            opacity: (!file || loading) ? 0.65 : 1,
-            cursor: (!file || loading) ? "not-allowed" : "pointer",
-          }}
-        >
-          {loading ? (
-            <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem" }}>
-              <span className={styles.spinner} /> Processing Document...
-            </span>
-          ) : (
-            mode === "analyze" ? "Analyze Document" : "Translate Document"
-          )}
-        </button>
-        <p className={styles.hint}>
-          🔒 Processed securely in-memory. Zero data retention policy.
-        </p>
-      </div>
-
-      {/* Info cards */}
-      <div className={`${styles.infoCards} animate-fade-in delay-300`}>
-        {[
-          { icon: "🏛️", text: "Enterprise-Grade Accuracy" },
-          { icon: "⚖️", text: "Statutory Law Aligned" },
-          { icon: "🛡️", text: "Multi-Model Fallback Architecture" },
-        ].map((c) => (
-          <div key={c.text} className={`glass-panel ${styles.infoCard}`}>
-            <span>{c.icon}</span>
-            <span style={{ color: "#475569", fontSize: "0.875rem", fontWeight: 500 }}>{c.text}</span>
+      {/* ── Main Content ─────────────────────── */}
+      <main className={styles.main}>
+        {mode === "resources" ? (
+          <div className="animate-fade-in" style={{ textAlign: "center", paddingTop: "4rem" }}>
+            <h1 className={styles.title}>Legal Resources Library</h1>
+            <p className={styles.subtitle}>
+              Access a comprehensive glossary of Indian legal terminology, standard contract templates, and guidelines on MSME compliance.
+            </p>
+            <div style={{ marginTop: "3rem", padding: "3rem", border: "1px dashed #cbd5e1", borderRadius: "8px", color: "#64748b" }}>
+              Feature coming soon.
+            </div>
           </div>
-        ))}
-      </div>
+        ) : (
+          <div className={`${styles.contentCard} animate-fade-in`}>
+            <header className={styles.header}>
+              <h1 className={styles.title}>
+                {mode === "analyze" ? "Statutory Risk Analysis" : "Document Translation"}
+              </h1>
+              <p className={styles.subtitle}>
+                {mode === "analyze" 
+                  ? "Upload an agreement to extract critical clauses, evaluate MSME Development Act 2006 compliance, and generate formal redlines."
+                  : "Upload a formal agreement to generate a precise, legally-toned translation in your chosen regional language."}
+              </p>
+            </header>
 
-      <Link href="/" style={{ color: "var(--accent-color)", fontSize: "0.95rem", marginTop: "1rem", fontWeight: 600 }}>
-        ← Return Home
-      </Link>
+            <div className={styles.formGroup}>
+              <label htmlFor="language-select" className={styles.label}>
+                {mode === "analyze" ? "Output Language (Report & Redlines)" : "Target Translation Language"}
+              </label>
+              <select 
+                id="language-select" 
+                className={styles.languageSelect}
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+              >
+                <option value="English">English</option>
+                <option value="Urdu">Urdu (اردو)</option>
+                <option value="Hindi">Hindi (हिंदी)</option>
+                <option value="Bengali">Bengali (বাংলা)</option>
+                <option value="Tamil">Tamil (தமிழ்)</option>
+                <option value="Telugu">Telugu (తెలుగు)</option>
+                <option value="Marathi">Marathi (मराठी)</option>
+              </select>
+            </div>
+
+            <div
+              className={`${styles.dropZone} ${dragging ? styles.dragging : ""}`}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+            >
+              <div className={styles.uploadIcon}>
+                {file ? "📄" : "🏛️"}
+              </div>
+
+              {file ? (
+                <div className={styles.fileName}>{file.name}</div>
+              ) : (
+                <>
+                  <div className={styles.dropText}>Drag & drop your PDF contract here</div>
+                  <div className={styles.orText}>or</div>
+                </>
+              )}
+
+              <input
+                type="file"
+                accept="application/pdf"
+                id="contract-upload"
+                className={styles.fileInput}
+                onChange={handleFileChange}
+              />
+              <label htmlFor="contract-upload" className="btn-secondary" style={{ cursor: "pointer", marginTop: "0.5rem" }}>
+                {file ? "Change Document" : "Browse Files"}
+              </label>
+
+              {error && <div className={styles.error}>{error}</div>}
+            </div>
+
+            <div>
+              <button
+                className="btn-primary"
+                onClick={handleUpload}
+                disabled={!file || loading}
+                style={{
+                  width: "100%",
+                  padding: "1rem",
+                  fontSize: "1.05rem",
+                  opacity: (!file || loading) ? 0.65 : 1,
+                  cursor: (!file || loading) ? "not-allowed" : "pointer",
+                }}
+              >
+                {loading ? (
+                  <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem" }}>
+                    <span className={styles.spinner} /> Processing Formal Document...
+                  </span>
+                ) : (
+                  mode === "analyze" ? "Generate Risk Analysis" : "Generate Translation"
+                )}
+              </button>
+              <p className={styles.hint}>
+                🔒 Documents are processed in-memory. Zero data retention policy.
+              </p>
+            </div>
+
+            <div className={styles.infoCards}>
+              {[
+                { icon: "🏛️", text: "Enterprise-Grade Accuracy" },
+                { icon: "⚖️", text: "Statutory Law Aligned" },
+                { icon: "🛡️", text: "Multi-Model Fallback Architecture" },
+              ].map((c) => (
+                <div key={c.text} className={styles.infoCard}>
+                  <span>{c.icon}</span>
+                  <span style={{ color: "#475569", fontWeight: 600 }}>{c.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

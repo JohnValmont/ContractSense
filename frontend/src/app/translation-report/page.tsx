@@ -39,11 +39,12 @@ export default function TranslationReport() {
     const element = reportRef.current;
     if (!element) return;
     const opt = {
-      margin:       1,
+      margin:       [0.75, 0.75, 0.75, 0.75], // Top, Right, Bottom, Left margins in inches
       filename:     'ContractSense_Formal_Translation.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      html2canvas:  { scale: 2, useCORS: true, windowWidth: 1000 },
+      jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+      pagebreak:    { mode: 'avoid-all' }
     };
     html2pdf().set(opt).from(element).save();
   };

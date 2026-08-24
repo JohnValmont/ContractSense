@@ -45,21 +45,37 @@
 
 /* ── Print Media ── */
 @media print {
+  @page {
+    margin: 1in;
+    size: A4;
+  }
+  
   :global(body) {
     background-color: #ffffff;
+    margin: 0;
+    padding: 0;
   }
   .container {
-    padding: 0;
+    padding: 0 !important;
     background-color: #ffffff;
+    min-height: auto;
   }
   .reportWrapper {
-    max-width: 100%;
+    max-width: 100% !important;
     border: none;
     box-shadow: none;
-    padding: 0;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   .bottomCta,
   .header button {
     display: none !important;
+  }
+  
+  .documentBody {
+    font-size: 12pt;
+    line-height: 1.6;
+    text-align: justify;
+    color: #000000;
   }
 }

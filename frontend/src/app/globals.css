@@ -4,10 +4,11 @@
   --text-muted: #475569;
   
   /* Elite Law Firm Theme */
-  --accent-color: #0B192C; /* Deep Navy */
-  --accent-hover: #1e3a8a;
-  --gold-color: #D4AF37; /* Champagne Gold */
-  --gold-hover: #c5a028;
+  --accent-color: #660000; /* Deep Maroon / Crimson */
+  --accent-hover: #4A0404;
+  --gold-color: #B8860B; /* Classic Gold */
+  --gold-hover: #996B09;
+  --bg-color: #fbfbf9; /* Warm parchment off-white */
   
   --danger-color: #dc2626;
   --warning-color: #d97706;

@@ -56,6 +56,7 @@ export default function Home() {
 
       {/* ── Hero ─────────────────────────────── */}
       <section className={`${styles.hero} animate-fade-in`}>
+        <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>⚖️</div>
         <div className={styles.badge}>
           <span className={styles.dot}></span>
           Strict Data Confidentiality · Zero Retention
@@ -130,7 +131,7 @@ export default function Home() {
       </div>
 
       <footer className={styles.footer}>
-        ContractSense · Elite Legal Tech Solutions · Strict Data Confidentiality
+        ContractSense · Premium Legal Technology · Strict Data Confidentiality
       </footer>
     </main>
   );
