@@ -31,8 +31,8 @@ export default function Dashboard() {
     formData.append("file", file);
 
     try {
-      // In production, use env variables. For now, localhost.
-      const res = await fetch("http://localhost:8000/api/analyze", {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+      const res = await fetch(`${backendUrl}/api/analyze`, {
         method: "POST",
         body: formData,
       });
