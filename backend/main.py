@@ -12,7 +12,56 @@ app = Flask(__name__)
 CORS(app)
 
 API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={API_KEY}"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") # Example fallback
+
+# Define fallback chain (list of dictionaries with endpoint info)
+FALLBACK_CHAIN = [
+    {
+        "name": "Gemini Latest",
+        "url": f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={API_KEY}",
+        "type": "gemini"
+    },
+    {
+        "name": "Gemini Fallback",
+        "url": f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={API_KEY}",
+        "type": "gemini"
+    }
+]
+
+def call_llm_with_fallback(prompt: str) -> dict:
+    last_error = None
+    
+    for api in FALLBACK_CHAIN:
+        if not API_KEY and api["type"] == "gemini":
+            continue
+            
+        try:
+            print(f"Trying API: {api['name']}")
+            if api["type"] == "gemini":
+                response = requests.post(
+                    api["url"],
+                    headers={"Content-Type": "application/json"},
+                    json={"contents": [{"parts": [{"text": prompt}]}]},
+                    timeout=30
+                )
+                response.raise_for_status()
+                data = response.json()
+                response_text = data["candidates"][0]["content"]["parts"][0]["text"]
+                
+                # Parse JSON
+                if response_text.startswith("```json"):
+                    response_text = response_text.replace("```json\n", "").replace("```", "")
+                elif response_text.startswith("```"):
+                    response_text = response_text.strip("```").strip()
+                
+                return json.loads(response_text)
+                
+        except Exception as e:
+            print(f"Failed with {api['name']}: {str(e)}")
+            last_error = e
+            continue
+            
+    raise Exception(f"All APIs in the fallback chain failed. Last error: {str(last_error)}")
 
 @app.route("/", methods=["GET"])
 def read_root():
@@ -81,24 +130,7 @@ def analyze_contract():
     """
 
     try:
-        response = requests.post(
-            GEMINI_URL,
-            headers={"Content-Type": "application/json"},
-            json={
-                "contents": [{"parts": [{"text": prompt}]}]
-            }
-        )
-        response.raise_for_status()
-        data = response.json()
-        
-        # Extract the text from Gemini response
-        response_text = data["candidates"][0]["content"]["parts"][0]["text"]
-        
-        # Parse JSON
-        if response_text.startswith("```json"):
-            response_text = response_text.replace("```json\n", "").replace("```", "")
-        
-        result = json.loads(response_text)
+        result = call_llm_with_fallback(prompt)
         return jsonify(result)
     except Exception as e:
         return jsonify({"detail": f"Error analyzing contract with AI: {str(e)}"}), 500

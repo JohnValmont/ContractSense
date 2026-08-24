@@ -1,0 +1,8 @@
+{
+  "python.defaultInterpreterPath": "D:\\ContractSense\\backend\\venv\\Scripts\\python.exe",
+  "python.analysis.extraPaths": [
+    "D:\\ContractSense\\backend\\venv\\Lib\\site-packages"
+  ],
+  "python.envFile": "D:\\ContractSense\\backend\\.env",
+  "pyrefly.pythonInterpreter": "D:\\ContractSense\\backend\\venv\\Scripts\\python.exe"
+}
