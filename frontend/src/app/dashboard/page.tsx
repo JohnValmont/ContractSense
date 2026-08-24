@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import Link from "next/link";
+import LegalResources from "../components/LegalResources";
 
 type Mode = "analyze" | "translate" | "resources";
 
@@ -117,15 +118,7 @@ export default function Dashboard() {
       {/* ── Main Content ─────────────────────── */}
       <main className={styles.main}>
         {mode === "resources" ? (
-          <div className="animate-fade-in" style={{ textAlign: "center", paddingTop: "4rem" }}>
-            <h1 className={styles.title}>Legal Resources Library</h1>
-            <p className={styles.subtitle}>
-              Access a comprehensive glossary of Indian legal terminology, standard contract templates, and guidelines on MSME compliance.
-            </p>
-            <div style={{ marginTop: "3rem", padding: "3rem", border: "1px dashed #334155", borderRadius: "8px", color: "var(--text-muted)" }}>
-              Feature coming soon.
-            </div>
-          </div>
+          <LegalResources />
         ) : (
           <div className={`${styles.contentCard} animate-fade-in`}>
             <header className={styles.header}>
