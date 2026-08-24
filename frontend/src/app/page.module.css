@@ -22,7 +22,7 @@
   font-family: var(--font-serif), serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--accent-color);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -75,7 +75,7 @@
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   line-height: 1.1;
   margin-bottom: 1.5rem;
-  color: var(--accent-color);
+  color: var(--text-primary);
 }
 
 .subtitle {
