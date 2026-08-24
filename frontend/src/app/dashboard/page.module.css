@@ -65,7 +65,7 @@
 
 /* ── Main Content ── */
 .main {
-  padding: 3rem 4rem;
+  padding: 2rem 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -76,13 +76,13 @@
 
 .header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   width: 100%;
 }
 
 .title {
-  font-size: 2.25rem;
-  margin-bottom: 0.75rem;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
   color: var(--text-primary);
   font-family: var(--font-serif), serif;
 }
@@ -99,18 +99,18 @@
   max-width: 600px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .label {
@@ -139,11 +139,11 @@
 
 .dropZone {
   width: 100%;
-  padding: 3rem 2rem;
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   cursor: default;
   transition: all 0.25s ease;
   border: 2px dashed #D0C9C4;
@@ -157,12 +157,12 @@
 }
 
 .uploadIcon {
-  font-size: 3rem;
+  font-size: 2.25rem;
   line-height: 1;
 }
 
 .dropText {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -219,7 +219,7 @@
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .infoCard {

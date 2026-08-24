@@ -60,6 +60,13 @@ export default function LegalResources() {
               </p>
               <span className={styles.itemRef}>Ref: Section 18, MSMED Act, 2006</span>
             </div>
+            <div className={styles.item}>
+              <h3 className={styles.itemTitle}>Recovery of Amount Due</h3>
+              <p className={styles.itemText}>
+                For any goods supplied or services rendered by the supplier, the buyer shall be liable to pay the amount with interest thereon as provided under Section 16. The buyer cannot contractually waive this liability.
+              </p>
+              <span className={styles.itemRef}>Ref: Section 17, MSMED Act, 2006</span>
+            </div>
           </div>
         )}
 
@@ -89,6 +96,18 @@ export default function LegalResources() {
                 Frees both parties from liability or obligation when an extraordinary event or circumstance beyond their control (e.g., war, strike, pandemic) prevents them from fulfilling their obligations.
               </p>
             </div>
+            <div className={styles.item}>
+              <h3 className={styles.itemTitle}>Liquidated Damages</h3>
+              <p className={styles.itemText}>
+                A predetermined sum agreed upon during the contract formation that a party must pay if they breach specific terms (often used for delays). MSMEs should ensure these are reasonable and capped.
+              </p>
+            </div>
+            <div className={styles.item}>
+              <h3 className={styles.itemTitle}>Governing Law and Jurisdiction</h3>
+              <p className={styles.itemText}>
+                Specifies which state's laws apply to the contract and which courts have authority to hear disputes. MSMEs should negotiate for their local jurisdiction to avoid costly interstate litigation.
+              </p>
+            </div>
           </div>
         )}
 
@@ -109,6 +128,15 @@ export default function LegalResources() {
                 A master services agreement with built-in Section 15 payment terms and liability caps favoring the vendor.
               </p>
               <button className="btn-secondary" style={{ width: "100%", padding: "0.5rem" }} onClick={() => alert("Downloading Secure Vendor Template...")}>
+                Download .DOCX
+              </button>
+            </div>
+            <div className={styles.templateCard}>
+              <h3 className={styles.templateTitle}>IT & Software Services Agreement</h3>
+              <p className={styles.templateDesc}>
+                Tailored for IT MSMEs, protecting intellectual property rights and providing clear acceptance criteria to trigger the 45-day payment clock.
+              </p>
+              <button className="btn-secondary" style={{ width: "100%", padding: "0.5rem" }} onClick={() => alert("Downloading IT Services Template...")}>
                 Download .DOCX
               </button>
             </div>

@@ -54,13 +54,13 @@ export default function Home() {
         <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>⚖️</div>
         <div className={styles.badge}>
           <span className={styles.dot}></span>
-          Strict Data Confidentiality · Zero Retention
+          MSME Development Act, 2006 Compliance
         </div>
         <h1 className={styles.title}>
-          Safeguard Your Commercial Interests<br />With Precision Auditing
+          Statutory Contract Auditing<br />& Document Translation
         </h1>
         <p className={styles.subtitle}>
-          ContractSense provides enterprise-grade contract analysis and translation for Indian MSMEs. Instantly audit vendor agreements against the MSME Development Act, 2006, and generate formal compliance redlines.
+          Identify non-compliant clauses in vendor agreements, reference statutory MSME protections, and generate formal regional translations.
         </p>
         <div className={styles.ctaRow}>
           <Link href="/dashboard" className="btn-primary">
@@ -116,17 +116,17 @@ export default function Home() {
       </div>
 
       {/* ── CTA Banner ───────────────────────── */}
-      <div className={`glass-panel ${styles.ctaBanner} animate-fade-in delay-300`}>
+      <div className={`${styles.ctaBanner} animate-fade-in delay-300`}>
         <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🏛️</div>
-        <h2>Ready to audit your commercial agreements?</h2>
-        <p>Ensure statutory compliance and fair trade terms with precision legal auditing.</p>
-        <Link href="/dashboard" className="btn-primary">
+        <h2>Initiate Contract Analysis</h2>
+        <p style={{ color: "#D0C9C4" }}>Submit commercial agreements for statutory compliance review and translation.</p>
+        <Link href="/dashboard" className="btn-secondary" style={{ marginTop: "1.5rem", background: "#FCFBF8", color: "#35241C" }}>
           Access Portal
         </Link>
       </div>
 
       <footer className={styles.footer}>
-        ContractSense · Premium Legal Technology · Strict Data Confidentiality
+        CONTRACTSENSE · STATUTORY COMPLIANCE · STRICT DATA CONFIDENTIALITY
       </footer>
     </main>
   );
