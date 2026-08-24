@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./page.module.css";
+import Navbar from "./components/Navbar";
 
 const features = [
   {
@@ -44,15 +45,9 @@ const steps = [
 export default function Home() {
   return (
     <main className={styles.main}>
+      <Navbar />
 
-      {/* ── Nav ──────────────────────────────── */}
-      <nav className={styles.nav}>
-        <span className={styles.logo}>⚖️ ContractSense</span>
-        <span className={styles.navBadge}>Premium Legal Compliance</span>
-        <Link href="/dashboard" className="btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.9rem" }}>
-          Access Portal
-        </Link>
-      </nav>
+
 
       {/* ── Hero ─────────────────────────────── */}
       <section className={`${styles.hero} animate-fade-in`}>
@@ -62,10 +57,10 @@ export default function Home() {
           Strict Data Confidentiality · Zero Retention
         </div>
         <h1 className={styles.title}>
-          Protect Your Commercial Interests<br />With Precision Analysis
+          Safeguard Your Commercial Interests<br />With Precision Auditing
         </h1>
         <p className={styles.subtitle}>
-          ContractSense empowers Indian MSMEs by automatically scanning vendor contracts for unfair clauses, citing statutory protections, and providing formal translations and redlines.
+          ContractSense provides enterprise-grade contract analysis and translation for Indian MSMEs. Instantly audit vendor agreements against the MSME Development Act, 2006, and generate formal compliance redlines.
         </p>
         <div className={styles.ctaRow}>
           <Link href="/dashboard" className="btn-primary">
@@ -122,10 +117,10 @@ export default function Home() {
 
       {/* ── CTA Banner ───────────────────────── */}
       <div className={`glass-panel ${styles.ctaBanner} animate-fade-in delay-300`}>
-        <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🔨</div>
-        <h2>Ready to protect your commercial interests?</h2>
-        <p>Ensure regulatory compliance and fair trade terms with automated legal analysis and translation.</p>
-        <Link href="/dashboard" className="btn-primary" style={{ background: "#ffffff", color: "#0B192C", borderColor: "#ffffff" }}>
+        <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🏛️</div>
+        <h2>Ready to audit your commercial agreements?</h2>
+        <p>Ensure statutory compliance and fair trade terms with precision legal auditing.</p>
+        <Link href="/dashboard" className="btn-primary">
           Access Portal
         </Link>
       </div>

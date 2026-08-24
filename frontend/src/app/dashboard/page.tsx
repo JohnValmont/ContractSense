@@ -122,7 +122,7 @@ export default function Dashboard() {
             <p className={styles.subtitle}>
               Access a comprehensive glossary of Indian legal terminology, standard contract templates, and guidelines on MSME compliance.
             </p>
-            <div style={{ marginTop: "3rem", padding: "3rem", border: "1px dashed #cbd5e1", borderRadius: "8px", color: "#64748b" }}>
+            <div style={{ marginTop: "3rem", padding: "3rem", border: "1px dashed #334155", borderRadius: "8px", color: "var(--text-muted)" }}>
               Feature coming soon.
             </div>
           </div>
@@ -226,7 +226,7 @@ export default function Dashboard() {
               ].map((c) => (
                 <div key={c.text} className={styles.infoCard}>
                   <span>{c.icon}</span>
-                  <span style={{ color: "#475569", fontWeight: 600 }}>{c.text}</span>
+                  <span>{c.text}</span>
                 </div>
               ))}
             </div>

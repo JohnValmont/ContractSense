@@ -1,21 +1,21 @@
 :root {
-  --bg-color: #f8fafc;
-  --text-color: #0f172a;
-  --text-muted: #475569;
+  --bg-color: #14161A;
+  --text-color: #F3F2EE;
   
-  /* Elite Law Firm Theme */
-  --accent-color: #660000; /* Deep Maroon / Crimson */
-  --accent-hover: #4A0404;
-  --gold-color: #B8860B; /* Classic Gold */
-  --gold-hover: #996B09;
-  --bg-color: #fbfbf9; /* Warm parchment off-white */
-  --text-primary: #1c1917; /* Dark Charcoal / Ink for text */
+  /* Midnight & Brushed Bronze Theme */
+  --accent-color: #C2A878; /* Brushed Bronze / Gold */
+  --accent-hover: #A68D5D;
+  --gold-color: #C2A878;
+  --gold-hover: #A68D5D;
+  --bg-color: #14161A; /* Midnight Slate */
+  --text-primary: #F3F2EE; /* Pearl White */
+  --text-muted: #94A3B8;
   
-  --danger-color: #dc2626;
-  --warning-color: #d97706;
-  --success-color: #16a34a;
-  --glass-bg: #ffffff;
-  --glass-border: #e2e8f0;
+  --danger-color: #ef4444;
+  --warning-color: #f59e0b;
+  --success-color: #10b981;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(194, 168, 120, 0.15);
   
   --font-inter: 'Inter', sans-serif;
   --font-serif: 'Merriweather', serif;
@@ -42,7 +42,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-serif), serif;
   font-weight: 700;
-  color: var(--accent-color);
+  color: var(--text-primary);
   line-height: 1.3;
 }
 
@@ -53,18 +53,18 @@ a { color: inherit; text-decoration: none; }
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
 }
 
 /* ── Buttons ────────────────────────────── */
 .btn-primary {
   display: inline-block;
   background: var(--accent-color);
-  color: var(--gold-color);
+  color: #14161A;
   padding: 0.75rem 1.75rem;
   border-radius: 4px;
   border: 1px solid var(--gold-color);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.95rem;
   font-family: var(--font-inter), sans-serif;
   cursor: pointer;
@@ -75,9 +75,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 .btn-primary:hover {
-  background: var(--gold-color);
-  color: var(--accent-color);
-  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+  background: var(--gold-hover);
+  border-color: var(--gold-hover);
+  box-shadow: 0 4px 12px rgba(194, 168, 120, 0.2);
 }
 
 .btn-primary:active {
@@ -86,11 +86,11 @@ a { color: inherit; text-decoration: none; }
 
 .btn-secondary {
   display: inline-block;
-  background: #ffffff;
-  color: var(--accent-color);
+  background: transparent;
+  color: var(--text-primary);
   padding: 0.75rem 1.75rem;
   border-radius: 4px;
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--glass-border);
   font-weight: 600;
   font-size: 0.95rem;
   font-family: var(--font-inter), sans-serif;
@@ -101,7 +101,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 .btn-secondary:hover {
-  background: #f1f5f9;
+  background: var(--glass-bg);
+  border-color: var(--accent-color);
 }
 
 /* ── Entrance animations ────────────────── */
@@ -117,6 +118,6 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Scrollbar ──────────────────────────── */
 ::-webkit-scrollbar       { width: 8px; }
-::-webkit-scrollbar-track { background: #f8fafc; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar-track { background: #14161A; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
