@@ -15,10 +15,18 @@ CORS(app, origins="*")
 # ─────────────────────────────────────────────
 #  API Keys
 # ─────────────────────────────────────────────
-GEMINI_API_KEY  = os.getenv("GEMINI_API_KEY", "")
-OPENAI_API_KEY  = os.getenv("OPENAI_API_KEY", "")
-GROK_API_KEY    = os.getenv("GROK_API_KEY", "")    # xAI Grok — console.x.ai
-GROQ_API_KEY    = os.getenv("GROQ_API_KEY", "")    # Groq (Llama) — console.groq.com
+def get_multiple_keys(prefix: str) -> list:
+    keys = []
+    # Check default (no suffix)
+    default = os.getenv(prefix, "")
+    if default:
+        keys.append(default)
+    # Check suffixes _1, _2, _3... up to 10
+    for i in range(1, 11):
+        key = os.getenv(f"{prefix}_{i}", "")
+        if key and key not in keys:
+            keys.append(key)
+    return keys
 
 # ─────────────────────────────────────────────
 #  Fallback Chain  (tried in order until one succeeds)
@@ -32,69 +40,77 @@ GROQ_API_KEY    = os.getenv("GROQ_API_KEY", "")    # Groq (Llama) — console.gr
 # ─────────────────────────────────────────────
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 
-def build_fallback_chain(gemini_key: str, openai_key: str, grok_key: str, groq_key: str) -> list:
+def build_fallback_chain() -> list:
     chain = []
 
     # 1️⃣  Gemini (Google) — free tier, 15 RPM
-    if gemini_key:
+    gemini_keys = get_multiple_keys("GEMINI_API_KEY")
+    for idx, key in enumerate(gemini_keys):
+        suffix = f" {idx+1}" if idx > 0 else ""
         chain += [
             {
-                "name":   "Gemini 2.0 Flash",
+                "name":   f"Gemini 2.0 Flash{suffix}",
                 "type":   "gemini",
-                "url":    f"{GEMINI_BASE}/gemini-2.0-flash:generateContent?key={gemini_key}",
+                "url":    f"{GEMINI_BASE}/gemini-2.0-flash:generateContent?key={key}",
             },
             {
-                "name":   "Gemini 1.5 Flash",
+                "name":   f"Gemini 1.5 Flash{suffix}",
                 "type":   "gemini",
-                "url":    f"{GEMINI_BASE}/gemini-1.5-flash:generateContent?key={gemini_key}",
+                "url":    f"{GEMINI_BASE}/gemini-1.5-flash:generateContent?key={key}",
             },
             {
-                "name":   "Gemini 1.5 Pro",
+                "name":   f"Gemini 1.5 Pro{suffix}",
                 "type":   "gemini",
-                "url":    f"{GEMINI_BASE}/gemini-1.5-pro:generateContent?key={gemini_key}",
+                "url":    f"{GEMINI_BASE}/gemini-1.5-pro:generateContent?key={key}",
             },
         ]
 
     # 2️⃣  Groq (Llama 3) — free, very fast, OpenAI-compatible
-    if groq_key:
+    groq_keys = get_multiple_keys("GROQ_API_KEY")
+    for idx, key in enumerate(groq_keys):
+        suffix = f" {idx+1}" if idx > 0 else ""
         chain += [
             {
-                "name":  "Groq Llama-3.3-70b",
+                "name":  f"Groq Llama-3.3-70b{suffix}",
                 "type":  "openai_compat",
                 "model": "llama-3.3-70b-versatile",
                 "base":  "https://api.groq.com/openai/v1",
-                "key":   groq_key,
+                "key":   key,
             },
         ]
 
     # 3️⃣  Grok (xAI) — free tier, OpenAI-compatible
-    if grok_key:
+    grok_keys = get_multiple_keys("GROK_API_KEY")
+    for idx, key in enumerate(grok_keys):
+        suffix = f" {idx+1}" if idx > 0 else ""
         chain += [
             {
-                "name":  "Grok 3 Mini",
+                "name":  f"Grok 3 Mini{suffix}",
                 "type":  "openai_compat",
                 "model": "grok-3-mini",
                 "base":  "https://api.x.ai/v1",
-                "key":   grok_key,
+                "key":   key,
             },
         ]
 
     # 4️⃣  OpenAI — paid, most reliable
-    if openai_key:
+    openai_keys = get_multiple_keys("OPENAI_API_KEY")
+    for idx, key in enumerate(openai_keys):
+        suffix = f" {idx+1}" if idx > 0 else ""
         chain += [
             {
-                "name":  "OpenAI GPT-4o",
+                "name":  f"OpenAI GPT-4o{suffix}",
                 "type":  "openai_compat",
                 "model": "gpt-4o",
                 "base":  "https://api.openai.com/v1",
-                "key":   openai_key,
+                "key":   key,
             },
             {
-                "name":  "OpenAI GPT-4o-mini",
+                "name":  f"OpenAI GPT-4o-mini{suffix}",
                 "type":  "openai_compat",
                 "model": "gpt-4o-mini",
                 "base":  "https://api.openai.com/v1",
-                "key":   openai_key,
+                "key":   key,
             },
         ]
 
@@ -113,10 +129,10 @@ def extract_json(text: str) -> dict:
 #  Core LLM caller with fallback
 # ─────────────────────────────────────────────
 def call_llm_with_fallback(prompt: str) -> dict:
-    chain = build_fallback_chain(GEMINI_API_KEY, OPENAI_API_KEY, GROK_API_KEY, GROQ_API_KEY)
+    chain = build_fallback_chain()
 
     if not chain:
-        raise Exception("No API keys configured. Add at least one of: GEMINI_API_KEY, GROQ_API_KEY, GROK_API_KEY, OPENAI_API_KEY to backend/.env")
+        raise Exception("No API keys configured. Add at least one of: GEMINI_API_KEY, GROQ_API_KEY, GROK_API_KEY, OPENAI_API_KEY (with optional _1, _2 suffixes) to backend/.env")
 
     errors = []
     for api in chain:
@@ -221,7 +237,7 @@ Contract Text:
 # ─────────────────────────────────────────────
 @app.route("/", methods=["GET"])
 def read_root():
-    chain = build_fallback_chain(GEMINI_API_KEY, OPENAI_API_KEY, GROK_API_KEY, GROQ_API_KEY)
+    chain = build_fallback_chain()
     return jsonify({
         "service": "ContractSense API",
         "status":  "online",
@@ -260,7 +276,7 @@ def analyze_contract():
         contract_text = contract_text[:12000] + "\n...[truncated for length]"
 
     # ── No API key → return demo response ─────
-    if not GEMINI_API_KEY and not OPENAI_API_KEY:
+    if not build_fallback_chain():
         return jsonify({
             "summary": "Demo mode: no API keys configured. Add GEMINI_API_KEY to backend/.env to enable live analysis.",
             "risk_score": 55,
