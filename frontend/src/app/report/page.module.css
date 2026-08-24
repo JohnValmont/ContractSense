@@ -219,7 +219,7 @@
 
 /* ── Print Media ── */
 @media print {
-  body {
+  :global(body) {
     background-color: #ffffff;
   }
   .container {
@@ -233,8 +233,7 @@
     padding: 0;
   }
   .bottomCta,
-  .header button,
-  nav {
+  .header button {
     display: none !important;
   }
   .clauseCard {
