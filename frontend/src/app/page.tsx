@@ -19,8 +19,8 @@ const features = [
   },
   {
     icon: "🌐",
-    title: "Multi-Language Support",
-    desc: "Generate your compliance reports and redline suggestions in English or key regional Indian languages for better local stakeholder alignment.",
+    title: "Full Document Translation",
+    desc: "Break down language barriers. Translate entire contracts into Urdu, Hindi, Bengali, Tamil, Telugu, or Marathi with our dedicated legal translation engine.",
   },
   {
     icon: "🔒",
@@ -28,17 +28,17 @@ const features = [
     desc: "Contracts are processed securely in-memory and are never stored on our servers. Your sensitive commercial documents remain strictly confidential.",
   },
   {
-    icon: "⚡",
-    title: "Instant Legal Analysis",
-    desc: "Comprehensive results in under 30 seconds for most contracts. Export the full risk report as a professional PDF or view it in our interactive UI.",
+    icon: "🏛️",
+    title: "Formal PDF Export",
+    desc: "Download your risk analysis reports and full document translations as professionally formatted legal memos, ready for your boardroom or legal counsel.",
   },
 ];
 
 const steps = [
   { title: "Upload your contract", desc: "Drag and drop or browse a PDF — vendor agreements, purchase orders, service contracts, NDAs." },
-  { title: "System extracts clauses", desc: "Our OCR and NLP pipeline identifies and categorises each clause systematically." },
-  { title: "Risk is evaluated against law", desc: "Clauses are benchmarked against the MSME Development Act, 2006, payment norms, and fair-trade standards." },
-  { title: "Download Professional Report", desc: "Review clause-by-clause risk badges, read plain-language explanations, and download a formal PDF memo." },
+  { title: "Select your service", desc: "Choose between deep Risk Analysis against the MSME Act or Full Document Translation into regional languages." },
+  { title: "System processes the document", desc: "Our engine identifies clauses, benchmarks against fair-trade standards, or translates with legal precision." },
+  { title: "Download Professional Report", desc: "Review the results in our interactive UI and download a formal, boardroom-ready PDF memo." },
 ];
 
 export default function Home() {
@@ -47,10 +47,10 @@ export default function Home() {
 
       {/* ── Nav ──────────────────────────────── */}
       <nav className={styles.nav}>
-        <span className={styles.logo}>ContractSense</span>
-        <span className={styles.navBadge}>Enterprise Legal Compliance</span>
+        <span className={styles.logo}>⚖️ ContractSense</span>
+        <span className={styles.navBadge}>Premium Legal Compliance</span>
         <Link href="/dashboard" className="btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.9rem" }}>
-          Get Started
+          Access Portal
         </Link>
       </nav>
 
@@ -58,20 +58,20 @@ export default function Home() {
       <section className={`${styles.hero} animate-fade-in`}>
         <div className={styles.badge}>
           <span className={styles.dot}></span>
-          MSME Development Act 2006 Compliance · Zero Retention
+          Strict Data Confidentiality · Zero Retention
         </div>
         <h1 className={styles.title}>
-          Identify Every Risk in<br />Your Vendor Contracts
+          Protect Your Commercial Interests<br />With Precision Analysis
         </h1>
         <p className={styles.subtitle}>
-          ContractSense scans MSME vendor contracts, flags unfair clauses, cites the exact statutory protections, and generates formal redline suggestions in under 30 seconds.
+          ContractSense empowers Indian MSMEs by automatically scanning vendor contracts for unfair clauses, citing statutory protections, and providing formal translations and redlines.
         </p>
         <div className={styles.ctaRow}>
           <Link href="/dashboard" className="btn-primary">
-            Analyze a Contract
+            Enter Dashboard
           </Link>
           <a href="#how-it-works" className="btn-secondary">
-            Learn More
+            View Capabilities
           </a>
         </div>
       </section>
@@ -93,8 +93,8 @@ export default function Home() {
       </div>
 
       {/* ── Features ─────────────────────────── */}
-      <h2 className={styles.sectionTitle}>Equip your procurement team</h2>
-      <p className={styles.sectionSub}>Built specifically for Indian MSMEs navigating complex enterprise agreements.</p>
+      <h2 className={styles.sectionTitle}>Elite tools for your procurement team</h2>
+      <p className={styles.sectionSub}>Built specifically for Indian MSMEs navigating complex enterprise agreements and language barriers.</p>
       <div className={`${styles.features} animate-fade-in delay-200`}>
         {features.map((f) => (
           <div key={f.title} className={`glass-panel ${styles.featureCard}`}>
@@ -121,15 +121,16 @@ export default function Home() {
 
       {/* ── CTA Banner ───────────────────────── */}
       <div className={`glass-panel ${styles.ctaBanner} animate-fade-in delay-300`}>
+        <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🔨</div>
         <h2>Ready to protect your commercial interests?</h2>
-        <p>Ensure regulatory compliance and fair trade terms with automated analysis.</p>
-        <Link href="/dashboard" className="btn-primary">
-          Analyze a Document
+        <p>Ensure regulatory compliance and fair trade terms with automated legal analysis and translation.</p>
+        <Link href="/dashboard" className="btn-primary" style={{ background: "#ffffff", color: "#0B192C", borderColor: "#ffffff" }}>
+          Access Portal
         </Link>
       </div>
 
       <footer className={styles.footer}>
-        ContractSense · Legal Tech Solutions · Strict Data Confidentiality
+        ContractSense · Elite Legal Tech Solutions · Strict Data Confidentiality
       </footer>
     </main>
   );

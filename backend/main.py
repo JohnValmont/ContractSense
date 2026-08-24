@@ -232,6 +232,25 @@ Contract Text:
 \"\"\"
 """.strip()
 
+def build_translation_prompt(contract_text: str, language: str) -> str:
+    return f"""
+You are an expert legal translator. Your task is to accurately translate the entire following legal document into {language}.
+Preserve the formal legal tone, formatting, and specific legal terminology.
+
+Respond ONLY with a single valid JSON object containing the translated text. Do not include markdown, code fences, or explanatory text — just raw JSON.
+
+Format:
+{{
+  "translated_title": "Translated title of the document in {language}",
+  "translated_text": "The full translated text of the document in {language}. Use \n for paragraph breaks."
+}}
+
+Document Text:
+\"\"\"
+{contract_text}
+\"\"\"
+""".strip()
+
 # ─────────────────────────────────────────────
 #  Routes
 # ─────────────────────────────────────────────
@@ -302,6 +321,52 @@ def analyze_contract():
     # ── Call AI with fallback chain ────────────
     try:
         prompt = build_prompt(contract_text, language)
+        result = call_llm_with_fallback(prompt)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"detail": str(e)}), 500
+
+@app.route("/api/translate", methods=["POST"])
+def translate_contract():
+    if "file" not in request.files:
+        return jsonify({"detail": "No file part in request. Send a multipart/form-data POST with key 'file'."}), 400
+
+    file = request.files["file"]
+    language = request.form.get("language", "Urdu")
+
+    if not file.filename:
+        return jsonify({"detail": "No file selected."}), 400
+
+    if not file.filename.lower().endswith(".pdf"):
+        return jsonify({"detail": "Only PDF files are supported."}), 400
+
+    # ── Extract text from PDF ──────────────────
+    contract_text = ""
+    try:
+        with pdfplumber.open(file) as pdf:
+            for page in pdf.pages:
+                extracted = page.extract_text()
+                if extracted:
+                    contract_text += extracted + "\n"
+    except Exception as e:
+        return jsonify({"detail": f"Failed to read PDF: {str(e)}"}), 500
+
+    if not contract_text.strip():
+        return jsonify({"detail": "No readable text found in the PDF."}), 400
+
+    # ── Trim to ~12,000 chars to stay within token limits ──
+    if len(contract_text) > 12000:
+        contract_text = contract_text[:12000] + "\n...[truncated for length]"
+
+    if not build_fallback_chain():
+        return jsonify({
+            "translated_title": f"Demo Translation ({language})",
+            "translated_text": "Demo mode: no API keys configured. Add API keys to backend/.env to enable live translation."
+        })
+
+    # ── Call AI with fallback chain ────────────
+    try:
+        prompt = build_translation_prompt(contract_text, language)
         result = call_llm_with_fallback(prompt)
         return jsonify(result)
     except Exception as e:

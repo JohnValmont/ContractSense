@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import Link from "next/link";
 
+type Mode = "analyze" | "translate";
+
 export default function Dashboard() {
+  const [mode, setMode] = useState<Mode>("analyze");
   const [file, setFile] = useState<File | null>(null);
   const [language, setLanguage] = useState("English");
   const [loading, setLoading] = useState(false);
@@ -47,7 +50,9 @@ export default function Dashboard() {
 
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
-      const res = await fetch(`${backendUrl}/api/analyze`, {
+      const endpoint = mode === "analyze" ? "/api/analyze" : "/api/translate";
+      
+      const res = await fetch(`${backendUrl}${endpoint}`, {
         method: "POST",
         body: formData,
       });
@@ -58,8 +63,15 @@ export default function Dashboard() {
       }
 
       const data = await res.json();
-      sessionStorage.setItem("contract_analysis", JSON.stringify(data));
-      router.push("/report");
+      
+      if (mode === "analyze") {
+        sessionStorage.setItem("contract_analysis", JSON.stringify(data));
+        router.push("/report");
+      } else {
+        sessionStorage.setItem("contract_translation", JSON.stringify(data));
+        router.push("/translation-report");
+      }
+      
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "An unexpected error occurred.";
       setError(msg);
@@ -70,15 +82,33 @@ export default function Dashboard() {
   return (
     <div className={styles.container}>
       <header className={`${styles.header} animate-fade-in`}>
-        <h1 className={styles.title}>Contract Analysis Portal</h1>
+        <h1 className={styles.title}>⚖️ Legal Services Portal</h1>
         <p className={styles.subtitle}>
-          Upload your vendor agreement to extract key clauses, score compliance against the MSME Development Act 2006, and generate statutory redlines.
+          Securely process your vendor agreements for statutory MSME compliance risk analysis or full-document translation.
         </p>
       </header>
 
+      {/* Mode Toggle */}
+      <div className={`${styles.modeToggle} animate-fade-in delay-100`}>
+        <button 
+          className={`${styles.modeBtn} ${mode === "analyze" ? styles.active : ""}`}
+          onClick={() => setMode("analyze")}
+        >
+          🔍 Risk Analysis
+        </button>
+        <button 
+          className={`${styles.modeBtn} ${mode === "translate" ? styles.active : ""}`}
+          onClick={() => setMode("translate")}
+        >
+          🌐 Full Translation
+        </button>
+      </div>
+
       {/* Language Selector */}
       <div className={`glass-panel animate-fade-in delay-100 ${styles.formGroup}`} style={{ padding: '1.5rem 2rem', background: '#fff', border: '1px solid #e2e8f0' }}>
-        <label htmlFor="language-select" className={styles.label}>Select Output Language</label>
+        <label htmlFor="language-select" className={styles.label}>
+          {mode === "analyze" ? "Output Language for Report & Redlines" : "Target Translation Language"}
+        </label>
         <select 
           id="language-select" 
           className={styles.languageSelect}
@@ -86,11 +116,12 @@ export default function Dashboard() {
           onChange={(e) => setLanguage(e.target.value)}
         >
           <option value="English">English</option>
-          <option value="Hindi">Hindi</option>
-          <option value="Bengali">Bengali</option>
-          <option value="Tamil">Tamil</option>
-          <option value="Telugu">Telugu</option>
-          <option value="Marathi">Marathi</option>
+          <option value="Urdu">Urdu (اردو)</option>
+          <option value="Hindi">Hindi (हिंदी)</option>
+          <option value="Bengali">Bengali (বাংলা)</option>
+          <option value="Tamil">Tamil (தமிழ்)</option>
+          <option value="Telugu">Telugu (తెలుగు)</option>
+          <option value="Marathi">Marathi (मराठी)</option>
         </select>
       </div>
 
@@ -102,7 +133,7 @@ export default function Dashboard() {
         onDragLeave={handleDragLeave}
       >
         <div className={styles.uploadIcon}>
-          {file ? "📄" : "☁️"}
+          {file ? "📄" : "🏛️"}
         </div>
 
         {file ? (
@@ -147,7 +178,7 @@ export default function Dashboard() {
               <span className={styles.spinner} /> Processing Document...
             </span>
           ) : (
-            "Analyze Document"
+            mode === "analyze" ? "Analyze Document" : "Translate Document"
           )}
         </button>
         <p className={styles.hint}>
@@ -158,19 +189,19 @@ export default function Dashboard() {
       {/* Info cards */}
       <div className={`${styles.infoCards} animate-fade-in delay-300`}>
         {[
-          { icon: "🔍", text: "Automated Clause Extraction" },
-          { icon: "⚖️", text: "MSME Act 2006 Compliance" },
+          { icon: "🏛️", text: "Enterprise-Grade Accuracy" },
+          { icon: "⚖️", text: "Statutory Law Aligned" },
           { icon: "🛡️", text: "Multi-Model Fallback Architecture" },
         ].map((c) => (
           <div key={c.text} className={`glass-panel ${styles.infoCard}`}>
             <span>{c.icon}</span>
-            <span style={{ color: "#475569", fontSize: "0.875rem" }}>{c.text}</span>
+            <span style={{ color: "#475569", fontSize: "0.875rem", fontWeight: 500 }}>{c.text}</span>
           </div>
         ))}
       </div>
 
-      <Link href="/" style={{ color: "var(--accent-color)", fontSize: "0.95rem", marginTop: "1rem", fontWeight: 500 }}>
-        ← Back to Home
+      <Link href="/" style={{ color: "var(--accent-color)", fontSize: "0.95rem", marginTop: "1rem", fontWeight: 600 }}>
+        ← Return Home
       </Link>
     </div>
   );
