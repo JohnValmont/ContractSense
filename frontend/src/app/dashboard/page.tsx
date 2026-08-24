@@ -92,25 +92,29 @@ export default function Dashboard() {
             className={`${styles.navItem} ${mode === "analyze" ? styles.active : ""}`}
             onClick={() => setMode("analyze")}
           >
-            <span className={styles.navIcon}>🔍</span> Statutory Risk Analysis
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Statutory Risk Analysis
           </button>
           <button 
             className={`${styles.navItem} ${mode === "translate" ? styles.active : ""}`}
             onClick={() => setMode("translate")}
           >
-            <span className={styles.navIcon}>🌐</span> Full Document Translation
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            Full Document Translation
           </button>
           <button 
             className={`${styles.navItem} ${mode === "resources" ? styles.active : ""}`}
             onClick={() => setMode("resources")}
           >
-            <span className={styles.navIcon}>📚</span> Legal Resources Library
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            Legal Resources Library
           </button>
         </nav>
         
         <div style={{ marginTop: "auto", paddingTop: "2rem" }}>
-          <Link href="/" style={{ color: "var(--text-muted)", fontSize: "0.9rem", fontWeight: 600 }}>
-            ← Return Home
+          <Link href="/" className={styles.navItem} style={{ color: "rgba(252, 251, 248, 0.5)", textDecoration: "none" }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Return to Homepage
           </Link>
         </div>
       </aside>
@@ -213,12 +217,12 @@ export default function Dashboard() {
 
             <div className={styles.infoCards}>
               {[
-                { icon: "🏛️", text: "Enterprise-Grade Accuracy" },
-                { icon: "⚖️", text: "Statutory Law Aligned" },
-                { icon: "🛡️", text: "Multi-Model Fallback Architecture" },
+                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>, text: "Enterprise-Grade Accuracy" },
+                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>, text: "Statutory Law Aligned" },
+                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>, text: "Multi-Model Fallback Architecture" },
               ].map((c) => (
                 <div key={c.text} className={styles.infoCard}>
-                  <span>{c.icon}</span>
+                  <span style={{ color: "var(--accent-color)", display: "flex" }}>{c.icon}</span>
                   <span>{c.text}</span>
                 </div>
               ))}
