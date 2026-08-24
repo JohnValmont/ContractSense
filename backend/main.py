@@ -17,6 +17,8 @@ CORS(app, origins="*")
 # ─────────────────────────────────────────────
 GEMINI_API_KEY  = os.getenv("GEMINI_API_KEY", "")
 OPENAI_API_KEY  = os.getenv("OPENAI_API_KEY", "")
+GROK_API_KEY    = os.getenv("GROK_API_KEY", "")    # xAI Grok — console.x.ai
+GROQ_API_KEY    = os.getenv("GROQ_API_KEY", "")    # Groq (Llama) — console.groq.com
 
 # ─────────────────────────────────────────────
 #  Fallback Chain  (tried in order until one succeeds)
@@ -30,9 +32,10 @@ OPENAI_API_KEY  = os.getenv("OPENAI_API_KEY", "")
 # ─────────────────────────────────────────────
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 
-def build_fallback_chain(gemini_key: str, openai_key: str) -> list:
+def build_fallback_chain(gemini_key: str, openai_key: str, grok_key: str, groq_key: str) -> list:
     chain = []
 
+    # 1️⃣  Gemini (Google) — free tier, 15 RPM
     if gemini_key:
         chain += [
             {
@@ -52,18 +55,45 @@ def build_fallback_chain(gemini_key: str, openai_key: str) -> list:
             },
         ]
 
+    # 2️⃣  Groq (Llama 3) — free, very fast, OpenAI-compatible
+    if groq_key:
+        chain += [
+            {
+                "name":  "Groq Llama-3.3-70b",
+                "type":  "openai_compat",
+                "model": "llama-3.3-70b-versatile",
+                "base":  "https://api.groq.com/openai/v1",
+                "key":   groq_key,
+            },
+        ]
+
+    # 3️⃣  Grok (xAI) — free tier, OpenAI-compatible
+    if grok_key:
+        chain += [
+            {
+                "name":  "Grok 3 Mini",
+                "type":  "openai_compat",
+                "model": "grok-3-mini",
+                "base":  "https://api.x.ai/v1",
+                "key":   grok_key,
+            },
+        ]
+
+    # 4️⃣  OpenAI — paid, most reliable
     if openai_key:
         chain += [
             {
                 "name":  "OpenAI GPT-4o",
-                "type":  "openai",
+                "type":  "openai_compat",
                 "model": "gpt-4o",
+                "base":  "https://api.openai.com/v1",
                 "key":   openai_key,
             },
             {
                 "name":  "OpenAI GPT-4o-mini",
-                "type":  "openai",
+                "type":  "openai_compat",
                 "model": "gpt-4o-mini",
+                "base":  "https://api.openai.com/v1",
                 "key":   openai_key,
             },
         ]
@@ -83,10 +113,10 @@ def extract_json(text: str) -> dict:
 #  Core LLM caller with fallback
 # ─────────────────────────────────────────────
 def call_llm_with_fallback(prompt: str) -> dict:
-    chain = build_fallback_chain(GEMINI_API_KEY, OPENAI_API_KEY)
+    chain = build_fallback_chain(GEMINI_API_KEY, OPENAI_API_KEY, GROK_API_KEY, GROQ_API_KEY)
 
     if not chain:
-        raise Exception("No API keys configured. Add GEMINI_API_KEY or OPENAI_API_KEY to .env")
+        raise Exception("No API keys configured. Add at least one of: GEMINI_API_KEY, GROQ_API_KEY, GROK_API_KEY, OPENAI_API_KEY to backend/.env")
 
     errors = []
     for api in chain:
@@ -113,9 +143,10 @@ def call_llm_with_fallback(prompt: str) -> dict:
                 print(f"[ContractSense] Success with {api['name']}")
                 return result
 
-            elif api["type"] == "openai":
+            elif api["type"] == "openai_compat":
+                # Works for OpenAI, Groq, Grok — all are OpenAI-compatible
                 resp = requests.post(
-                    "https://api.openai.com/v1/chat/completions",
+                    f"{api['base']}/chat/completions",
                     headers={
                         "Authorization": f"Bearer {api['key']}",
                         "Content-Type":  "application/json",
@@ -126,7 +157,7 @@ def call_llm_with_fallback(prompt: str) -> dict:
                         "messages": [
                             {
                                 "role":    "system",
-                                "content": "You are an expert Indian corporate lawyer specializing in the MSME Development Act, 2006. Always respond with valid raw JSON only.",
+                                "content": "You are an expert Indian corporate lawyer specializing in the MSME Development Act, 2006. Always respond with valid raw JSON only — no markdown, no explanation.",
                             },
                             {"role": "user", "content": prompt},
                         ],
@@ -190,7 +221,7 @@ Contract Text:
 # ─────────────────────────────────────────────
 @app.route("/", methods=["GET"])
 def read_root():
-    chain = build_fallback_chain(GEMINI_API_KEY, OPENAI_API_KEY)
+    chain = build_fallback_chain(GEMINI_API_KEY, OPENAI_API_KEY, GROK_API_KEY, GROQ_API_KEY)
     return jsonify({
         "service": "ContractSense API",
         "status":  "online",
