@@ -1,41 +1,65 @@
 .container {
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  background-color: var(--bg-color);
+  flex-direction: row;
 }
 
-.content {
+/* ── Left Panel ── */
+.leftPanel {
+  flex: 1;
+  background-color: var(--accent-color);
+  color: #FCFBF8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem;
+  position: relative;
+}
+
+.leftPanelContent {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.leftPanel h1 {
+  font-family: var(--font-serif), serif;
+  font-size: 3.5rem;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: #FCFBF8;
+}
+
+.leftPanel p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+/* ── Right Panel ── */
+.rightPanel {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  background-color: #FFFFFF;
+  position: relative;
 }
 
 .card {
   width: 100%;
-  max-width: 440px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  padding: 3rem 2.5rem;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+  max-width: 420px;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   animation: fadeInUp 0.4s ease forwards;
 }
 
 .header {
-  text-align: center;
-  margin-bottom: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-bottom: 2.5rem;
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-family: var(--font-serif), serif;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
@@ -50,45 +74,45 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.75rem;
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .input {
-  padding: 0.85rem 1rem;
-  border-radius: 6px;
-  border: 1px solid #D0C9C4;
-  background: #FCFBF8;
+  padding: 0.5rem 0;
+  border: none;
+  border-bottom: 2px solid #E8E3DF;
+  border-radius: 0;
+  background: transparent;
   font-family: var(--font-inter), sans-serif;
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--text-primary);
   outline: none;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .input:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(53, 36, 28, 0.1);
+  border-bottom-color: var(--accent-color);
 }
 
 .submitBtn {
   width: 100%;
   padding: 1rem;
   font-size: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .backBtn {
@@ -115,27 +139,36 @@
   font-size: 0.9rem;
   margin-bottom: 1.5rem;
   border: 1px solid rgba(220, 38, 38, 0.2);
-  text-align: center;
+  text-align: left;
 }
 
 .footer {
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--glass-border);
+  margin-top: 3rem;
   text-align: center;
   font-size: 0.9rem;
   color: var(--text-muted);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
 }
 
 .guestLink {
   color: var(--gold-color);
   font-weight: 600;
   transition: color 0.2s;
+  margin-left: 0.25rem;
 }
 
 .guestLink:hover {
   color: var(--gold-hover);
+}
+
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
+  .leftPanel {
+    flex: none;
+    padding: 3rem 2rem;
+  }
+  .rightPanel {
+    padding: 3rem 1rem;
+  }
 }

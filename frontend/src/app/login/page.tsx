@@ -63,14 +63,21 @@ export default function Login() {
 
   return (
     <main className={styles.container}>
-      <Navbar />
-      <div className={styles.content}>
+      <div className={styles.leftPanel}>
+        <div className={styles.leftPanelContent}>
+          <h1>⚖️<br/>Contract<br/>Sense.</h1>
+          <p>
+            Statutory compliance and precision contract auditing for Indian MSMEs.
+          </p>
+        </div>
+      </div>
+      
+      <div className={styles.rightPanel}>
         <div className={styles.card}>
           <div className={styles.header}>
-            <span style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>🏛️</span>
-            <h1 className={styles.title}>Access Portal</h1>
+            <h2 className={styles.title}>Welcome back</h2>
             <p className={styles.subtitle}>
-              {step === "email" ? "Enter your email to receive a secure login code." : `Enter the 6-digit code sent to ${email}`}
+              {step === "email" ? "Sign in to review your vendor and client contracts." : `Enter the 6-digit code sent to ${email}`}
             </p>
           </div>
 
@@ -79,18 +86,18 @@ export default function Login() {
           {step === "email" ? (
             <form onSubmit={handleRequestOtp} className={styles.form}>
               <div className={styles.formGroup}>
-                <label className={styles.label}>Corporate Email Address</label>
+                <label className={styles.label}>Work Email</label>
                 <input
                   type="email"
                   className={styles.input}
-                  placeholder="name@company.com"
+                  placeholder="you@yourbusiness.in"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
               <button type="submit" className={`btn-primary ${styles.submitBtn}`} disabled={loading}>
-                {loading ? "Sending Code..." : "Continue with Email"}
+                {loading ? "Sending Code..." : "Sign in →"}
               </button>
             </form>
           ) : (
@@ -108,7 +115,7 @@ export default function Login() {
                 />
               </div>
               <button type="submit" className={`btn-primary ${styles.submitBtn}`} disabled={loading}>
-                {loading ? "Verifying..." : "Verify & Sign In"}
+                {loading ? "Verifying..." : "Verify & Sign In →"}
               </button>
               <button 
                 type="button" 
@@ -121,7 +128,7 @@ export default function Login() {
           )}
 
           <div className={styles.footer}>
-            <p>Don't want to create an account right now?</p>
+            <span>Don't want to create an account?</span>
             <Link href="/dashboard" className={styles.guestLink}>
               Continue as Guest
             </Link>

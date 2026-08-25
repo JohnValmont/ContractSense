@@ -15,6 +15,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const router = useRouter();
 
   const handleFile = (f: File) => {
@@ -83,7 +84,7 @@ export default function Dashboard() {
   return (
     <div className={styles.layout}>
       {/* ── Sidebar ──────────────────────────── */}
-      <aside className={styles.sidebar}>
+      <aside className={`${styles.sidebar} ${!isSidebarOpen ? styles.collapsed : ""}`}>
         <div className={styles.logo}>
           ⚖️ ContractSense
         </div>
@@ -121,6 +122,16 @@ export default function Dashboard() {
 
       {/* ── Main Content ─────────────────────── */}
       <main className={styles.main}>
+        <div className={styles.topBar}>
+          <button className={styles.toggleBtn} onClick={() => setIsSidebarOpen(!isSidebarOpen)} aria-label="Toggle Sidebar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
         {mode === "resources" ? (
           <LegalResources />
         ) : (

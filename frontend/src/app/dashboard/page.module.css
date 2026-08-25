@@ -1,12 +1,13 @@
 .layout {
-  display: grid;
-  grid-template-columns: 280px 1fr;
+  display: flex;
   min-height: 100vh;
   background-color: var(--bg-color);
+  overflow: hidden;
 }
 
 /* ── Sidebar ── */
 .sidebar {
+  width: 280px;
   background-color: var(--accent-color);
   border-right: 1px solid var(--accent-hover);
   padding: 2rem 1.5rem;
@@ -15,6 +16,13 @@
   height: 100vh;
   position: sticky;
   top: 0;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.sidebar.collapsed {
+  margin-left: -280px;
 }
 
 .logo {
@@ -68,6 +76,7 @@
 
 /* ── Main Content ── */
 .main {
+  flex: 1;
   padding: 2rem 2.5rem;
   display: flex;
   flex-direction: column;
@@ -75,6 +84,33 @@
   max-width: 1000px;
   margin: 0 auto;
   width: 100%;
+  position: relative;
+  overflow-y: auto;
+}
+
+.topBar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.toggleBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 0.5rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.toggleBtn:hover {
+  background: rgba(0,0,0,0.05);
+  color: var(--text-primary);
 }
 
 .header {
@@ -124,39 +160,40 @@
 
 .languageSelect {
   width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  border: 1px solid #E8E3DF;
-  background-color: #FFFFFF;
+  padding: 0.5rem 0;
+  border: none;
+  border-bottom: 2px solid #E8E3DF;
+  border-radius: 0;
+  background-color: transparent;
   color: var(--text-primary);
   font-family: var(--font-inter), sans-serif;
-  font-size: 1rem;
+  font-size: 1.05rem;
   cursor: pointer;
   outline: none;
+  transition: border-color 0.2s ease;
 }
 
 .languageSelect:focus {
-  border-color: var(--gold-color);
-  box-shadow: 0 0 0 2px rgba(194, 168, 120, 0.1);
+  border-bottom-color: var(--accent-color);
 }
 
 .dropZone {
   width: 100%;
-  padding: 2rem 1.5rem;
+  padding: 2.5rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
   cursor: default;
   transition: all 0.25s ease;
-  border: 2px dashed #D0C9C4;
-  background: var(--glass-bg);
-  border-radius: 8px;
+  border: 1px dashed rgba(53, 36, 28, 0.2);
+  background: rgba(252, 251, 248, 0.5);
+  border-radius: 12px;
 }
 
 .dropZone.dragging {
-  border-color: var(--gold-color);
-  background: rgba(179, 139, 89, 0.1);
+  border-color: var(--accent-color);
+  background: rgba(179, 139, 89, 0.05);
 }
 
 .uploadIcon {
