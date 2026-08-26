@@ -119,8 +119,16 @@ export default function Report() {
           {/* Risk Score */}
           <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: 12, padding: "1.5rem", border: "1px solid rgba(255,255,255,0.05)", marginBottom: "1.5rem", textAlign: "center" }}>
             <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,240,232,0.4)", marginBottom: "1rem" }}>Overall Risk Assessment</div>
-            <div style={{ fontFamily: "'EB Garamond', serif", fontSize: "4.5rem", fontWeight: 500, lineHeight: 1, color: scoreColor, marginBottom: "0.25rem" }}>
-              {result.risk_score}
+            <div style={{ position: "relative", width: 140, height: 70, margin: "0 auto 1.5rem" }}>
+              <svg viewBox="0 0 100 50" style={{ width: "100%", height: "100%", overflow: "visible" }}>
+                <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" strokeLinecap="round" />
+                <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke={scoreColor} strokeWidth="8" strokeLinecap="round" strokeDasharray={125.66} strokeDashoffset={125.66 * (1 - result.risk_score / 100)} style={{ transition: "stroke-dashoffset 1s ease-out" }} />
+              </svg>
+              <div style={{ position: "absolute", bottom: -5, left: 0, right: 0, textAlign: "center" }}>
+                <span style={{ fontFamily: "'EB Garamond', serif", fontSize: "2.75rem", fontWeight: 500, lineHeight: 1, color: scoreColor }}>
+                  {result.risk_score}
+                </span>
+              </div>
             </div>
             <div style={{ fontSize: "0.9rem", fontWeight: 700, color: scoreColor, marginBottom: "1.25rem" }}>{scoreLabel}</div>
             <div style={{ display: "flex", justifyContent: "center", gap: "1.25rem", fontSize: "0.75rem" }}>
