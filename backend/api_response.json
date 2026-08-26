@@ -1,0 +1,27 @@
+{
+  "clauses": [
+    {
+      "content": "payment within 90 days.",
+      "explanation": "The contract obliges the buyer to pay the vendor within 90 days, which exceeds the 45‑day threshold and does not specify interest for late payment. This can cause cash‑flow problems for the MSME and gives the buyer no incentive to pay promptly.",
+      "redline_suggestion": "Change to \"payment within 30 days of invoice receipt, with interest at the rate of 1.5% per month on any overdue amount\".",
+      "risk_level": "High",
+      "title": "Payment Clause"
+    },
+    {
+      "content": "terminate for convenience.",
+      "explanation": "The clause allows the other party to terminate the agreement at any time for convenience, without any notice period, compensation, or protection for work‑in‑progress. This leaves the MSME vulnerable to abrupt contract loss and unrecovered effort.",
+      "redline_suggestion": "Insert a mutual termination right with a minimum 30‑day notice and require payment for all services performed up to the termination date, plus a reasonable termination fee of 10% of the contract value.",
+      "risk_level": "High",
+      "title": "Termination Clause"
+    },
+    {
+      "content": "perpetual license.",
+      "explanation": "Granting a perpetual license effectively transfers all rights in the deliverables to the buyer indefinitely, with no limitation to the specific work or any license‑back for the vendor's pre‑existing tools. This can strip the MSME of its IP and future commercial opportunities.",
+      "redline_suggestion": "Limit the license to a non‑exclusive, royalty‑free, worldwide license to use the deliverables solely for the purpose of the contract, and retain all rights to pre‑existing materials. Include a clause that any background IP remains the vendor's property.",
+      "risk_level": "High",
+      "title": "Intellectual Property Clause"
+    }
+  ],
+  "risk_score": 85,
+  "summary": "The contract contains several predatory provisions that heavily disadvantage an MSME vendor. Payment is required within 90 days, far exceeding the standard 45‑day limit and without any interest for late payment. The termination clause grants unilateral convenience termination to the other party with no notice period or compensation for work already performed. The IP clause grants a perpetual license, effectively assigning all rights to the buyer without any limitation or license‑back for the vendor's pre‑existing tools. These clauses expose the MSME to cash‑flow strain, loss of work value on early termination, and loss of intellectual property, making the agreement highly risky."
+}

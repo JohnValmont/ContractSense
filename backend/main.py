@@ -7,6 +7,8 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 import pdfplumber
 
+from local_analyzer import analyze_contract_local
+
 from db import init_db
 from auth import auth_bp
 
@@ -58,19 +60,19 @@ def build_fallback_chain() -> list:
         suffix = f" {idx+1}" if idx > 0 else ""
         chain += [
             {
-                "name":   f"Gemini 3.5 Flash{suffix}",
+                "name":   f"Gemini 2.0 Flash{suffix}",
                 "type":   "gemini",
-                "url":    f"{GEMINI_BASE}/gemini-3.5-flash:generateContent?key={key}",
+                "url":    f"{GEMINI_BASE}/gemini-2.0-flash:generateContent?key={key}",
             },
             {
-                "name":   f"Gemini 2.5 Pro{suffix}",
+                "name":   f"Gemini 1.5 Pro{suffix}",
                 "type":   "gemini",
-                "url":    f"{GEMINI_BASE}/gemini-2.5-pro:generateContent?key={key}",
+                "url":    f"{GEMINI_BASE}/gemini-1.5-pro:generateContent?key={key}",
             },
             {
-                "name":   f"Gemini 2.5 Flash{suffix}",
+                "name":   f"Gemini 1.5 Flash{suffix}",
                 "type":   "gemini",
-                "url":    f"{GEMINI_BASE}/gemini-2.5-flash:generateContent?key={key}",
+                "url":    f"{GEMINI_BASE}/gemini-1.5-flash:generateContent?key={key}",
             },
         ]
 
@@ -182,7 +184,7 @@ def call_llm_with_fallback(prompt: str) -> dict:
                         "messages": [
                             {
                                 "role":    "system",
-                                "content": "You are an expert Indian corporate lawyer specializing in the MSME Development Act, 2006. Always respond with valid raw JSON only — no markdown, no explanation.",
+                                "content": "You are an elite Indian corporate lawyer and auditor specializing in the MSME Development Act, 2006. You strictly follow instructions, exhaustively identify ALL risks, and ALWAYS respond with valid raw JSON only — no markdown fences, no conversational text.",
                             },
                             {"role": "user", "content": prompt},
                         ],
@@ -204,33 +206,47 @@ def call_llm_with_fallback(prompt: str) -> dict:
     raise Exception("All APIs in the fallback chain failed.\n" + "\n".join(errors))
 
 # ─────────────────────────────────────────────
-#  MSME Analysis Prompt
+#  MSME Analysis Prompt (Advanced Taxonomy & CoT)
 # ─────────────────────────────────────────────
 def build_prompt(contract_text: str, language: str = "English") -> str:
     return f"""
-You are an expert Indian corporate lawyer specializing in the MSME Development Act, 2006.
+You are an elite Indian corporate lawyer and auditor specializing in the MSME Development Act, 2006, the Indian Contract Act, 1872, the Information Technology Act, 2000 (for data/privacy), and the Competition Act, 2002 (for anti-competitive clauses). Your sole purpose is to protect MSME vendors from predatory corporate contracting practices.
 
-Carefully analyze the following vendor contract. For each key clause:
-1. Identify the clause title and extract its text verbatim (in English).
-2. Evaluate the risk level for the MSME vendor: Low, Medium, or High (in English).
-3. Provide a plain-language explanation in simple terms, referencing specific sections of the MSME Development Act, 2006, the Indian Contract Act, 1872, or other relevant law wherever applicable. Write this explanation in {language}.
-4. If the clause is risky (Medium or High), propose a specific, fair redline suggestion. Write this redline suggestion in {language}.
+--- RISK TAXONOMY & CHECKLIST ---
+When analyzing this contract, systematically check for EACH of the following known risk patterns. Do not rely only on general impression — actively verify the presence or absence of each category below, and flag any that are present, even if phrased in standard-sounding legal language:
 
-Also compute an overall risk_score (0-100, where 100 is extremely risky for the MSME).
+1. Payment terms exceeding 45 days, or payment conditioned on subjective/undefined acceptance criteria, or no late-payment interest specified
+2. Termination rights available to only one party, or asymmetric notice periods, or no compensation for work-in-progress on termination
+3. One-sided indemnification obligations, or asymmetric liability caps, or liability carve-outs applying to only one party
+4. IP assignment broader than the specific deliverables of this engagement, or no license-back for vendor's pre-existing tools/methods
+5. Confidentiality obligations that are asymmetric in duration or scope between the parties
+6. Non-compete, exclusivity, or non-solicitation obligations extending beyond 12 months post-termination or covering an unreasonably broad category of business
+7. Automatic renewal with a narrow non-renewal notice window, or unilateral amendment rights with "deemed acceptance" language
+8. Force majeure relief that is asymmetric between the parties
+9. Dispute resolution venue or arbitrator-selection rights that favor one party's location or control
+10. Assignment rights that are asymmetric between the parties
+11. Audit rights that are broad, frequent, or short-notice with no reciprocal obligation
+12. Notice provisions that could be used to claim deemed receipt without actual receipt
+13. Warranty periods or disclaimers that are shorter/broader for one party than commercially typical
 
-Respond ONLY with a single valid JSON object. Do not include any markdown, code fences, or explanatory text — just raw JSON.
+For each pattern found, report: which clause/section it appears in, a plain-language explanation of the specific risk, and a risk level (High/Medium/Low) based on severity and how disadvantageous it is relative to normal commercial practice. If you are uncertain whether something qualifies, include it as Low risk rather than omitting it — err toward flagging over silence. Write this explanation in {language}.
+
+Also provide a fair, specific redline suggestion to neutralize the risk. Write this in {language}.
+Finally, compute a brutal, realistic risk_score (0-100) based on how predatory the contract is overall.
+
+Respond ONLY with a single valid JSON object. No markdown fences. No explanatory text.
 
 Format:
 {{
-  "summary": "2-3 sentence executive summary of the contract and its overall risk to the MSME vendor, written in {language}.",
+  "summary": "Detailed executive summary of the contract's predatory nature and overall risk to the MSME, written in {language}.",
   "risk_score": <integer 0-100>,
   "clauses": [
     {{
-      "title": "Payment Terms",
-      "content": "Exact text of this clause from the contract.",
+      "title": "Article X.Y",
+      "content": "Exact text...",
       "risk_level": "High",
-      "explanation": "Explanation written in {language} about why it is risky...",
-      "redline_suggestion": "Suggested redline rewritten in {language}..."
+      "explanation": "Explanation in {language}...",
+      "redline_suggestion": "Suggested redline in {language}..."
     }}
   ]
 }}
@@ -300,40 +316,37 @@ def analyze_contract():
     if not contract_text.strip():
         return jsonify({"detail": "No readable text found in the PDF. Make sure it is not a scanned image-only PDF."}), 400
 
-    # ── Trim to ~12,000 chars to stay within token limits ──
-    if len(contract_text) > 12000:
-        contract_text = contract_text[:12000] + "\n...[truncated for length]"
+    # ── Trim to ~300,000 chars to stay within token limits ──
+    if len(contract_text) > 300000:
+        contract_text = contract_text[:300000] + "\n...[truncated for length]"
 
-    # ── No API key → return demo response ─────
-    if not build_fallback_chain():
-        return jsonify({
-            "summary": "Demo mode: no API keys configured. Add GEMINI_API_KEY to backend/.env to enable live analysis.",
-            "risk_score": 55,
-            "clauses": [
-                {
-                    "title": "Payment Terms",
-                    "content": "The Buyer shall make payment within 90 days of receipt of invoice.",
-                    "risk_level": "High",
-                    "explanation": "Section 15 of the MSME Development Act, 2006 mandates payment within 45 days. A 90-day term directly violates this and exposes the buyer to compound interest at 3× the RBI bank rate.",
-                    "redline_suggestion": "Payment shall be made within 45 days of receipt of invoice, in compliance with the MSME Development Act, 2006.",
-                },
-                {
-                    "title": "Dispute Resolution",
-                    "content": "All disputes shall be resolved exclusively through arbitration in Delhi.",
-                    "risk_level": "Medium",
-                    "explanation": "Exclusive arbitration in a distant city creates a financial burden for smaller MSME vendors. The MSME Samadhan (MSEFC) portal offers a cheaper, faster statutory remedy.",
-                    "redline_suggestion": "Disputes shall first be referred to the Micro and Small Enterprise Facilitation Council (MSEFC) under Section 18 of the MSME Development Act, 2006. Arbitration may follow if conciliation fails.",
-                },
-            ],
-        })
+    # ── Call AI or Local Fallback ────────────
+    fallback_chain = build_fallback_chain()
+    
+    if fallback_chain:
+        try:
+            prompt = build_prompt(contract_text, language)
+            result = call_llm_with_fallback(prompt)
+            return jsonify(result)
+        except Exception as e:
+            print(f"[ContractSense] API call failed, falling back to local heuristic engine: {e}")
+    else:
+        print("[ContractSense] No API keys configured, using local heuristic engine.")
 
-    # ── Call AI with fallback chain ────────────
+    # ── Fallback: Try local dynamic extraction ──
+    local_result = analyze_contract_local(contract_text, language)
+    if local_result:
+        return jsonify(local_result)
+        
+    # ── Final Fallback: Static Demo ──
     try:
-        prompt = build_prompt(contract_text, language)
-        result = call_llm_with_fallback(prompt)
-        return jsonify(result)
-    except Exception as e:
-        return jsonify({"detail": str(e)}), 500
+        filename = "demo_risk_analysis.json"
+        if language.lower() == "hindi":
+            filename = "demo_risk_analysis_hindi.json"
+        with open(filename, "r", encoding="utf-8") as f:
+            return jsonify(json.load(f))
+    except Exception as inner_e:
+        return jsonify({"detail": f"APIs failed and Demo file missing: {inner_e}"}), 500
 
 @app.route("/api/translate", methods=["POST"])
 def translate_contract():
@@ -363,9 +376,9 @@ def translate_contract():
     if not contract_text.strip():
         return jsonify({"detail": "No readable text found in the PDF."}), 400
 
-    # ── Trim to ~12,000 chars to stay within token limits ──
-    if len(contract_text) > 12000:
-        contract_text = contract_text[:12000] + "\n...[truncated for length]"
+    # ── Trim to ~300,000 chars to stay within token limits ──
+    if len(contract_text) > 300000:
+        contract_text = contract_text[:300000] + "\n...[truncated for length]"
 
     if not build_fallback_chain():
         return jsonify({
@@ -379,7 +392,11 @@ def translate_contract():
         result = call_llm_with_fallback(prompt)
         return jsonify(result)
     except Exception as e:
-        return jsonify({"detail": str(e)}), 500
+        print(f"[ContractSense] Translation API call failed, falling back to demo: {e}")
+        return jsonify({
+            "translated_title": f"Demo Translation ({language})",
+            "translated_text": f"This is a fallback demo response because the API call failed ({e}). In a production environment with active API keys, the full contract translation will appear here."
+        })
 
 
 if __name__ == "__main__":

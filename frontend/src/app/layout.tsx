@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "./context/AuthContext";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const merriweather = Merriweather({ weight: ["300", "400", "700"], subsets: ["latin"], variable: "--font-serif" });
 
 export const metadata: Metadata = {
   title: "ContractSense | Legal Risk Analysis Platform",
@@ -19,7 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${merriweather.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+      </head>
+      <body>
         <AuthProvider>
           {children}
         </AuthProvider>

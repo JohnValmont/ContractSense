@@ -4,8 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
-// @ts-ignore
-import html2pdf from "html2pdf.js";
 
 interface Clause {
   title: string;
@@ -21,26 +19,24 @@ interface AnalysisResult {
   clauses: Clause[];
 }
 
-function RiskMeter({ score }: { score: number }) {
-  const color = score < 30 ? "#16a34a" : score < 70 ? "#d97706" : "#dc2626";
-  const label = score < 30 ? "Low Risk" : score < 70 ? "Moderate Risk" : "High Risk";
+function getRiskColor(level: string) {
+  const l = level.toLowerCase();
+  if (l.includes("high"))   return "#dc2626";
+  if (l.includes("medium")) return "#d97706";
+  return "#16a34a";
+}
 
-  return (
-    <div className={styles.meterWrap}>
-      <div className={styles.meterLabel}>{label}</div>
-      <div className={styles.meterTrack}>
-        <div
-          className={styles.meterFill}
-          style={{ width: `${score}%`, background: color }}
-        />
-      </div>
-      <div className={styles.meterScore} style={{ color }}>{score}/100</div>
-    </div>
-  );
+function getRiskBg(level: string) {
+  const l = level.toLowerCase();
+  if (l.includes("high"))   return "#fef2f2";
+  if (l.includes("medium")) return "#fffbeb";
+  return "#f0fdf4";
 }
 
 export default function Report() {
-  const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [result, setResult]           = useState<AnalysisResult | null>(null);
+  const [activeIdx, setActiveIdx]     = useState<number>(0);
+  const [filterLevel, setFilterLevel] = useState<string>("All");
   const router = useRouter();
   const reportRef = useRef<HTMLDivElement>(null);
 
@@ -55,119 +51,175 @@ export default function Report() {
 
   if (!result) {
     return (
-      <div style={{ padding: "8rem", textAlign: "center", color: "#64748b" }}>
-        <div style={{ fontSize: "2rem", marginBottom: "1rem" }}>⏳</div>
-        Loading formal report...
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"center", height:"100vh", background:"var(--canvas)", flexDirection:"column", gap:"1rem" }}>
+        <div style={{ width:32, height:32, border:"2px solid var(--glass-border)", borderTopColor:"var(--ink)", borderRadius:"50%", animation:"spin 0.75s linear infinite" }} />
+        <p style={{ color:"var(--ink-muted)", fontSize:"0.875rem", fontFamily:"var(--font-sans)" }}>Loading report…</p>
       </div>
     );
   }
 
-  const getBadgeClass = (level: string) => {
-    const l = level.toLowerCase();
-    if (l.includes("high"))   return styles.badgeHigh;
-    if (l.includes("medium")) return styles.badgeMedium;
-    return styles.badgeLow;
-  };
+  const highCount = result.clauses.filter(c => c.risk_level.toLowerCase().includes("high")).length;
+  const medCount  = result.clauses.filter(c => c.risk_level.toLowerCase().includes("medium")).length;
+  const lowCount  = result.clauses.filter(c => !c.risk_level.toLowerCase().includes("high") && !c.risk_level.toLowerCase().includes("medium")).length;
 
-  const handleExportPDF = () => {
-    const element = reportRef.current;
-    if (!element) return;
-    const opt = {
-      margin:       0.5,
-      filename:     'Contract_Risk_Analysis_Report.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
-  };
+  const filtered = filterLevel === "All"
+    ? result.clauses
+    : result.clauses.filter(c => c.risk_level.toLowerCase().includes(filterLevel.toLowerCase()));
 
-  const highCount   = result.clauses.filter(c => c.risk_level.toLowerCase().includes("high")).length;
-  const medCount    = result.clauses.filter(c => c.risk_level.toLowerCase().includes("medium")).length;
-  const lowCount    = result.clauses.filter(c => !c.risk_level.toLowerCase().includes("high") && !c.risk_level.toLowerCase().includes("medium")).length;
+  const activeClause = filtered[activeIdx] ?? result.clauses[0];
+
+  const scoreColor = result.risk_score < 30 ? "#16a34a" : result.risk_score < 70 ? "#d97706" : "#dc2626";
+  const scoreLabel = result.risk_score < 30 ? "Low Risk"  : result.risk_score < 70 ? "Moderate Risk" : "High Risk";
 
   return (
-    <div className={styles.container}>
-      
-      <div className={styles.reportWrapper} ref={reportRef}>
-        {/* ── Page header ───────────────────── */}
-        <header className={`${styles.header} animate-fade-in`}>
-          <div>
-            <h1 className={styles.title}>Legal Risk Analysis Report</h1>
-            <p style={{ color: "#64748b", marginTop: "0.25rem", fontSize: "0.95rem" }}>
-              {result.clauses.length} clauses evaluated against the MSME Development Act, 2006
-            </p>
-          </div>
-          <button className="btn-secondary" onClick={handleExportPDF} data-html2canvas-ignore>
-            📄 Download PDF Report
+    <div className={styles.shell}>
+
+      {/* ══ TOP NAV BAR ══════════════════════════════════ */}
+      <header className={styles.topbar}>
+        <div className={styles.topbarLeft}>
+          <Link href="/dashboard" className={styles.backBtn}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Dashboard
+          </Link>
+          <span className={styles.topbarDivider} />
+          <span className={styles.topbarTitle}>Legal Risk Analysis Report</span>
+        </div>
+        <div className={styles.topbarRight}>
+          <button className={styles.exportBtn} onClick={() => window.print()}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export PDF
           </button>
-        </header>
+          <Link href="/dashboard" className={styles.newBtn}>
+            Analyze Another
+          </Link>
+        </div>
+      </header>
 
-        {/* ── Risk overview strip ───────────── */}
-        <div className={`${styles.overviewStrip} animate-fade-in delay-100`}>
-          <RiskMeter score={result.risk_score} />
-          <div className={styles.clauseCounts}>
-            <div className={styles.countBadge} style={{ background: "#fef2f2", color: "#dc2626", border: "1px solid #fca5a5" }}>
-              🔴 {highCount} High
+      {/* ══ BODY: LEFT PANEL + RIGHT DETAIL ══════════════ */}
+      <div className={styles.body} ref={reportRef}>
+
+        {/* ── LEFT PANEL ─────────────────────────────── */}
+        <aside className={styles.leftPanel}>
+
+          {/* Risk Score Card */}
+          <div className={styles.scoreCard}>
+            <div className={styles.scoreNumber} style={{ color: scoreColor }}>
+              {result.risk_score}
             </div>
-            <div className={styles.countBadge} style={{ background: "#fffbeb", color: "#d97706", border: "1px solid #fde68a" }}>
-              🟡 {medCount} Medium
+            <div className={styles.scoreDenom}>/100</div>
+            <div className={styles.scoreLabel} style={{ color: scoreColor }}>{scoreLabel}</div>
+            <div className={styles.scoreMeterTrack}>
+              <div className={styles.scoreMeterFill} style={{ width: `${result.risk_score}%`, background: scoreColor }} />
             </div>
-            <div className={styles.countBadge} style={{ background: "#f0fdf4", color: "#16a34a", border: "1px solid #bbf7d0" }}>
-              🟢 {lowCount} Low
+            <div className={styles.scoreCounts}>
+              <span style={{ color:"#dc2626" }}>●&nbsp;{highCount} High</span>
+              <span style={{ color:"#d97706" }}>●&nbsp;{medCount} Med</span>
+              <span style={{ color:"#16a34a" }}>●&nbsp;{lowCount} Low</span>
             </div>
           </div>
-        </div>
 
-        {/* ── Executive summary ─────────────── */}
-        <div className={`${styles.summary} animate-fade-in delay-100`}>
-          <div className={styles.sectionLabel}>Executive Summary</div>
-          <p>{result.summary}</p>
-        </div>
+          {/* Executive Summary */}
+          <div className={styles.summaryCard}>
+            <div className={styles.panelLabel}>Executive Summary</div>
+            <p className={styles.summaryText}>{result.summary}</p>
+          </div>
 
-        {/* ── Clause cards ──────────────────── */}
-        <div className={styles.sectionLabel} style={{ marginBottom: "1rem" }}>
-          Clause-by-Clause Evaluation
-        </div>
-        <div className={styles.clausesGrid}>
-          {result.clauses.map((clause, idx) => (
-            <div key={idx} className={`${styles.clauseCard} animate-fade-in delay-200`}>
-              <div className={styles.clauseHeader}>
-                <h3 className={styles.clauseTitle}>{clause.title}</h3>
-                <span className={`${styles.badge} ${getBadgeClass(clause.risk_level)}`}>
-                  {clause.risk_level} Risk
+          {/* Filter */}
+          <div className={styles.filterRow}>
+            {["All","High","Medium","Low"].map(f => (
+              <button
+                key={f}
+                className={`${styles.filterBtn} ${filterLevel === f ? styles.filterActive : ""}`}
+                onClick={() => { setFilterLevel(f); setActiveIdx(0); }}
+              >{f}</button>
+            ))}
+          </div>
+
+          {/* Clause list */}
+          <div className={styles.clauseList}>
+            {filtered.map((clause, idx) => (
+              <button
+                key={idx}
+                className={`${styles.clauseListItem} ${activeIdx === idx ? styles.clauseListActive : ""}`}
+                onClick={() => setActiveIdx(idx)}
+              >
+                <span
+                  className={styles.clauseListDot}
+                  style={{ background: getRiskColor(clause.risk_level) }}
+                />
+                <span className={styles.clauseListTitle}>{clause.title}</span>
+                <span
+                  className={styles.clauseListBadge}
+                  style={{ background: getRiskBg(clause.risk_level), color: getRiskColor(clause.risk_level) }}
+                >
+                  {clause.risk_level}
                 </span>
-              </div>
+              </button>
+            ))}
+          </div>
+        </aside>
 
-              <div>
-                <div className={styles.fieldLabel}>Original Clause Text</div>
-                <div className={styles.originalContent}>{clause.content}</div>
-              </div>
+        {/* ── RIGHT DETAIL PANE ──────────────────────── */}
+        <main className={styles.detailPane}>
+          {activeClause ? (
+            <div className={styles.detailCard} key={activeClause.title}>
 
-              <div>
-                <div className={styles.fieldLabel}>⚖️ Statutory Analysis</div>
-                <div className={styles.explanation}>{clause.explanation}</div>
-              </div>
-
-              {clause.redline_suggestion && (
+              <div className={styles.detailHeader}>
                 <div>
-                  <div className={styles.fieldLabel}>✏️ Proposed Redline</div>
-                  <div className={styles.redline}>{clause.redline_suggestion}</div>
+                  <h2 className={styles.detailTitle}>{activeClause.title}</h2>
+                  <span
+                    className={styles.detailBadge}
+                    style={{ background: getRiskBg(activeClause.risk_level), color: getRiskColor(activeClause.risk_level) }}
+                  >
+                    {activeClause.risk_level} Risk
+                  </span>
+                </div>
+              </div>
+
+              <div className={styles.detailSection}>
+                <div className={styles.detailLabel}>Original Clause Text</div>
+                <div className={styles.detailContent}>{activeClause.content}</div>
+              </div>
+
+              <div className={styles.detailSection}>
+                <div className={styles.detailLabel}>⚖ Statutory Analysis</div>
+                <div className={styles.detailExplanation}>{activeClause.explanation}</div>
+              </div>
+
+              {activeClause.redline_suggestion && (
+                <div className={styles.detailSection}>
+                  <div className={styles.detailLabel}>✏ Proposed Redline</div>
+                  <div className={styles.detailRedline}>{activeClause.redline_suggestion}</div>
                 </div>
               )}
-            </div>
-          ))}
-        </div>
-      </div>
 
-      {/* ── Bottom CTA ───────────────────── */}
-      <div className={styles.bottomCta} data-html2canvas-ignore>
-        <Link href="/dashboard" className="btn-primary">
-          Analyze Another Document
-        </Link>
-        <Link href="/" className="btn-secondary">
-          Return Home
-        </Link>
+              {/* Navigation */}
+              <div className={styles.detailNav}>
+                <button
+                  className={styles.detailNavBtn}
+                  disabled={activeIdx === 0}
+                  onClick={() => setActiveIdx(i => Math.max(0, i - 1))}
+                >
+                  ← Previous
+                </button>
+                <span className={styles.detailNavCount}>{activeIdx + 1} of {filtered.length}</span>
+                <button
+                  className={styles.detailNavBtn}
+                  disabled={activeIdx === filtered.length - 1}
+                  onClick={() => setActiveIdx(i => Math.min(filtered.length - 1, i + 1))}
+                >
+                  Next →
+                </button>
+              </div>
+
+            </div>
+          ) : (
+            <div className={styles.emptyDetail}>
+              <p>Select a clause from the list to view details.</p>
+            </div>
+          )}
+        </main>
+
       </div>
     </div>
   );

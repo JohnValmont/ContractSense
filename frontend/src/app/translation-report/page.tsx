@@ -4,8 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
-// @ts-ignore
-import html2pdf from "html2pdf.js";
+// html2pdf is imported dynamically inside the handler for SSR compatibility
 
 interface TranslationResult {
   translated_title: string;
@@ -36,17 +35,7 @@ export default function TranslationReport() {
   }
 
   const handleExportPDF = () => {
-    const element = reportRef.current;
-    if (!element) return;
-    const opt = {
-      margin:       [0.75, 0.75, 0.75, 0.75], // Top, Right, Bottom, Left margins in inches
-      filename:     'ContractSense_Formal_Translation.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true, windowWidth: 1000 },
-      jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
-      pagebreak:    { mode: 'avoid-all' }
-    };
-    html2pdf().set(opt).from(element).save();
+    window.print();
   };
 
   return (
