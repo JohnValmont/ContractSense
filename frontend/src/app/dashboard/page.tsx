@@ -70,6 +70,10 @@ export default function Dashboard() {
       } else {
         endpoint = "/api/analyze";
       }
+
+      // ── Transparent routing log (visible in browser DevTools > Console) ──
+      console.log(`[ContractSense] Processing mode: "${processingMode}" → calling: ${backendUrl}${endpoint}`);
+
       const res = await fetch(`${backendUrl}${endpoint}`, { method: "POST", body: formData });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -77,6 +81,8 @@ export default function Dashboard() {
       }
       const data = await res.json();
       if (mode === "analyze") {
+        // Store processing mode alongside result so report page can verify independently
+        data._clientMode = processingMode;
         sessionStorage.setItem("contract_analysis", JSON.stringify(data));
         router.push("/report");
       } else {

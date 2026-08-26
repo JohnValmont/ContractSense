@@ -17,6 +17,7 @@ interface AnalysisResult {
   summary: string;
   risk_score: number;
   clauses: Clause[];
+  _clientMode?: string;
   _meta?: {
     sha256: string;
     ocr_used: boolean;
@@ -64,6 +65,9 @@ export default function Report() {
   }
 
   const meta = result._meta;
+  // _clientMode is stored by the dashboard at submission time — independent of backend _meta
+  const clientMode = result._clientMode ?? meta?.processing_mode ?? "unknown";
+  const isOffline = clientMode === "offline" || clientMode === "offline_fallback";
   const highCount = result.clauses.filter(c => c.risk_level.toLowerCase().includes("high")).length;
   const medCount = result.clauses.filter(c => c.risk_level.toLowerCase().includes("medium")).length;
   const lowCount = result.clauses.filter(c => !c.risk_level.toLowerCase().includes("high") && !c.risk_level.toLowerCase().includes("medium")).length;
@@ -214,8 +218,35 @@ export default function Report() {
 
       {/* ── MAIN PANE (Web App View) ────────────────────── */}
       <main className="main-scroll main-pane hide-on-print" style={{ flex: 1, overflowY: "auto", position: "relative" }}>
+        {/* ── Mode Verification Banner ─────────────────── */}
+        <div style={{
+          position: "sticky", top: 0, zIndex: 5,
+          background: isOffline ? "rgba(22,163,74,0.08)" : "rgba(212,146,74,0.08)",
+          borderBottom: `1px solid ${isOffline ? "rgba(74,222,128,0.2)" : "rgba(212,146,74,0.2)"}`,
+          padding: "0.6rem 2rem",
+          display: "flex", alignItems: "center", gap: "0.75rem",
+        }}>
+          <div style={{
+            width: 8, height: 8, borderRadius: "50%",
+            background: isOffline ? "#4ADE80" : "#FBBF24",
+            boxShadow: `0 0 6px ${isOffline ? "#4ADE80" : "#FBBF24"}`,
+          }} />
+          <span style={{ fontSize: "0.75rem", fontWeight: 700, color: isOffline ? "#166534" : "#92400E" }}>
+            {isOffline ? "🔒 Secure Offline Mode" : "⚡ AI-Powered Mode"}
+          </span>
+          <span style={{ fontSize: "0.7rem", color: isOffline ? "rgba(22,101,52,0.7)" : "rgba(146,64,14,0.7)", fontFamily: "monospace" }}>
+            → {isOffline ? "POST /api/analyze-local (no external calls)" : "POST /api/analyze (Gemini / OpenAI)"}
+          </span>
+          {meta?.ocr_used && (
+            <span style={{ marginLeft: "auto", fontSize: "0.65rem", background: "rgba(99,179,237,0.15)", color: "#1e40af", padding: "0.2rem 0.6rem", borderRadius: 100, fontWeight: 700, border: "1px solid rgba(99,179,237,0.3)" }}>
+              📷 OCR Scanned
+            </span>
+          )}
+        </div>
+
         {activeClause ? (
-          <div style={{ maxWidth: 860, margin: "0 auto", padding: "4rem 4rem 6rem" }}>
+          <div style={{ maxWidth: 860, margin: "0 auto", padding: "3rem 4rem 6rem" }}>
+
             <div style={{ marginBottom: "3rem" }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.35rem 0.85rem", borderRadius: 100, background: getRiskBg(activeClause.risk_level), color: getRiskColor(activeClause.risk_level), fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: "1.25rem" }}>
                 <span style={{ width: 6, height: 6, borderRadius: "50%", background: getRiskColor(activeClause.risk_level) }} />
