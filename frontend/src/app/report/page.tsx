@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import styles from "./page.module.css";
+import Logo from "../components/Logo";
 
 interface Clause {
   title: string;
@@ -21,24 +21,23 @@ interface AnalysisResult {
 
 function getRiskColor(level: string) {
   const l = level.toLowerCase();
-  if (l.includes("high"))   return "#dc2626";
+  if (l.includes("high")) return "#dc2626";
   if (l.includes("medium")) return "#d97706";
   return "#16a34a";
 }
 
 function getRiskBg(level: string) {
   const l = level.toLowerCase();
-  if (l.includes("high"))   return "#fef2f2";
-  if (l.includes("medium")) return "#fffbeb";
-  return "#f0fdf4";
+  if (l.includes("high")) return "rgba(220,38,38,0.12)";
+  if (l.includes("medium")) return "rgba(217,119,6,0.12)";
+  return "rgba(22,163,74,0.12)";
 }
 
 export default function Report() {
-  const [result, setResult]           = useState<AnalysisResult | null>(null);
-  const [activeIdx, setActiveIdx]     = useState<number>(0);
+  const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [activeIdx, setActiveIdx] = useState<number>(0);
   const [filterLevel, setFilterLevel] = useState<string>("All");
   const router = useRouter();
-  const reportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const data = sessionStorage.getItem("contract_analysis");
@@ -51,16 +50,17 @@ export default function Report() {
 
   if (!result) {
     return (
-      <div style={{ display:"flex", alignItems:"center", justifyContent:"center", height:"100vh", background:"var(--canvas)", flexDirection:"column", gap:"1rem" }}>
-        <div style={{ width:32, height:32, border:"2px solid var(--glass-border)", borderTopColor:"var(--ink)", borderRadius:"50%", animation:"spin 0.75s linear infinite" }} />
-        <p style={{ color:"var(--ink-muted)", fontSize:"0.875rem", fontFamily:"var(--font-sans)" }}>Loading report…</p>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", background: "#0F0B06", flexDirection: "column", gap: "1.5rem" }}>
+        <div style={{ width: 40, height: 40, border: "2px solid rgba(245,240,232,0.1)", borderTopColor: "#D4924A", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
+        <p style={{ color: "rgba(245,240,232,0.6)", fontSize: "0.875rem", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Loading secure report…</p>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
 
   const highCount = result.clauses.filter(c => c.risk_level.toLowerCase().includes("high")).length;
-  const medCount  = result.clauses.filter(c => c.risk_level.toLowerCase().includes("medium")).length;
-  const lowCount  = result.clauses.filter(c => !c.risk_level.toLowerCase().includes("high") && !c.risk_level.toLowerCase().includes("medium")).length;
+  const medCount = result.clauses.filter(c => c.risk_level.toLowerCase().includes("medium")).length;
+  const lowCount = result.clauses.filter(c => !c.risk_level.toLowerCase().includes("high") && !c.risk_level.toLowerCase().includes("medium")).length;
 
   const filtered = filterLevel === "All"
     ? result.clauses
@@ -68,158 +68,218 @@ export default function Report() {
 
   const activeClause = filtered[activeIdx] ?? result.clauses[0];
 
-  const scoreColor = result.risk_score < 30 ? "#16a34a" : result.risk_score < 70 ? "#d97706" : "#dc2626";
-  const scoreLabel = result.risk_score < 30 ? "Low Risk"  : result.risk_score < 70 ? "Moderate Risk" : "High Risk";
+  const scoreColor = result.risk_score < 30 ? "#4ADE80" : result.risk_score < 70 ? "#FBBF24" : "#F87171";
+  const scoreLabel = result.risk_score < 30 ? "Low Risk" : result.risk_score < 70 ? "Moderate Risk" : "Critical Risk";
 
   return (
-    <div className={styles.shell}>
+    <div className="report-container" style={{ display: "flex", height: "100vh", background: "#F5F0E8", fontFamily: "'Plus Jakarta Sans', sans-serif", overflow: "hidden" }}>
+      <style>{`
+        /* Web App Layout Styles */
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        
+        .main-scroll::-webkit-scrollbar { width: 6px; }
+        .main-scroll::-webkit-scrollbar-track { background: transparent; }
+        .main-scroll::-webkit-scrollbar-thumb { background: rgba(24,18,10,0.15); border-radius: 4px; }
 
-      {/* ══ TOP NAV BAR ══════════════════════════════════ */}
-      <header className={styles.topbar}>
-        <div className={styles.topbarLeft}>
-          <Link href="/dashboard" className={styles.backBtn}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-            Dashboard
+        .clause-btn { transition: all 0.2s cubic-bezier(.25,.46,.45,.94); }
+        .clause-btn:hover { background: rgba(255,255,255,0.04); }
+
+        /* PDF Export / Print Styles */
+        @media print {
+          @page { margin: 1.5cm; size: A4 portrait; }
+          body { background: #fff !important; color: #000 !important; }
+          .report-container { display: block !important; height: auto !important; overflow: visible !important; background: #fff !important; }
+          .hide-on-print { display: none !important; }
+          .print-only { display: block !important; }
+          .main-pane { width: 100% !important; max-width: 100% !important; padding: 0 !important; overflow: visible !important; height: auto !important; }
+          .clause-print-card { page-break-inside: avoid; border: 1px solid #ccc; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; background: #fafafa !important; }
+          .print-header { border-bottom: 2px solid #000; padding-bottom: 1.5rem; margin-bottom: 2rem; }
+        }
+      `}</style>
+
+      {/* ── SIDEBAR (Hidden on Print) ────────────────────── */}
+      <aside className="hide-on-print" style={{
+        width: 380, flexShrink: 0, background: "#0F0B06", borderRight: "1px solid rgba(255,255,255,0.06)",
+        display: "flex", flexDirection: "column", height: "100%", zIndex: 10
+      }}>
+        {/* Topbar */}
+        <div style={{ padding: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
+            <Logo size={20} />
+            <span style={{ fontFamily: "'EB Garamond', serif", fontSize: "1.1rem", fontWeight: 600, color: "#F5F0E8" }}>ContractSense</span>
           </Link>
-          <span className={styles.topbarDivider} />
-          <span className={styles.topbarTitle}>Legal Risk Analysis Report</span>
-        </div>
-        <div className={styles.topbarRight}>
-          <button className={styles.exportBtn} onClick={() => window.print()}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: "0.4rem", padding: "0.4rem 0.8rem", borderRadius: 4, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", color: "#F5F0E8", fontSize: "0.75rem", fontWeight: 600, cursor: "pointer", transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.12)"} onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}>
             Export PDF
           </button>
-          <Link href="/dashboard" className={styles.newBtn}>
-            Analyze Another
-          </Link>
         </div>
-      </header>
 
-      {/* ══ BODY: LEFT PANEL + RIGHT DETAIL ══════════════ */}
-      <div className={styles.body} ref={reportRef}>
-
-        {/* ── LEFT PANEL ─────────────────────────────── */}
-        <aside className={styles.leftPanel}>
-
-          {/* Risk Score Card */}
-          <div className={styles.scoreCard}>
-            <div className={styles.scoreNumber} style={{ color: scoreColor }}>
+        <div className="sidebar-scroll" style={{ overflowY: "auto", flex: 1, padding: "1.5rem" }}>
+          {/* Risk Score */}
+          <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: 12, padding: "1.5rem", border: "1px solid rgba(255,255,255,0.05)", marginBottom: "1.5rem", textAlign: "center" }}>
+            <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,240,232,0.4)", marginBottom: "1rem" }}>Overall Risk Assessment</div>
+            <div style={{ fontFamily: "'EB Garamond', serif", fontSize: "4.5rem", fontWeight: 500, lineHeight: 1, color: scoreColor, marginBottom: "0.25rem" }}>
               {result.risk_score}
             </div>
-            <div className={styles.scoreDenom}>/100</div>
-            <div className={styles.scoreLabel} style={{ color: scoreColor }}>{scoreLabel}</div>
-            <div className={styles.scoreMeterTrack}>
-              <div className={styles.scoreMeterFill} style={{ width: `${result.risk_score}%`, background: scoreColor }} />
-            </div>
-            <div className={styles.scoreCounts}>
-              <span style={{ color:"#dc2626" }}>●&nbsp;{highCount} High</span>
-              <span style={{ color:"#d97706" }}>●&nbsp;{medCount} Med</span>
-              <span style={{ color:"#16a34a" }}>●&nbsp;{lowCount} Low</span>
+            <div style={{ fontSize: "0.9rem", fontWeight: 700, color: scoreColor, marginBottom: "1.25rem" }}>{scoreLabel}</div>
+            <div style={{ display: "flex", justifyContent: "center", gap: "1.25rem", fontSize: "0.75rem" }}>
+              <span style={{ color: "#F87171", fontWeight: 600 }}>{highCount} High</span>
+              <span style={{ color: "#FBBF24", fontWeight: 600 }}>{medCount} Med</span>
+              <span style={{ color: "#4ADE80", fontWeight: 600 }}>{lowCount} Low</span>
             </div>
           </div>
 
-          {/* Executive Summary */}
-          <div className={styles.summaryCard}>
-            <div className={styles.panelLabel}>Executive Summary</div>
-            <p className={styles.summaryText}>{result.summary}</p>
+          {/* Exec Summary */}
+          <div style={{ marginBottom: "2rem" }}>
+            <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,240,232,0.4)", marginBottom: "0.75rem" }}>Executive Summary</div>
+            <p style={{ fontSize: "0.825rem", color: "rgba(245,240,232,0.7)", lineHeight: 1.7 }}>{result.summary}</p>
           </div>
 
           {/* Filter */}
-          <div className={styles.filterRow}>
-            {["All","High","Medium","Low"].map(f => (
-              <button
-                key={f}
-                className={`${styles.filterBtn} ${filterLevel === f ? styles.filterActive : ""}`}
-                onClick={() => { setFilterLevel(f); setActiveIdx(0); }}
-              >{f}</button>
-            ))}
-          </div>
-
-          {/* Clause list */}
-          <div className={styles.clauseList}>
-            {filtered.map((clause, idx) => (
-              <button
-                key={idx}
-                className={`${styles.clauseListItem} ${activeIdx === idx ? styles.clauseListActive : ""}`}
-                onClick={() => setActiveIdx(idx)}
-              >
-                <span
-                  className={styles.clauseListDot}
-                  style={{ background: getRiskColor(clause.risk_level) }}
-                />
-                <span className={styles.clauseListTitle}>{clause.title}</span>
-                <span
-                  className={styles.clauseListBadge}
-                  style={{ background: getRiskBg(clause.risk_level), color: getRiskColor(clause.risk_level) }}
-                >
-                  {clause.risk_level}
-                </span>
+          <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
+            {["All", "High", "Medium", "Low"].map(f => (
+              <button key={f} onClick={() => { setFilterLevel(f); setActiveIdx(0); }} style={{
+                flex: 1, padding: "0.4rem 0", borderRadius: 4, border: "none", cursor: "pointer",
+                fontSize: "0.72rem", fontWeight: 700,
+                background: filterLevel === f ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.03)",
+                color: filterLevel === f ? "#fff" : "rgba(255,255,255,0.4)",
+              }}>
+                {f}
               </button>
             ))}
           </div>
-        </aside>
 
-        {/* ── RIGHT DETAIL PANE ──────────────────────── */}
-        <main className={styles.detailPane}>
-          {activeClause ? (
-            <div className={styles.detailCard} key={activeClause.title}>
+          {/* Clause List */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+            {filtered.map((clause, idx) => {
+              const active = activeIdx === idx;
+              return (
+                <button key={idx} className="clause-btn" onClick={() => setActiveIdx(idx)} style={{
+                  textAlign: "left", padding: "0.875rem 1rem", borderRadius: 8, cursor: "pointer",
+                  background: active ? "rgba(255,255,255,0.08)" : "transparent",
+                  border: active ? "1px solid rgba(255,255,255,0.15)" : "1px solid transparent",
+                  display: "flex", alignItems: "flex-start", gap: "0.75rem"
+                }}>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: getRiskColor(clause.risk_level), marginTop: 6, flexShrink: 0 }} />
+                  <div>
+                    <div style={{ fontSize: "0.8rem", fontWeight: 600, color: active ? "#fff" : "rgba(245,240,232,0.7)", marginBottom: "0.35rem", lineHeight: 1.4 }}>{clause.title}</div>
+                    <div style={{ display: "inline-block", padding: "0.15rem 0.5rem", borderRadius: 100, fontSize: "0.62rem", fontWeight: 800, background: getRiskBg(clause.risk_level), color: getRiskColor(clause.risk_level), letterSpacing: "0.05em" }}>
+                      {clause.risk_level.toUpperCase()}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </aside>
 
-              <div className={styles.detailHeader}>
-                <div>
-                  <h2 className={styles.detailTitle}>{activeClause.title}</h2>
-                  <span
-                    className={styles.detailBadge}
-                    style={{ background: getRiskBg(activeClause.risk_level), color: getRiskColor(activeClause.risk_level) }}
-                  >
-                    {activeClause.risk_level} Risk
-                  </span>
+      {/* ── MAIN PANE (Web App View) ────────────────────── */}
+      <main className="main-scroll main-pane hide-on-print" style={{ flex: 1, overflowY: "auto", position: "relative" }}>
+        {activeClause ? (
+          <div style={{ maxWidth: 860, margin: "0 auto", padding: "4rem 4rem 6rem" }}>
+            <div style={{ marginBottom: "3rem" }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.35rem 0.85rem", borderRadius: 100, background: getRiskBg(activeClause.risk_level), color: getRiskColor(activeClause.risk_level), fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: "1.25rem" }}>
+                <span style={{ width: 6, height: 6, borderRadius: "50%", background: getRiskColor(activeClause.risk_level) }} />
+                {activeClause.risk_level} Risk
+              </div>
+              <h1 style={{ fontFamily: "'EB Garamond', serif", fontSize: "2.5rem", fontWeight: 500, color: "#18120A", lineHeight: 1.15, letterSpacing: "-0.02em" }}>
+                {activeClause.title}
+              </h1>
+            </div>
+
+            <div style={{ background: "#FBF9F5", border: "1px solid rgba(24,18,10,0.08)", borderRadius: 12, padding: "2.5rem" }}>
+              <div style={{ marginBottom: "2.5rem" }}>
+                <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#A89C8F", marginBottom: "1rem" }}>Original Clause Text</div>
+                <div style={{ fontSize: "0.925rem", color: "#18120A", lineHeight: 1.8, padding: "1.5rem", background: "rgba(24,18,10,0.03)", borderRadius: 8, borderLeft: "4px solid rgba(24,18,10,0.15)" }}>
+                  {activeClause.content}
                 </div>
               </div>
 
-              <div className={styles.detailSection}>
-                <div className={styles.detailLabel}>Original Clause Text</div>
-                <div className={styles.detailContent}>{activeClause.content}</div>
-              </div>
-
-              <div className={styles.detailSection}>
-                <div className={styles.detailLabel}>⚖ Statutory Analysis</div>
-                <div className={styles.detailExplanation}>{activeClause.explanation}</div>
+              <div style={{ marginBottom: "2.5rem" }}>
+                <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#A89C8F", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  Statutory Analysis
+                </div>
+                <div style={{ fontSize: "0.925rem", color: "#5A5048", lineHeight: 1.8 }}>
+                  {activeClause.explanation}
+                </div>
               </div>
 
               {activeClause.redline_suggestion && (
-                <div className={styles.detailSection}>
-                  <div className={styles.detailLabel}>✏ Proposed Redline</div>
-                  <div className={styles.detailRedline}>{activeClause.redline_suggestion}</div>
+                <div>
+                  <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#A89C8F", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    Proposed Redline
+                  </div>
+                  <div style={{ fontSize: "0.925rem", color: "#166534", fontWeight: 500, lineHeight: 1.8, padding: "1.5rem", background: "rgba(22,163,74,0.06)", borderRadius: 8, border: "1px solid rgba(22,163,74,0.15)" }}>
+                    {activeClause.redline_suggestion}
+                  </div>
                 </div>
               )}
+            </div>
 
-              {/* Navigation */}
-              <div className={styles.detailNav}>
-                <button
-                  className={styles.detailNavBtn}
-                  disabled={activeIdx === 0}
-                  onClick={() => setActiveIdx(i => Math.max(0, i - 1))}
-                >
-                  ← Previous
-                </button>
-                <span className={styles.detailNavCount}>{activeIdx + 1} of {filtered.length}</span>
-                <button
-                  className={styles.detailNavBtn}
-                  disabled={activeIdx === filtered.length - 1}
-                  onClick={() => setActiveIdx(i => Math.min(filtered.length - 1, i + 1))}
-                >
-                  Next →
-                </button>
+            {/* Nav Controls */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "2.5rem" }}>
+              <button disabled={activeIdx === 0} onClick={() => setActiveIdx(i => Math.max(0, i - 1))} style={{ padding: "0.75rem 1.5rem", borderRadius: 6, background: "transparent", border: "1px solid rgba(24,18,10,0.15)", fontSize: "0.825rem", fontWeight: 600, color: "#18120A", cursor: activeIdx === 0 ? "not-allowed" : "pointer", opacity: activeIdx === 0 ? 0.4 : 1 }}>
+                ← Previous
+              </button>
+              <span style={{ fontSize: "0.825rem", fontWeight: 600, color: "#7A6E64" }}>Clause {activeIdx + 1} of {filtered.length}</span>
+              <button disabled={activeIdx === filtered.length - 1} onClick={() => setActiveIdx(i => Math.min(filtered.length - 1, i + 1))} style={{ padding: "0.75rem 1.5rem", borderRadius: 6, background: "#18120A", border: "1px solid #18120A", fontSize: "0.825rem", fontWeight: 600, color: "#F5F0E8", cursor: activeIdx === filtered.length - 1 ? "not-allowed" : "pointer", opacity: activeIdx === filtered.length - 1 ? 0.4 : 1 }}>
+                Next →
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "#7A6E64", fontSize: "0.9rem" }}>
+            Select a clause to view details.
+          </div>
+        )}
+      </main>
+
+      {/* ── PRINT-ONLY VIEW (Hidden in Web App) ────────────── */}
+      <div className="print-only" style={{ display: "none" }}>
+        <div className="print-header">
+          <h1 style={{ fontFamily: "'EB Garamond', serif", fontSize: "2.5rem", marginBottom: "0.5rem" }}>Legal Risk Analysis Report</h1>
+          <p style={{ color: "#555", fontSize: "0.9rem" }}>Generated by ContractSense</p>
+        </div>
+        
+        <div style={{ marginBottom: "2.5rem", padding: "1.5rem", border: "2px solid #000", borderRadius: 8 }}>
+          <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem", textTransform: "uppercase" }}>Executive Summary</h2>
+          <p style={{ fontSize: "1rem", lineHeight: 1.6 }}>{result.summary}</p>
+          <div style={{ marginTop: "1.5rem", fontWeight: "bold" }}>Overall Risk Score: {result.risk_score}/100 ({scoreLabel})</div>
+        </div>
+
+        <h2 style={{ fontSize: "1.5rem", marginBottom: "1.5rem", borderBottom: "1px solid #ccc", paddingBottom: "0.5rem" }}>Clause Analysis</h2>
+        
+        {result.clauses.map((clause, idx) => (
+          <div key={idx} className="clause-print-card">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+              <h3 style={{ fontFamily: "'EB Garamond', serif", fontSize: "1.6rem", margin: 0 }}>{clause.title}</h3>
+              <span style={{ padding: "4px 10px", background: "#eee", border: "1px solid #000", fontWeight: "bold", fontSize: "0.8rem", textTransform: "uppercase" }}>
+                Risk: {clause.risk_level}
+              </span>
+            </div>
+            
+            <div style={{ marginBottom: "1.5rem" }}>
+              <strong style={{ display: "block", fontSize: "0.85rem", textTransform: "uppercase", marginBottom: "0.5rem", color: "#555" }}>Original Clause</strong>
+              <div style={{ padding: "1rem", background: "#f9f9f9", borderLeft: "4px solid #ccc", fontStyle: "italic", lineHeight: 1.6 }}>{clause.content}</div>
+            </div>
+
+            <div style={{ marginBottom: "1.5rem" }}>
+              <strong style={{ display: "block", fontSize: "0.85rem", textTransform: "uppercase", marginBottom: "0.5rem", color: "#555" }}>Statutory Analysis</strong>
+              <div style={{ lineHeight: 1.6 }}>{clause.explanation}</div>
+            </div>
+
+            {clause.redline_suggestion && (
+              <div>
+                <strong style={{ display: "block", fontSize: "0.85rem", textTransform: "uppercase", marginBottom: "0.5rem", color: "#555" }}>Proposed Redline</strong>
+                <div style={{ padding: "1rem", border: "1px dashed #000", background: "#fff", lineHeight: 1.6, fontWeight: "bold" }}>{clause.redline_suggestion}</div>
               </div>
-
-            </div>
-          ) : (
-            <div className={styles.emptyDetail}>
-              <p>Select a clause from the list to view details.</p>
-            </div>
-          )}
-        </main>
-
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
