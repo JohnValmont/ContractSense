@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import hashlib
 import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -11,6 +12,58 @@ from local_analyzer import analyze_contract_local
 
 from db import init_db
 from auth import auth_bp
+
+# ─────────────────────────────────────────────
+#  PDF Text Extraction with OCR Fallback
+# ─────────────────────────────────────────────
+def extract_pdf_text(file_stream) -> tuple[str, bool]:
+    """
+    Returns (text, used_ocr).
+    Tries pdfplumber first (fast, for digital PDFs).
+    Falls back to pytesseract OCR for scanned image-only PDFs.
+    """
+    text = ""
+    used_ocr = False
+
+    try:
+        with pdfplumber.open(file_stream) as pdf:
+            for page in pdf.pages:
+                extracted = page.extract_text()
+                if extracted:
+                    text += extracted + "\n"
+    except Exception as e:
+        print(f"[ContractSense] pdfplumber failed: {e}")
+
+    # If no text found, try OCR fallback
+    if not text.strip():
+        try:
+            from pdf2image import convert_from_bytes
+            import pytesseract
+            from PIL import Image
+
+            file_stream.seek(0)
+            pdf_bytes = file_stream.read()
+            images = convert_from_bytes(pdf_bytes, dpi=300)
+            for img in images:
+                ocr_text = pytesseract.image_to_string(img, lang='eng')
+                if ocr_text:
+                    text += ocr_text + "\n"
+            used_ocr = True
+            print(f"[ContractSense] OCR extracted {len(text)} chars from scanned PDF")
+        except Exception as e:
+            print(f"[ContractSense] OCR fallback failed: {e}")
+
+    return text.strip(), used_ocr
+
+
+def sha256_hash(file_stream) -> str:
+    """Compute SHA-256 fingerprint of the uploaded file."""
+    file_stream.seek(0)
+    h = hashlib.sha256()
+    for chunk in iter(lambda: file_stream.read(8192), b""):
+        h.update(chunk)
+    file_stream.seek(0)
+    return h.hexdigest()
 
 load_dotenv()
 
@@ -302,19 +355,14 @@ def analyze_contract():
     if not file.filename.lower().endswith(".pdf"):
         return jsonify({"detail": "Only PDF files are supported."}), 400
 
-    # ── Extract text from PDF ──────────────────
-    contract_text = ""
-    try:
-        with pdfplumber.open(file) as pdf:
-            for page in pdf.pages:
-                extracted = page.extract_text()
-                if extracted:
-                    contract_text += extracted + "\n"
-    except Exception as e:
-        return jsonify({"detail": f"Failed to read PDF: {str(e)}"}), 500
+    # ── Compute SHA-256 fingerprint before reading ──
+    doc_fingerprint = sha256_hash(file)
 
-    if not contract_text.strip():
-        return jsonify({"detail": "No readable text found in the PDF. Make sure it is not a scanned image-only PDF."}), 400
+    # ── Extract text from PDF (with OCR fallback) ──────────────────
+    contract_text, used_ocr = extract_pdf_text(file)
+
+    if not contract_text:
+        return jsonify({"detail": "No readable text found in the PDF. The file may be corrupted or password-protected."}), 400
 
     # ── Trim to ~300,000 chars to stay within token limits ──
     if len(contract_text) > 300000:
@@ -323,11 +371,20 @@ def analyze_contract():
     # ── Call AI or Local Fallback ────────────
     fallback_chain = build_fallback_chain()
     
+    def attach_meta(result: dict) -> dict:
+        """Attach security metadata to every analysis result."""
+        result["_meta"] = {
+            "sha256": doc_fingerprint,
+            "ocr_used": used_ocr,
+            "processing_mode": "ai",
+        }
+        return result
+
     if fallback_chain:
         try:
             prompt = build_prompt(contract_text, language)
             result = call_llm_with_fallback(prompt)
-            return jsonify(result)
+            return jsonify(attach_meta(result))
         except Exception as e:
             print(f"[ContractSense] API call failed, falling back to local heuristic engine: {e}")
     else:
@@ -336,17 +393,62 @@ def analyze_contract():
     # ── Fallback: Try local dynamic extraction ──
     local_result = analyze_contract_local(contract_text, language)
     if local_result:
+        local_result["_meta"] = {"sha256": doc_fingerprint, "ocr_used": used_ocr, "processing_mode": "offline_fallback"}
         return jsonify(local_result)
-        
+
     # ── Final Fallback: Static Demo ──
     try:
         filename = "demo_risk_analysis.json"
         if language.lower() == "hindi":
             filename = "demo_risk_analysis_hindi.json"
         with open(filename, "r", encoding="utf-8") as f:
-            return jsonify(json.load(f))
+            demo = json.load(f)
+            demo["_meta"] = {"sha256": doc_fingerprint, "ocr_used": used_ocr, "processing_mode": "demo"}
+            return jsonify(demo)
     except Exception as inner_e:
         return jsonify({"detail": f"APIs failed and Demo file missing: {inner_e}"}), 500
+
+
+@app.route("/api/analyze-local", methods=["POST"])
+def analyze_contract_offline():
+    """Dedicated offline endpoint — skips all LLM calls. Zero data leaves the server."""
+    if "file" not in request.files:
+        return jsonify({"detail": "No file part in request."}), 400
+
+    file = request.files["file"]
+    language = request.form.get("language", "English")
+
+    if not file.filename or not file.filename.lower().endswith(".pdf"):
+        return jsonify({"detail": "Only PDF files are supported."}), 400
+
+    doc_fingerprint = sha256_hash(file)
+    contract_text, used_ocr = extract_pdf_text(file)
+
+    if not contract_text:
+        return jsonify({"detail": "No readable text found in PDF."}), 400
+
+    if len(contract_text) > 300000:
+        contract_text = contract_text[:300000]
+
+    local_result = analyze_contract_local(contract_text, language)
+
+    if local_result:
+        local_result["_meta"] = {
+            "sha256": doc_fingerprint,
+            "ocr_used": used_ocr,
+            "processing_mode": "offline",
+        }
+        return jsonify(local_result)
+
+    # Static demo fallback
+    try:
+        filename = "demo_risk_analysis_hindi.json" if language.lower() == "hindi" else "demo_risk_analysis.json"
+        with open(filename, "r", encoding="utf-8") as f:
+            demo = json.load(f)
+            demo["_meta"] = {"sha256": doc_fingerprint, "ocr_used": used_ocr, "processing_mode": "demo"}
+            return jsonify(demo)
+    except Exception as e:
+        return jsonify({"detail": f"Offline analysis failed: {e}"}), 500
 
 @app.route("/api/translate", methods=["POST"])
 def translate_contract():
@@ -362,18 +464,10 @@ def translate_contract():
     if not file.filename.lower().endswith(".pdf"):
         return jsonify({"detail": "Only PDF files are supported."}), 400
 
-    # ── Extract text from PDF ──────────────────
-    contract_text = ""
-    try:
-        with pdfplumber.open(file) as pdf:
-            for page in pdf.pages:
-                extracted = page.extract_text()
-                if extracted:
-                    contract_text += extracted + "\n"
-    except Exception as e:
-        return jsonify({"detail": f"Failed to read PDF: {str(e)}"}), 500
+    # ── Extract text from PDF (with OCR fallback) ──────────────────
+    contract_text, _ = extract_pdf_text(file)
 
-    if not contract_text.strip():
+    if not contract_text:
         return jsonify({"detail": "No readable text found in the PDF."}), 400
 
     # ── Trim to ~300,000 chars to stay within token limits ──

@@ -17,6 +17,11 @@ interface AnalysisResult {
   summary: string;
   risk_score: number;
   clauses: Clause[];
+  _meta?: {
+    sha256: string;
+    ocr_used: boolean;
+    processing_mode: string;
+  };
 }
 
 function getRiskColor(level: string) {
@@ -58,6 +63,7 @@ export default function Report() {
     );
   }
 
+  const meta = result._meta;
   const highCount = result.clauses.filter(c => c.risk_level.toLowerCase().includes("high")).length;
   const medCount = result.clauses.filter(c => c.risk_level.toLowerCase().includes("medium")).length;
   const lowCount = result.clauses.filter(c => !c.risk_level.toLowerCase().includes("high") && !c.risk_level.toLowerCase().includes("medium")).length;
@@ -144,6 +150,29 @@ export default function Report() {
             <p style={{ fontSize: "0.825rem", color: "rgba(245,240,232,0.7)", lineHeight: 1.7 }}>{result.summary}</p>
           </div>
 
+          {/* Security Meta */}
+          {meta && (
+            <div style={{ marginBottom: "1.5rem", padding: "1rem", background: "rgba(255,255,255,0.02)", borderRadius: 8, border: "1px solid rgba(255,255,255,0.05)" }}>
+              <div style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,240,232,0.3)", marginBottom: "0.75rem" }}>Security Metadata</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ fontSize: "0.7rem", color: meta.processing_mode === "offline" ? "#4ADE80" : "#FBBF24", fontWeight: 700 }}>
+                    {meta.processing_mode === "offline" ? "🔒 Offline" : meta.processing_mode === "ai" ? "⚡ AI-Powered" : meta.processing_mode === "demo" ? "🎬 Demo" : "🔁 Fallback"}
+                  </span>
+                  {meta.ocr_used && (
+                    <span style={{ fontSize: "0.65rem", background: "rgba(99,179,237,0.15)", color: "#63B3ED", padding: "0.15rem 0.5rem", borderRadius: 100, fontWeight: 700, border: "1px solid rgba(99,179,237,0.2)" }}>
+                      📷 OCR Scanned
+                    </span>
+                  )}
+                </div>
+                <div style={{ fontSize: "0.62rem", color: "rgba(245,240,232,0.3)", fontFamily: "monospace", lineHeight: 1.4, wordBreak: "break-all" }}>
+                  <span style={{ color: "rgba(245,240,232,0.2)", display: "block", marginBottom: "0.15rem" }}>⛓ SHA-256</span>
+                  {meta.sha256.slice(0, 32)}…
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Filter */}
           <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
             {["All", "High", "Medium", "Low"].map(f => (
@@ -207,7 +236,7 @@ export default function Report() {
 
               <div style={{ marginBottom: "2.5rem" }}>
                 <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#A89C8F", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
                   Statutory Analysis
                 </div>
                 <div style={{ fontSize: "0.925rem", color: "#5A5048", lineHeight: 1.8 }}>
@@ -218,7 +247,7 @@ export default function Report() {
               {activeClause.redline_suggestion && (
                 <div>
                   <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#A89C8F", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
                     Proposed Redline
                   </div>
                   <div style={{ fontSize: "0.925rem", color: "#166534", fontWeight: 500, lineHeight: 1.8, padding: "1.5rem", background: "rgba(22,163,74,0.06)", borderRadius: 8, border: "1px solid rgba(22,163,74,0.15)" }}>
@@ -252,7 +281,7 @@ export default function Report() {
           <h1 style={{ fontFamily: "'EB Garamond', serif", fontSize: "2.5rem", marginBottom: "0.5rem" }}>Legal Risk Analysis Report</h1>
           <p style={{ color: "#555", fontSize: "0.9rem" }}>Generated by ContractSense</p>
         </div>
-        
+
         <div style={{ marginBottom: "2.5rem", padding: "1.5rem", border: "2px solid #000", borderRadius: 8 }}>
           <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem", textTransform: "uppercase" }}>Executive Summary</h2>
           <p style={{ fontSize: "1rem", lineHeight: 1.6 }}>{result.summary}</p>
@@ -260,7 +289,7 @@ export default function Report() {
         </div>
 
         <h2 style={{ fontSize: "1.5rem", marginBottom: "1.5rem", borderBottom: "1px solid #ccc", paddingBottom: "0.5rem" }}>Clause Analysis</h2>
-        
+
         {result.clauses.map((clause, idx) => (
           <div key={idx} className="clause-print-card">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
@@ -269,7 +298,7 @@ export default function Report() {
                 Risk: {clause.risk_level}
               </span>
             </div>
-            
+
             <div style={{ marginBottom: "1.5rem" }}>
               <strong style={{ display: "block", fontSize: "0.85rem", textTransform: "uppercase", marginBottom: "0.5rem", color: "#555" }}>Original Clause</strong>
               <div style={{ padding: "1rem", background: "#f9f9f9", borderLeft: "4px solid #ccc", fontStyle: "italic", lineHeight: 1.6 }}>{clause.content}</div>

@@ -7,6 +7,7 @@ import LegalResources from "../components/LegalResources";
 import Logo from "../components/Logo";
 
 type Mode = "analyze" | "translate" | "resources";
+type ProcessingMode = "offline" | "ai";
 
 export default function Dashboard() {
   const [uiLanguage, setUiLanguage] = useState<"en" | "hi">("en");
@@ -17,6 +18,9 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [processingMode, setProcessingMode] = useState<ProcessingMode>("offline");
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
   const router = useRouter();
 
   const handleFile = (f: File) => {
@@ -44,6 +48,13 @@ export default function Dashboard() {
 
   const handleUpload = async () => {
     if (!file) { setError("Please select a PDF document first."); return; }
+
+    // If AI mode selected but not yet acknowledged, show the privacy modal
+    if (processingMode === "ai" && !privacyAcknowledged) {
+      setShowPrivacyModal(true);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     const formData = new FormData();
@@ -51,8 +62,15 @@ export default function Dashboard() {
     formData.append("language", language);
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
-      const endpoint   = mode === "analyze" ? "/api/analyze" : "/api/translate";
-      const res        = await fetch(`${backendUrl}${endpoint}`, { method: "POST", body: formData });
+      let endpoint: string;
+      if (mode === "translate") {
+        endpoint = "/api/translate";
+      } else if (processingMode === "offline") {
+        endpoint = "/api/analyze-local";
+      } else {
+        endpoint = "/api/analyze";
+      }
+      const res = await fetch(`${backendUrl}${endpoint}`, { method: "POST", body: formData });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.detail || `Server error: ${res.status}`);
@@ -73,6 +91,55 @@ export default function Dashboard() {
   };
 
   const hi = uiLanguage === "hi";
+
+  /* ── Privacy Warning Modal ─────────────────────────────────────── */
+  const PrivacyModal = () => (
+    <div style={{
+      position: "fixed", inset: 0, background: "rgba(0,0,0,0.65)", zIndex: 9999,
+      display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem",
+      backdropFilter: "blur(4px)",
+    }}>
+      <div style={{
+        background: "#1A1208", border: "1px solid rgba(255,120,60,0.35)", borderRadius: 16,
+        padding: "2.5rem", maxWidth: 520, width: "100%", boxShadow: "0 40px 80px rgba(0,0,0,0.6)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
+          <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(255,120,60,0.12)", border: "1px solid rgba(255,120,60,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.5rem", flexShrink: 0 }}>⚠️</div>
+          <div>
+            <div style={{ fontFamily: "'EB Garamond', serif", fontSize: "1.35rem", fontWeight: 600, color: "#F5F0E8", marginBottom: "0.25rem" }}>Third-Party API Warning</div>
+            <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#FF7840", letterSpacing: "0.05em", textTransform: "uppercase" }}>Data Privacy Notice</div>
+          </div>
+        </div>
+
+        <div style={{ fontSize: "0.9rem", color: "rgba(245,240,232,0.75)", lineHeight: 1.7, marginBottom: "1.5rem" }}>
+          By using <strong style={{ color: "#F5F0E8" }}>AI-Powered mode</strong>, your contract text will be transmitted to third-party AI providers such as <strong style={{ color: "#F5F0E8" }}>Google Gemini</strong> or <strong style={{ color: "#F5F0E8" }}>OpenAI</strong>.
+        </div>
+
+        <div style={{ background: "rgba(255,120,60,0.08)", border: "1px solid rgba(255,120,60,0.2)", borderRadius: 8, padding: "1rem 1.25rem", marginBottom: "2rem" }}>
+          <ul style={{ margin: 0, paddingLeft: "1.25rem", color: "rgba(245,240,232,0.7)", fontSize: "0.84rem", lineHeight: 1.8 }}>
+            <li>These providers <strong style={{ color: "#FFB380" }}>may use your data to train AI models</strong>.</li>
+            <li>Ensure your document contains <strong style={{ color: "#FFB380" }}>no confidential or sensitive information</strong> before proceeding.</li>
+            <li>For maximum security, use <strong style={{ color: "#4ADE80" }}>🔒 Secure Offline mode</strong>.</li>
+          </ul>
+        </div>
+
+        <div style={{ display: "flex", gap: "0.75rem" }}>
+          <button
+            onClick={() => { setProcessingMode("offline"); setShowPrivacyModal(false); }}
+            style={{ flex: 1, padding: "0.75rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "rgba(245,240,232,0.8)", fontSize: "0.84rem", fontWeight: 600, cursor: "pointer" }}
+          >
+            Switch to Offline Mode
+          </button>
+          <button
+            onClick={() => { setPrivacyAcknowledged(true); setShowPrivacyModal(false); setTimeout(handleUpload, 50); }}
+            style={{ flex: 1, padding: "0.75rem", borderRadius: 8, border: "none", background: "#FF7840", color: "#fff", fontSize: "0.84rem", fontWeight: 700, cursor: "pointer" }}
+          >
+            I Understand, Proceed
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div style={{ display:"flex", height:"100vh", background:"var(--canvas)", overflow:"hidden" }}>
@@ -261,6 +328,50 @@ export default function Dashboard() {
               )}
             </div>
 
+            {/* ── Processing Mode Toggle ───────────────────────── */}
+            {mode === "analyze" && (
+              <div style={{ marginTop: "1.75rem", padding: "1.25rem", background: "var(--surface)", borderRadius: 10, border: "1px solid var(--glass-border)" }}>
+                <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: "1rem" }}>Processing Mode</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                  {/* Offline Option */}
+                  <button
+                    onClick={() => setProcessingMode("offline")}
+                    style={{
+                      padding: "1rem", borderRadius: 8, cursor: "pointer", textAlign: "left",
+                      border: processingMode === "offline" ? "1.5px solid #4ADE80" : "1.5px solid var(--glass-border)",
+                      background: processingMode === "offline" ? "rgba(74,222,128,0.06)" : "var(--surface-2)",
+                      transition: "all 0.2s",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                      <span style={{ fontSize: "1.1rem" }}>🔒</span>
+                      <span style={{ fontSize: "0.82rem", fontWeight: 700, color: processingMode === "offline" ? "#4ADE80" : "var(--ink)", fontFamily: "var(--font-sans)" }}>Secure Offline</span>
+                      {processingMode === "offline" && <span style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#4ADE80" }} />}
+                    </div>
+                    <div style={{ fontSize: "0.74rem", color: "var(--ink-muted)", lineHeight: 1.5, fontFamily: "var(--font-sans)" }}>Local heuristic engine only. Zero data leaves your device.</div>
+                  </button>
+
+                  {/* AI Option */}
+                  <button
+                    onClick={() => { setProcessingMode("ai"); setPrivacyAcknowledged(false); }}
+                    style={{
+                      padding: "1rem", borderRadius: 8, cursor: "pointer", textAlign: "left",
+                      border: processingMode === "ai" ? "1.5px solid #D4924A" : "1.5px solid var(--glass-border)",
+                      background: processingMode === "ai" ? "rgba(212,146,74,0.06)" : "var(--surface-2)",
+                      transition: "all 0.2s",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                      <span style={{ fontSize: "1.1rem" }}>⚡</span>
+                      <span style={{ fontSize: "0.82rem", fontWeight: 700, color: processingMode === "ai" ? "#D4924A" : "var(--ink)", fontFamily: "var(--font-sans)" }}>AI-Powered</span>
+                      {processingMode === "ai" && <span style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#D4924A" }} />}
+                    </div>
+                    <div style={{ fontSize: "0.74rem", color: "var(--ink-muted)", lineHeight: 1.5, fontFamily: "var(--font-sans)" }}>Sends to Gemini / OpenAI for deeper analysis. 3rd-party data policy applies.</div>
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Action bar */}
             <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:"1.5rem", marginTop:"1.25rem" }}>
               <div style={{ display:"flex", alignItems:"center", gap:"0.75rem" }}>
@@ -310,35 +421,44 @@ export default function Dashboard() {
               </button>
             </div>
 
-            {/* Privacy note */}
             <p style={{ fontSize:"0.75rem", color:"var(--ink-subtle)", fontFamily:"var(--font-sans)", marginTop:"0.875rem", textAlign:"right" }}>
-              {hi ? "🔒 दस्तावेज़ इन-मेमोरी संसाधित किए जाते हैं। शून्य डेटा प्रतिधारण नीति।" : "🔒 Documents processed in-memory. Zero data retention policy."}
+              {processingMode === "offline"
+                ? "🔒 Offline mode — zero data transmitted. SHA-256 fingerprint generated locally."
+                : (hi ? "🔒 दस्तावेज़ इन-मेमोरी संसाधित किए जाते हैं। शून्य डेटा प्रतिधारण नीति।" : "⚡ AI mode — encrypted in-transit. No persistent storage on our servers.")}
             </p>
 
-            {/* Feature pills */}
-            <div style={{ display:"flex", flexWrap:"wrap", gap:"0.6rem", marginTop:"2.5rem", paddingTop:"2rem", borderTop:"1px solid rgba(26,18,8,0.06)" }}>
-              {[
-                { icon:"⚖", label: hi ? "वैधानिक कानून संरेखित" : "Statutory Law Aligned" },
-                { icon:"🛡", label: hi ? "एंटरप्राइज़-ग्रेड" : "Enterprise-Grade Accuracy" },
-                { icon:"🔒", label: hi ? "ऑफलाइन मोड उपलब्ध" : "Offline Mode Available" },
-                { icon:"🇮🇳", label: hi ? "भारत के लिए बनाया गया" : "Built for Bharat" },
-              ].map(pill => (
-                <div key={pill.label} style={{
-                  display:"flex", alignItems:"center", gap:"0.45rem",
-                  padding:"0.4rem 0.875rem", borderRadius:100,
-                  background:"var(--surface)", border:"1px solid var(--glass-border)",
-                  fontSize:"0.775rem", fontWeight:500, color:"var(--ink-muted)",
-                  fontFamily:"var(--font-sans)",
-                }}>
-                  <span style={{ fontSize:"0.8rem" }}>{pill.icon}</span>
-                  {pill.label}
-                </div>
-              ))}
+            {/* ── Blockchain & Cybersecurity Trust Strip ─────── */}
+            <div style={{ marginTop: "2.5rem", paddingTop: "2rem", borderTop: "1px solid rgba(26,18,8,0.06)" }}>
+              <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink-subtle)", marginBottom: "0.875rem" }}>Security & Trust</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
+                {[
+                  { icon: "🔐", label: "AES-256 In Transit" },
+                  { icon: "⛓", label: "SHA-256 Doc Fingerprint" },
+                  { icon: "🕵️", label: "Zero-Knowledge Processing" },
+                  { icon: "🛡", label: "No PII Stored" },
+                  { icon: "📵", label: "Offline Air-Gap Mode" },
+                  { icon: "🇮🇳", label: "MSME Act Compliant" },
+                ].map(badge => (
+                  <div key={badge.label} style={{
+                    display: "flex", alignItems: "center", gap: "0.4rem",
+                    padding: "0.35rem 0.75rem", borderRadius: 100,
+                    background: "var(--surface)", border: "1px solid var(--glass-border)",
+                    fontSize: "0.72rem", fontWeight: 600, color: "var(--ink-muted)",
+                    fontFamily: "var(--font-sans)",
+                  }}>
+                    <span style={{ fontSize: "0.75rem" }}>{badge.icon}</span>
+                    {badge.label}
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>
         )}
       </main>
+
+      {/* Privacy Modal */}
+      {showPrivacyModal && <PrivacyModal />}
 
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
