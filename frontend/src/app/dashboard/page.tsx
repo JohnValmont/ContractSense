@@ -4,9 +4,10 @@ import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LegalResources from "../components/LegalResources";
+import SchemeMatch from "../components/SchemeMatch";
 import Logo from "../components/Logo";
 
-type Mode = "analyze" | "translate" | "resources";
+type Mode = "analyze" | "translate" | "scheme" | "resources";
 type ProcessingMode = "offline" | "ai";
 
 export default function Dashboard() {
@@ -110,22 +111,24 @@ export default function Dashboard() {
         padding: "2.5rem", maxWidth: 520, width: "100%", boxShadow: "0 40px 80px rgba(0,0,0,0.6)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
-          <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(255,120,60,0.12)", border: "1px solid rgba(255,120,60,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.5rem", flexShrink: 0 }}>⚠️</div>
+          <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(22,163,74,0.12)", border: "1px solid rgba(22,163,74,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
           <div>
-            <div style={{ fontFamily: "'EB Garamond', serif", fontSize: "1.35rem", fontWeight: 600, color: "#F5F0E8", marginBottom: "0.25rem" }}>Third-Party API Warning</div>
+            <div style={{ fontFamily: "'EB Garamond', serif", fontSize: "1.35rem", fontWeight: 600, color: "#F5F0E8", marginBottom: "0.25rem" }}>Zero-Data Retention API</div>
             <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#FF7840", letterSpacing: "0.05em", textTransform: "uppercase" }}>Data Privacy Notice</div>
           </div>
         </div>
 
         <div style={{ fontSize: "0.9rem", color: "rgba(245,240,232,0.75)", lineHeight: 1.7, marginBottom: "1.5rem" }}>
-          By using <strong style={{ color: "#F5F0E8" }}>AI-Powered mode</strong>, your contract text will be transmitted to third-party AI providers such as <strong style={{ color: "#F5F0E8" }}>Google Gemini</strong> or <strong style={{ color: "#F5F0E8" }}>OpenAI</strong>.
+          ContractSense routes your documents through <strong style={{ color: "#F5F0E8" }}>Enterprise LLM Endpoints</strong> to ensure strict compliance with data privacy regulations.
         </div>
 
-        <div style={{ background: "rgba(255,120,60,0.08)", border: "1px solid rgba(255,120,60,0.2)", borderRadius: 8, padding: "1rem 1.25rem", marginBottom: "2rem" }}>
+        <div style={{ background: "rgba(22,163,74,0.08)", border: "1px solid rgba(22,163,74,0.2)", borderRadius: 8, padding: "1rem 1.25rem", marginBottom: "2rem" }}>
           <ul style={{ margin: 0, paddingLeft: "1.25rem", color: "rgba(245,240,232,0.7)", fontSize: "0.84rem", lineHeight: 1.8 }}>
-            <li>These providers <strong style={{ color: "#FFB380" }}>may use your data to train AI models</strong>.</li>
-            <li>Ensure your document contains <strong style={{ color: "#FFB380" }}>no confidential or sensitive information</strong> before proceeding.</li>
-            <li>For maximum security, use <strong style={{ color: "#4ADE80" }}>🔒 Secure Offline mode</strong>.</li>
+            <li>We guarantee <strong style={{ color: "#4ADE80" }}>Zero Third-Party Data Retention</strong>.</li>
+            <li>Your contract data is <strong style={{ color: "#4ADE80" }}>never stored</strong> and <strong style={{ color: "#4ADE80" }}>never used to train models</strong>.</li>
+            <li>Processing occurs entirely in-memory and is discarded immediately after response generation.</li>
           </ul>
         </div>
 
@@ -138,7 +141,7 @@ export default function Dashboard() {
           </button>
           <button
             onClick={() => { setPrivacyAcknowledged(true); setShowPrivacyModal(false); setTimeout(handleUpload, 50); }}
-            style={{ flex: 1, padding: "0.75rem", borderRadius: 8, border: "none", background: "#FF7840", color: "#fff", fontSize: "0.84rem", fontWeight: 700, cursor: "pointer" }}
+            style={{ flex: 1, padding: "0.75rem", borderRadius: 8, border: "none", background: "#16a34a", color: "#fff", fontSize: "0.84rem", fontWeight: 700, cursor: "pointer" }}
           >
             I Understand, Proceed
           </button>
@@ -180,6 +183,7 @@ export default function Dashboard() {
           {[
             { key: "analyze" as const,   label: hi ? "अनुबंध ऑडिटर" : "Contract Auditor", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg> },
             { key: "translate" as const, label: hi ? "दस्तावेज़ अनुवाद" : "Translate Doc",    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> },
+            { key: "scheme" as const, label: hi ? "ZKP योजना मैच" : "ZKP Scheme Match", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="7.5 4.21 12 6.81 16.5 4.21"/><polyline points="7.5 19.79 7.5 14.6 3 12"/><polyline points="21 12 16.5 14.6 16.5 19.79"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> },
             { key: "resources" as const, label: hi ? "कानूनी लाइब्रेरी" : "Legal Library",   icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> },
           ].map(item => (
             <button key={item.key} onClick={() => setMode(item.key)} style={{
@@ -245,23 +249,25 @@ export default function Dashboard() {
       <main style={{ flex:1, overflowY:"auto", background:"var(--canvas)", scrollbarWidth:"none" }}>
         {mode === "resources" ? (
           <LegalResources uiLanguage={uiLanguage} />
+        ) : mode === "scheme" ? (
+          <SchemeMatch uiLanguage={uiLanguage} />
         ) : (
-          <div style={{ maxWidth:820, margin:"0 auto", padding:"3.5rem 3rem 4rem" }}>
+          <div style={{ maxWidth: 1080, margin: "0 auto", padding: "3.5rem 3rem 4rem" }}>
 
             {/* Page heading */}
-            <div style={{ marginBottom:"2.5rem", paddingBottom:"1.5rem", borderBottom:"1px solid rgba(26,18,8,0.08)" }}>
-              <h1 style={{
-                fontFamily:"var(--font-display)", fontSize:"2rem", fontWeight:500,
-                letterSpacing:"-0.03em", color:"var(--ink)", lineHeight:1.15, marginBottom:"0.5rem",
+            <div style={{ marginBottom:"2.5rem", paddingBottom:"1.5rem", borderBottom:"1px solid rgba(26,18,8,0.06)" }}>
+              <h1 className="premium-gradient-text" style={{
+                fontFamily:"var(--font-display)", fontSize:"2.25rem", fontWeight:600,
+                letterSpacing:"-0.02em", lineHeight:1.15, marginBottom:"0.75rem",
               }}>
                 {mode === "analyze"
                   ? (hi ? "AI अनुबंध लेखा परीक्षक" : "Contract Auditor")
                   : (hi ? "सटीक अनुवाद" : "Precision Translation")}
               </h1>
-              <p style={{ color:"var(--ink-muted)", fontSize:"0.875rem", lineHeight:1.7, maxWidth:540, fontFamily:"var(--font-sans)" }}>
+              <p style={{ color:"var(--ink-muted)", fontSize:"0.95rem", lineHeight:1.6, maxWidth:600, fontFamily:"var(--font-sans)" }}>
                 {mode === "analyze"
-                  ? (hi ? "MSME अधिनियम 2006 के विरुद्ध विक्रेता समझौतों का तत्काल ऑडिट करें।" : "Instantly audit vendor agreements against the MSME Act 2006. Extract hidden liabilities, enforce compliance, and generate boardroom-ready redlines in seconds.")
-                  : (hi ? "अपने क्षेत्रीय भाषा में कानूनी अनुवाद उत्पन्न करें।" : "Upload complex legal agreements to generate flawless, legally-toned translations in your regional language.")}
+                  ? (hi ? "MSME अधिनियम 2006 के विरुद्ध विक्रेता समझौतों का तत्काल ऑडिट करें। छिपे हुए जोखिमों को पहचानें, अनुपालन लागू करें, और सेकंडों में बोर्डरूम-रेडी रेडलाइन जनरेट करें।" : "Instantly audit vendor agreements against the MSME Act 2006. Extract hidden liabilities, enforce compliance, and generate boardroom-ready redlines in seconds.")
+                  : (hi ? "विशिष्ट विधिक शब्दावली को बनाए रखते हुए अपनी क्षेत्रीय भाषा में निर्दोष कानूनी अनुवाद उत्पन्न करें।" : "Upload complex legal agreements to generate flawless, legally-toned translations while preserving strict legal terminology.")}
               </p>
             </div>
 
@@ -269,11 +275,12 @@ export default function Dashboard() {
             <div
               onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave}
               style={{
-                border: dragging ? "1.5px dashed var(--saffron)" : "1.5px dashed rgba(26,18,8,0.14)",
-                background: dragging ? "rgba(193,125,60,0.03)" : "var(--surface)",
-                borderRadius:10, padding:"3.5rem 2rem",
-                display:"flex", flexDirection:"column", alignItems:"center", gap:"0.875rem",
-                transition:"all 0.2s", cursor:"default",
+                border: dragging ? "1.5px dashed var(--saffron)" : "1.5px dashed rgba(26,18,8,0.1)",
+                background: dragging ? "rgba(193,125,60,0.02)" : "var(--surface)",
+                borderRadius: 16, padding:"4rem 2rem",
+                display:"flex", flexDirection:"column", alignItems:"center", gap:"1rem",
+                transition:"all 0.25s var(--ease-out)", cursor:"default",
+                boxShadow: "var(--shadow-sm)"
               }}
             >
               {/* Icon */}
@@ -336,43 +343,45 @@ export default function Dashboard() {
 
             {/* ── Processing Mode Toggle ───────────────────────── */}
             {mode === "analyze" && (
-              <div style={{ marginTop: "1.75rem", padding: "1.25rem", background: "var(--surface)", borderRadius: 10, border: "1px solid var(--glass-border)" }}>
-                <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: "1rem" }}>Processing Mode</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+              <div style={{ marginTop: "2rem" }}>
+                <div style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-subtle)", marginBottom: "1rem" }}>Processing Architecture</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                   {/* Offline Option */}
                   <button
                     onClick={() => setProcessingMode("offline")}
                     style={{
-                      padding: "1rem", borderRadius: 8, cursor: "pointer", textAlign: "left",
-                      border: processingMode === "offline" ? "1.5px solid #4ADE80" : "1.5px solid var(--glass-border)",
-                      background: processingMode === "offline" ? "rgba(74,222,128,0.06)" : "var(--surface-2)",
-                      transition: "all 0.2s",
+                      padding: "1.25rem", borderRadius: "12px", cursor: "pointer", textAlign: "left",
+                      border: processingMode === "offline" ? "1.5px solid #16a34a" : "1px solid rgba(26,18,8,0.08)",
+                      background: processingMode === "offline" ? "rgba(22,163,74,0.03)" : "var(--surface)",
+                      boxShadow: processingMode === "offline" ? "0 4px 12px rgba(22,163,74,0.08)" : "var(--shadow-sm)",
+                      transition: "all 0.25s var(--ease-out)",
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
-                      <span style={{ fontSize: "1.1rem" }}>🔒</span>
-                      <span style={{ fontSize: "0.82rem", fontWeight: 700, color: processingMode === "offline" ? "#4ADE80" : "var(--ink)", fontFamily: "var(--font-sans)" }}>Secure Offline</span>
-                      {processingMode === "offline" && <span style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#4ADE80" }} />}
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.5rem" }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={processingMode === "offline" ? "#16a34a" : "var(--ink-muted)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                      <span style={{ fontSize: "0.9rem", fontWeight: 600, color: processingMode === "offline" ? "#16a34a" : "var(--ink)", fontFamily: "var(--font-sans)" }}>Secure Offline</span>
+                      {processingMode === "offline" && <span style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#16a34a" }} />}
                     </div>
-                    <div style={{ fontSize: "0.74rem", color: "var(--ink-muted)", lineHeight: 1.5, fontFamily: "var(--font-sans)" }}>Local heuristic engine only. Zero data leaves your device.</div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--ink-muted)", lineHeight: 1.5, fontFamily: "var(--font-sans)" }}>Zero-knowledge heuristic engine. Financial data never leaves your device's memory.</div>
                   </button>
 
                   {/* AI Option */}
                   <button
                     onClick={() => { setProcessingMode("ai"); setPrivacyAcknowledged(false); }}
                     style={{
-                      padding: "1rem", borderRadius: 8, cursor: "pointer", textAlign: "left",
-                      border: processingMode === "ai" ? "1.5px solid #D4924A" : "1.5px solid var(--glass-border)",
-                      background: processingMode === "ai" ? "rgba(212,146,74,0.06)" : "var(--surface-2)",
-                      transition: "all 0.2s",
+                      padding: "1.25rem", borderRadius: "12px", cursor: "pointer", textAlign: "left",
+                      border: processingMode === "ai" ? "1.5px solid var(--saffron)" : "1px solid rgba(26,18,8,0.08)",
+                      background: processingMode === "ai" ? "rgba(193,125,60,0.03)" : "var(--surface)",
+                      boxShadow: processingMode === "ai" ? "0 4px 12px rgba(193,125,60,0.15)" : "var(--shadow-sm)",
+                      transition: "all 0.25s var(--ease-out)",
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
-                      <span style={{ fontSize: "1.1rem" }}>⚡</span>
-                      <span style={{ fontSize: "0.82rem", fontWeight: 700, color: processingMode === "ai" ? "#D4924A" : "var(--ink)", fontFamily: "var(--font-sans)" }}>AI-Powered</span>
-                      {processingMode === "ai" && <span style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#D4924A" }} />}
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.5rem" }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={processingMode === "ai" ? "var(--saffron)" : "var(--ink-muted)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                      <span style={{ fontSize: "0.9rem", fontWeight: 600, color: processingMode === "ai" ? "var(--saffron)" : "var(--ink)", fontFamily: "var(--font-sans)" }}>Cloud AI Enhanced</span>
+                      {processingMode === "ai" && <span style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "var(--saffron)" }} />}
                     </div>
-                    <div style={{ fontSize: "0.74rem", color: "var(--ink-muted)", lineHeight: 1.5, fontFamily: "var(--font-sans)" }}>Sends to Gemini / OpenAI for deeper analysis. 3rd-party data policy applies.</div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--ink-muted)", lineHeight: 1.5, fontFamily: "var(--font-sans)" }}>Advanced LLM contextual analysis. Requires transmitting document over TLS to secure endpoints.</div>
                   </button>
                 </div>
               </div>
@@ -432,32 +441,6 @@ export default function Dashboard() {
                 ? "🔒 Offline mode — zero data transmitted. SHA-256 fingerprint generated locally."
                 : (hi ? "🔒 दस्तावेज़ इन-मेमोरी संसाधित किए जाते हैं। शून्य डेटा प्रतिधारण नीति।" : "⚡ AI mode — encrypted in-transit. No persistent storage on our servers.")}
             </p>
-
-            {/* ── Blockchain & Cybersecurity Trust Strip ─────── */}
-            <div style={{ marginTop: "2.5rem", paddingTop: "2rem", borderTop: "1px solid rgba(26,18,8,0.06)" }}>
-              <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink-subtle)", marginBottom: "0.875rem" }}>Security & Trust</div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
-                {[
-                  { icon: "🔐", label: "AES-256 In Transit" },
-                  { icon: "⛓", label: "SHA-256 Doc Fingerprint" },
-                  { icon: "🕵️", label: "Zero-Knowledge Processing" },
-                  { icon: "🛡", label: "No PII Stored" },
-                  { icon: "📵", label: "Offline Air-Gap Mode" },
-                  { icon: "🇮🇳", label: "MSME Act Compliant" },
-                ].map(badge => (
-                  <div key={badge.label} style={{
-                    display: "flex", alignItems: "center", gap: "0.4rem",
-                    padding: "0.35rem 0.75rem", borderRadius: 100,
-                    background: "var(--surface)", border: "1px solid var(--glass-border)",
-                    fontSize: "0.72rem", fontWeight: 600, color: "var(--ink-muted)",
-                    fontFamily: "var(--font-sans)",
-                  }}>
-                    <span style={{ fontSize: "0.75rem" }}>{badge.icon}</span>
-                    {badge.label}
-                  </div>
-                ))}
-              </div>
-            </div>
 
           </div>
         )}

@@ -8,6 +8,11 @@ import Logo from "../components/Logo";
 interface TranslationResult {
   translated_title: string;
   translated_text: string;
+  _meta?: {
+    sha256: string;
+    ocr_used: boolean;
+    processing_mode: string;
+  };
 }
 
 export default function TranslationReport() {
@@ -75,6 +80,11 @@ export default function TranslationReport() {
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#D4924A" }} />
               Certified Translation
             </div>
+            {result._meta?.ocr_used && (
+              <div className="hide-on-print" style={{ marginLeft: "0.5rem", fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "#1e40af", marginBottom: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(99,179,237,0.15)", padding: "0.4rem 0.8rem", borderRadius: 100, border: "1px solid rgba(99,179,237,0.3)" }}>
+                📷 OCR Scanned
+              </div>
+            )}
             <h1 style={{ fontFamily: "'EB Garamond', serif", fontSize: "2.5rem", fontWeight: 600, color: "#18120A", lineHeight: 1.2, margin: 0 }}>
               {result.translated_title || "Formal Document Translation"}
             </h1>

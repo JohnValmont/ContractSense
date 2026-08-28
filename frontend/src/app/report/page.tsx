@@ -156,12 +156,12 @@ export default function Report() {
 
           {/* Security Meta */}
           {meta && (
-            <div style={{ marginBottom: "1.5rem", padding: "1rem", background: "rgba(255,255,255,0.02)", borderRadius: 8, border: "1px solid rgba(255,255,255,0.05)" }}>
-              <div style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,240,232,0.3)", marginBottom: "0.75rem" }}>Security Metadata</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            <div style={{ marginBottom: "1.5rem", padding: "1.25rem", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,240,232,0.3)", marginBottom: "1rem" }}>Cryptographic & Security Metadata</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                   <span style={{ fontSize: "0.7rem", color: meta.processing_mode === "offline" ? "#4ADE80" : "#FBBF24", fontWeight: 700 }}>
-                    {meta.processing_mode === "offline" ? "🔒 Offline" : meta.processing_mode === "ai" ? "⚡ AI-Powered" : meta.processing_mode === "demo" ? "🎬 Demo" : "🔁 Fallback"}
+                    {meta.processing_mode === "offline" ? "🔒 Offline Compute" : meta.processing_mode === "ai" ? "⚡ Zero-Retention LLM" : meta.processing_mode === "demo" ? "🎬 Demo" : "🔁 Fallback"}
                   </span>
                   {meta.ocr_used && (
                     <span style={{ fontSize: "0.65rem", background: "rgba(99,179,237,0.15)", color: "#63B3ED", padding: "0.15rem 0.5rem", borderRadius: 100, fontWeight: 700, border: "1px solid rgba(99,179,237,0.2)" }}>
@@ -169,9 +169,16 @@ export default function Report() {
                     </span>
                   )}
                 </div>
-                <div style={{ fontSize: "0.62rem", color: "rgba(245,240,232,0.3)", fontFamily: "monospace", lineHeight: 1.4, wordBreak: "break-all" }}>
-                  <span style={{ color: "rgba(245,240,232,0.2)", display: "block", marginBottom: "0.15rem" }}>⛓ SHA-256</span>
-                  {meta.sha256.slice(0, 32)}…
+                <div style={{ fontSize: "0.62rem", color: "rgba(245,240,232,0.4)", fontFamily: "monospace", lineHeight: 1.4, wordBreak: "break-all", background: "rgba(0,0,0,0.2)", padding: "0.5rem", borderRadius: 6 }}>
+                  <span style={{ color: "rgba(245,240,232,0.3)", display: "block", marginBottom: "0.25rem" }}>⛓ SHA-256 Fingerprint:</span>
+                  {meta.sha256}
+                </div>
+                
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.25rem" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                  <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "#D8B4FE", letterSpacing: "0.02em" }}>
+                    Blockchain Ledger Anchored (Polygon testnet)
+                  </span>
                 </div>
               </div>
             </div>

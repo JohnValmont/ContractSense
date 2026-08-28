@@ -237,7 +237,7 @@ def call_llm_with_fallback(prompt: str) -> dict:
                         "messages": [
                             {
                                 "role":    "system",
-                                "content": "You are an elite Indian corporate lawyer and auditor specializing in the MSME Development Act, 2006. You strictly follow instructions, exhaustively identify ALL risks, and ALWAYS respond with valid raw JSON only — no markdown fences, no conversational text.",
+                                "content": "You are an elite Indian corporate lawyer and auditor specializing in the MSME Development Act 2006, the Indian Contract Act 1872, and the Sale of Goods Act 1930. You evaluate contracts strictly against common Indian commercial contract patterns. You exhaustively identify ALL risks, and ALWAYS respond with valid raw JSON only — no markdown fences, no conversational text.",
                             },
                             {"role": "user", "content": prompt},
                         ],
@@ -263,9 +263,9 @@ def call_llm_with_fallback(prompt: str) -> dict:
 # ─────────────────────────────────────────────
 def build_prompt(contract_text: str, language: str = "English") -> str:
     return f"""
-You are an elite Indian corporate lawyer and auditor specializing in the MSME Development Act, 2006, the Indian Contract Act, 1872, the Information Technology Act, 2000 (for data/privacy), and the Competition Act, 2002 (for anti-competitive clauses). Your sole purpose is to protect MSME vendors from predatory corporate contracting practices.
+You are an elite Indian corporate lawyer and auditor specializing in the MSME Development Act 2006, the Indian Contract Act 1872, the Sale of Goods Act 1930, and common Indian commercial contract patterns. Your sole purpose is to protect MSME vendors from predatory corporate contracting practices prevalent in the Indian legal context.
 
---- RISK TAXONOMY & CHECKLIST ---
+--- RISK TAXONOMY & INDIAN LEGAL CONTEXT CHECKLIST ---
 When analyzing this contract, systematically check for EACH of the following known risk patterns. Do not rely only on general impression — actively verify the presence or absence of each category below, and flag any that are present, even if phrased in standard-sounding legal language:
 
 1. Payment terms exceeding 45 days, or payment conditioned on subjective/undefined acceptance criteria, or no late-payment interest specified
@@ -464,8 +464,11 @@ def translate_contract():
     if not file.filename.lower().endswith(".pdf"):
         return jsonify({"detail": "Only PDF files are supported."}), 400
 
+    # ── Compute SHA-256 fingerprint before reading ──
+    doc_fingerprint = sha256_hash(file)
+
     # ── Extract text from PDF (with OCR fallback) ──────────────────
-    contract_text, _ = extract_pdf_text(file)
+    contract_text, used_ocr = extract_pdf_text(file)
 
     if not contract_text:
         return jsonify({"detail": "No readable text found in the PDF."}), 400
@@ -481,16 +484,25 @@ def translate_contract():
         })
 
     # ── Call AI with fallback chain ────────────
+    def attach_meta(result: dict, mode: str) -> dict:
+        result["_meta"] = {
+            "sha256": doc_fingerprint,
+            "ocr_used": used_ocr,
+            "processing_mode": mode,
+        }
+        return result
+
     try:
         prompt = build_translation_prompt(contract_text, language)
         result = call_llm_with_fallback(prompt)
-        return jsonify(result)
+        return jsonify(attach_meta(result, "ai"))
     except Exception as e:
         print(f"[ContractSense] Translation API call failed, falling back to demo: {e}")
-        return jsonify({
+        demo_result = {
             "translated_title": f"Demo Translation ({language})",
             "translated_text": f"This is a fallback demo response because the API call failed ({e}). In a production environment with active API keys, the full contract translation will appear here."
-        })
+        }
+        return jsonify(attach_meta(demo_result, "demo"))
 
 
 if __name__ == "__main__":

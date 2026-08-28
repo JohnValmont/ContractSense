@@ -58,12 +58,7 @@ function Btn({ href, dark, children, style = {} }: { href: string; dark?: boolea
   );
 }
 
-/* ─── Testimonials data ──────────────────── */
-const testimonials = [
-  { quote: "ContractSense flagged a 90-day payment clause in our Q3 vendor agreement within seconds. That clause alone could have cost us ₹18 lakhs under the MSMED Act.", name: "Rajan Mehta", role: "Proprietor, Mehta Textile Exports, Surat" },
-  { quote: "As a procurement team of four, we were reviewing 30+ contracts a month manually. ContractSense cut that to under an hour and generates redlines we can actually use.", name: "Priyanka Soni", role: "Head of Procurement, Pune Engineering Works" },
-  { quote: "The Hindi translation was accurate enough to share directly with our board. No lawyer required for the initial review — that's a first for us.", name: "Anil Sharma", role: "Director, Rajasthan MSME Consortium" },
-];
+/* ─── Testimonials data removed ────────────── */
 
 const WHO = [
   { title: "MSMEs & Suppliers", desc: "Protect your payment rights. Flag voidable indemnity clauses, illegal arbitration terms, and unfair termination rights — before you sign.", cta: "Audit a Contract →", color: "#1A1208" },
@@ -176,21 +171,10 @@ export default function Home() {
   const whoReveal  = useReveal();
   const zigReveal  = useReveal();
   const banReveal  = useReveal();
-  const testReveal = useReveal();
+  const archReveal = useReveal();
   const ucReveal   = useReveal();
   const ctaReveal  = useReveal();
 
-  /* Testimonial carousel */
-  const [tIdx, setTIdx] = useState(0);
-  const [tFade, setTFade] = useState(true);
-  const rotateTo = useCallback((next: number) => {
-    setTFade(false);
-    setTimeout(() => { setTIdx(next); setTFade(true); }, 350);
-  }, []);
-  useEffect(() => {
-    const id = setInterval(() => rotateTo((tIdx + 1) % testimonials.length), 5000);
-    return () => clearInterval(id);
-  }, [tIdx, rotateTo]);
 
   const fadeUp = (delay = 0, visible = true): React.CSSProperties => ({
     opacity: visible ? 1 : 0,
@@ -426,27 +410,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ TESTIMONIALS ══════════════════════════ */}
-      <section ref={testReveal.ref} style={{ background: "#18120A", padding: "6rem 3rem" }}>
-        <div style={{ maxWidth: 860, margin: "0 auto" }}>
-          <div style={{ ...fadeUp(0, testReveal.visible), textAlign: "center", marginBottom: "3.5rem" }}>
-            <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#B8742E", marginBottom: "0.875rem" }}>What MSMEs Say</p>
+      {/* ══ ARCHITECTURE ══════════════════════════ */}
+      <section ref={archReveal.ref} style={{ background: "#18120A", padding: "6rem 3rem" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ ...fadeUp(0, archReveal.visible), textAlign: "center", marginBottom: "4.5rem" }}>
+            <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#B8742E", marginBottom: "0.875rem" }}>Under the Hood</p>
             <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: "clamp(1.75rem,3vw,2.5rem)", fontWeight: 500, color: "#F5F0E8", letterSpacing: "-0.03em" }}>
-              Real outcomes. Real businesses.
+              How ContractSense works.
             </h2>
           </div>
-          {/* Quote */}
-          <div style={{ ...fadeUp(100, testReveal.visible), textAlign: "center", opacity: tFade ? 1 : 0, transition: "opacity 0.35s ease" }}>
-            <div style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: "clamp(1.25rem,2.5vw,1.75rem)", fontStyle: "italic", fontWeight: 400, color: "rgba(245,240,232,0.9)", lineHeight: 1.55, marginBottom: "2rem", maxWidth: 700, margin: "0 auto 2rem" }}>
-              "{testimonials[tIdx].quote}"
-            </div>
-            <div style={{ fontSize: "0.825rem", fontWeight: 700, color: "#D4924A", marginBottom: "0.2rem" }}>{testimonials[tIdx].name}</div>
-            <div style={{ fontSize: "0.775rem", color: "rgba(245,240,232,0.38)" }}>{testimonials[tIdx].role}</div>
-          </div>
-          {/* Dots */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", marginTop: "2.5rem" }}>
-            {testimonials.map((_, i) => (
-              <button key={i} className="dot-btn" onClick={() => rotateTo(i)} style={{ width: i === tIdx ? 24 : 8, height: 8, borderRadius: 100, background: i === tIdx ? "#D4924A" : "rgba(255,255,255,0.2)", border: "none", cursor: "pointer", padding: 0, transition: "all 0.3s" }} />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem" }}>
+            {[
+              { num: "01", title: "Document Ingestion & OCR", desc: "Digital PDFs are parsed natively. Scanned image-only PDFs trigger an automatic fallback to Tesseract OCR for seamless text extraction." },
+              { num: "02", title: "Offline / Cloud Routing", desc: "Users select between 'Secure Offline' mode (regex-based heuristic engine) or 'AI-Powered' mode (LLM processing) based on data sensitivity." },
+              { num: "03", title: "Statutory NLP Analysis", desc: "The contract is analyzed against Indian commercial law, cross-referencing the MSMED Act to flag predatory clauses and generate fair redlines." }
+            ].map((step, i) => (
+              <div key={step.num} style={{ ...fadeUp(100 + i * 100, archReveal.visible), background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "2.5rem" }}>
+                <div style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: "3.5rem", fontWeight: 500, color: "rgba(212,146,74,0.15)", lineHeight: 1, marginBottom: "1.5rem" }}>{step.num}</div>
+                <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#F5F0E8", marginBottom: "1rem", letterSpacing: "-0.01em" }}>{step.title}</h3>
+                <p style={{ fontSize: "0.85rem", color: "rgba(245,240,232,0.6)", lineHeight: 1.7 }}>{step.desc}</p>
+              </div>
             ))}
           </div>
         </div>

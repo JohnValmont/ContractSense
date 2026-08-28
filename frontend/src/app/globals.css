@@ -57,18 +57,18 @@
   --r-xl:   16px;
   --r-full: 9999px;
 
-  /* ── Shadow — cleaner, less diffuse ── */
-  --shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md:  0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
-  --shadow-lg:  0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
-  --shadow-xl:  0 20px 48px rgba(0,0,0,0.10), 0 6px 16px rgba(0,0,0,0.05);
+  /* ── Shadow — premium, soft, diffused ── */
+  --shadow-sm:  0 1px 2px rgba(26,18,8,0.03);
+  --shadow-md:  0 4px 12px -2px rgba(26,18,8,0.05);
+  --shadow-lg:  0 12px 24px -4px rgba(26,18,8,0.07);
+  --shadow-xl:  0 24px 48px -8px rgba(26,18,8,0.09);
+  --shadow-gold: 0 4px 14px 0 rgba(193,125,60,0.15);
 
-  /* ── Motion ── */
+  /* ── Utilities ── */
   --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in:    cubic-bezier(0.76, 0, 0.24, 1);
   --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
 }
-
 
 
 
@@ -190,3 +190,43 @@ button { font-family: var(--font-sans); }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #D5CFC7; border-radius: var(--r-full); }
 ::-webkit-scrollbar-thumb:hover { background: #BEB7AD; }
+
+/* -- Premium Utilities -- */
+.premium-gradient-text {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--saffron) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.premium-card {
+  background: var(--surface);
+  border: 1px solid rgba(26,18,8,0.06);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s var(--ease-out);
+}
+.premium-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  border-color: rgba(193,125,60,0.25);
+}
+
+.premium-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid rgba(26,18,8,0.12);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  outline: none;
+}
+.premium-input:focus {
+  border-color: var(--saffron);
+  box-shadow: 0 0 0 3px rgba(193,125,60,0.15);
+  background: var(--surface);
+}
