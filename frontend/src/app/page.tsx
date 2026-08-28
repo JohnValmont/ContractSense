@@ -486,7 +486,7 @@ export default function Home() {
             {/* Brand col */}
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1rem" }}>
-                <Logo size={24} />
+                <Logo size={24} dark />
                 <span style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: "1.1rem", fontWeight: 600, color: "#F5F0E8", letterSpacing: "-0.025em" }}>ContractSense</span>
               </div>
               <p style={{ fontSize: "0.8rem", color: "rgba(245,240,232,0.35)", lineHeight: 1.7, maxWidth: 260, marginBottom: "1.5rem" }}>

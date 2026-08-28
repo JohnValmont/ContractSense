@@ -167,7 +167,7 @@ export default function Dashboard() {
       }}>
         {/* Logo */}
         <Link href="/" style={{ display:"flex", alignItems:"center", gap:"0.6rem", textDecoration:"none", marginBottom:"2.5rem", opacity: isSidebarOpen ? 1 : 0, transition:"opacity 0.2s" }}>
-          <Logo size={26} />
+          <Logo size={26} dark />
           <span style={{ fontFamily:"var(--font-display)", fontSize:"1.05rem", fontWeight:600, color:"rgba(245,242,236,0.95)", letterSpacing:"-0.01em", whiteSpace:"nowrap" }}>
             ContractSense
           </span>
