@@ -378,7 +378,7 @@ export default function Home() {
                   
                   {/* Outline Drawings */}
                   {i === 0 && (
-                    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.15)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", top: "50%", left: "75%", transform: "translate(-50%, -50%)" }}>
+                    <svg width="160" height="160" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.06)" strokeWidth="0.75" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", right: -30, bottom: -30 }}>
                       <rect x="2" y="12" width="6" height="10" />
                       <rect x="8" y="6" width="8" height="16" />
                       <rect x="16" y="10" width="6" height="12" />
@@ -386,7 +386,7 @@ export default function Home() {
                     </svg>
                   )}
                   {i === 1 && (
-                    <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.15)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", top: "50%", left: "75%", transform: "translate(-50%, -50%)" }}>
+                    <svg width="140" height="140" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.06)" strokeWidth="0.75" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", right: -20, bottom: -20 }}>
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                       <polyline points="14 2 14 8 20 8" />
                       <circle cx="10" cy="14" r="2" />
@@ -395,7 +395,7 @@ export default function Home() {
                     </svg>
                   )}
                   {i === 2 && (
-                    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.15)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", top: "50%", left: "75%", transform: "translate(-50%, -50%)" }}>
+                    <svg width="160" height="160" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.06)" strokeWidth="0.75" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", right: -30, bottom: -30 }}>
                       <path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
                       <path d="M2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
                       <path d="M7 21h10" />
@@ -581,10 +581,10 @@ export default function Home() {
               <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,240,232,0.25)", marginBottom: "1rem" }}>Company</div>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
                 {[
-                  { label: "About", href: "/" },
-                  { label: "Privacy Policy", href: "/" },
-                  { label: "Terms of Service", href: "/" },
-                  { label: "Zero Retention Policy", href: "/" },
+                  { label: "About", href: "/#how-it-works" },
+                  { label: "Privacy Policy", href: "/privacy" },
+                  { label: "Terms of Service", href: "/terms" },
+                  { label: "Zero Retention Policy", href: "/privacy" },
                 ].map(link => (
                   <Link key={link.label} href={link.href} style={{ fontSize: "0.8rem", color: "rgba(245,240,232,0.45)", textDecoration: "none", transition: "color 0.15s" }}
                     onMouseEnter={e => (e.currentTarget.style.color = "rgba(245,240,232,0.85)")}
