@@ -129,11 +129,14 @@ const ZIGZAG = [
             {["#ff5f57","#febc2e","#28c840"].map(c => <div key={c} style={{ width: 9, height: 9, borderRadius: "50%", background: c }} />)}
           </div>
         </div>
-        <div style={{ padding: "1.25rem" }}>
-          <div style={{ height: 10, background: "#EDE9E1", borderRadius: 3, marginBottom: "0.5rem" }} />
-          <div style={{ height: 10, background: "#EDE9E1", borderRadius: 3, width: "80%", marginBottom: "0.5rem" }} />
-          <div style={{ height: 10, background: "rgba(220,38,38,0.15)", borderRadius: 3, width: "90%", marginBottom: "0.5rem" }} />
-          <div style={{ height: 10, background: "#EDE9E1", borderRadius: 3, width: "70%", marginBottom: "1rem" }} />
+        <div style={{ padding: "1.25rem", fontFamily: "var(--font-sans)", color: "#18120A" }}>
+          <div style={{ borderBottom: "1px solid rgba(24,18,10,0.06)", paddingBottom: "0.5rem", marginBottom: "0.75rem" }}>
+            <h4 style={{ fontSize: "0.85rem", fontWeight: 700, margin: 0 }}>Clause 4.2: Payment Terms</h4>
+            <p style={{ fontSize: "0.7rem", color: "rgba(24,18,10,0.5)", margin: "0.2rem 0 0 0" }}>Risk Level: High (Statutory Violation)</p>
+          </div>
+          <div style={{ fontSize: "0.75rem", lineHeight: 1.6, marginBottom: "1rem", color: "rgba(24,18,10,0.7)" }}>
+            The buyer shall remit payment to the supplier within <span style={{ background: "rgba(220,38,38,0.15)", color: "#991B1B", padding: "0 4px", borderRadius: 3, fontWeight: 600 }}>90 days of invoice receipt</span>. Failure to do so will incur no penalties.
+          </div>
           <div style={{ background: "rgba(22,163,74,0.08)", border: "1px solid rgba(22,163,74,0.2)", borderRadius: 6, padding: "0.75rem" }}>
             <div style={{ fontSize: "0.65rem", fontWeight: 700, color: "#16a34a", marginBottom: "0.25rem" }}>✓ REDLINE SUGGESTED</div>
             <div style={{ fontSize: "0.72rem", color: "#18120A", lineHeight: 1.5 }}>Replace: <span style={{ textDecoration: "line-through", color: "#dc2626" }}>"90 days"</span> → <span style={{ color: "#16a34a", fontWeight: 600 }}>"45 days (MSMED Act, S.15)"</span></div>
