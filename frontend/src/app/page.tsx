@@ -548,7 +548,8 @@ export default function Home() {
                 ))}
               </div>
             </div>
-          </div>Content: "space-between" }}>
+          </div>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "1.75rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <span style={{ fontSize: "0.72rem", color: "rgba(245,240,232,0.25)" }}>© 2026 ContractSense. All rights reserved. Built for Smart India Hackathon.</span>
             <div style={{ display: "flex", gap: "2rem" }}>
               {["MSME Compliance", "Zero Data Retention", "Indian Contract Act, 1872"].map(t => (
