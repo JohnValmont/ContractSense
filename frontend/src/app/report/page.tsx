@@ -283,6 +283,10 @@ export default function Report() {
                     <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#9333EA" }}>{activeClause.msme_act_reference}</span>
                   </div>
                 )}
+                <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#A89C8F", marginBottom: "0.5rem", marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                  Plain-Language Risk Explanation
+                </div>
                 <div style={{ fontSize: "0.925rem", color: "#5A5048", lineHeight: 1.8 }}>
                   {activeClause.explanation}
                 </div>
