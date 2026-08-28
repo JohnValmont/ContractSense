@@ -220,7 +220,9 @@ export default function Home() {
         <nav style={{ maxWidth: 1280, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.125rem 3rem" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.65rem", textDecoration: "none" }}>
             <Logo size={26} />
-            <span style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: "1.1rem", fontWeight: 600, color: "#18120A", letterSpacing: "-0.025em" }}>ContractSense</span>
+            <span style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: "1.25rem", fontWeight: 500, letterSpacing: "-0.02em", lineHeight: 1 }}>
+              <span style={{ color: "#18120A" }}>Contract</span><span style={{ color: "#B8742E", fontStyle: "italic" }}>Sense</span>
+            </span>
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: "2.5rem" }}>
             {[["How it Works", "#how-it-works"], ["Capabilities", "/capabilities"], ["Pricing", "/pricing"]].map(([label, href]) => (

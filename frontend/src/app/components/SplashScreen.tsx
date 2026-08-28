@@ -2,43 +2,33 @@
 
 import { useEffect, useState } from "react";
 
-/* ─── Cinematic Splash Screen ────────────────────────────────────────────
-   Timeline:
-   0.0s  – Line sweeps in from center
-   0.5s  – Scales SVG draws itself stroke by stroke
-   2.2s  – "ContractSense" name reveals letter by letter
-   3.2s  – Subtitle fades in
-   4.0s  – Everything fades out
-   4.7s  – onDone() called, app appears
-*/
-
 const BRAND = "ContractSense";
 
 export default function SplashScreen({ onDone }: { onDone: () => void }) {
-  const [step, setStep]         = useState(0);   // 0=line 1=scales 2=name 3=sub 4=out
+  const [step, setStep]           = useState(0);
   const [letterIdx, setLetterIdx] = useState(0);
 
   useEffect(() => {
-    const s1 = setTimeout(() => setStep(1), 300);
-    const s2 = setTimeout(() => setStep(2), 2000);
-    const s3 = setTimeout(() => setStep(3), 3100);
-    const s4 = setTimeout(() => setStep(4), 3900);
+    const s1 = setTimeout(() => setStep(1), 200);   // start drawing
+    const s2 = setTimeout(() => setStep(2), 2000);  // start rocking + type name
+    const s3 = setTimeout(() => setStep(3), 3100);  // subtitle
+    const s4 = setTimeout(() => setStep(4), 3900);  // fade out
     const s5 = setTimeout(() => onDone(),   4700);
-    return () => { [s1,s2,s3,s4,s5].forEach(clearTimeout); };
+    return () => [s1, s2, s3, s4, s5].forEach(clearTimeout);
   }, [onDone]);
 
-  // Letter-by-letter reveal
   useEffect(() => {
     if (step < 2) { setLetterIdx(0); return; }
     if (letterIdx >= BRAND.length) return;
-    const t = setTimeout(() => setLetterIdx(i => i + 1), 72);
+    const t = setTimeout(() => setLetterIdx(i => i + 1), 68);
     return () => clearTimeout(t);
   }, [step, letterIdx]);
 
-  const scalesVisible = step >= 1;
-  const nameVisible   = step >= 2;
-  const subVisible    = step >= 3;
-  const fadingOut     = step >= 4;
+  const isDrawing  = step >= 1;
+  const isRocking  = step >= 2;
+  const isTyping   = step >= 2;
+  const showSub    = step >= 3;
+  const fadingOut  = step >= 4;
 
   return (
     <div style={{
@@ -46,211 +36,229 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
       background: "#09070A",
       display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center",
-      gap: 0,
       opacity: fadingOut ? 0 : 1,
-      transition: fadingOut ? "opacity 0.75s cubic-bezier(.4,0,.2,1)" : "none",
+      transition: fadingOut ? "opacity 0.8s cubic-bezier(.4,0,.2,1)" : "none",
     }}>
       <style>{`
-        /* ── Scales SVG draw animation ── */
+        /* ── Draw animation: shared base ── */
         .splash-svg path,
         .splash-svg line,
         .splash-svg ellipse,
-        .splash-svg circle {
+        .splash-svg circle:not(.no-dash) {
           fill: none;
           stroke-linecap: round;
           stroke-linejoin: round;
-          stroke-dasharray: 300;
-          stroke-dashoffset: 300;
+          stroke-dasharray: 400;
+          stroke-dashoffset: 400;
         }
 
-        /* Outer rings */
-        .s-ring1 { stroke:#B8742E; stroke-width:1.2; animation: drawS 0.5s ease forwards 0.0s; }
-        .s-ring2 { stroke:#B8742E; stroke-width:0.5; opacity:0.35; animation: drawS 0.4s ease forwards 0.1s; }
+        /* Structural draw order */
+        .d-ring1  { stroke:#B8742E; stroke-width:1.4; animation: drawStroke 0.55s ease forwards 0.0s; }
+        .d-ring2  { stroke:#B8742E; stroke-width:0.5; opacity:0.3; animation: drawStroke 0.4s ease forwards 0.1s; }
+        .d-pillar { stroke:#D4924A; stroke-width:2.2; animation: drawStroke 0.3s ease forwards 0.4s; }
+        .d-beam   { stroke:#D4924A; stroke-width:2.2; animation: drawStroke 0.4s ease forwards 0.65s; }
+        .d-chl    { stroke:#C17D3C; stroke-width:1.4; animation: drawStroke 0.22s ease forwards 0.95s; }
+        .d-chr    { stroke:#C17D3C; stroke-width:1.4; animation: drawStroke 0.22s ease forwards 1.05s; }
+        .d-panl   { stroke:#D4924A; stroke-width:1.9; animation: drawStroke 0.3s ease forwards 1.18s; }
+        .d-panr   { stroke:#D4924A; stroke-width:1.9; animation: drawStroke 0.3s ease forwards 1.28s; }
+        .d-base   { stroke:#D4924A; stroke-width:2.4; animation: drawStroke 0.2s ease forwards 1.42s; }
 
-        /* Pillar */
-        .s-pillar { stroke:#D4924A; stroke-width:2; animation: drawS 0.3s ease forwards 0.4s; }
+        /* Icon draw — contract doc */
+        .d-doc-box  { stroke:#E8A86A; stroke-width:1.1; animation: drawStroke 0.25s ease forwards 1.5s; }
+        .d-doc-l1   { stroke:#E8A86A; stroke-width:0.8; opacity:0.75; animation: drawStroke 0.15s ease forwards 1.62s; }
+        .d-doc-l2   { stroke:#E8A86A; stroke-width:0.8; opacity:0.65; animation: drawStroke 0.15s ease forwards 1.7s; }
+        .d-doc-l3   { stroke:#E8A86A; stroke-width:0.8; opacity:0.5; animation: drawStroke 0.12s ease forwards 1.78s; }
+        .d-doc-seal { stroke:#E8A86A; stroke-width:0.8; opacity:0.6; animation: drawStroke 0.15s ease forwards 1.82s; }
 
-        /* Beam */
-        .s-beam { stroke:#D4924A; stroke-width:2; animation: drawS 0.35s ease forwards 0.6s; }
+        @keyframes drawStroke { to { stroke-dashoffset: 0; } }
 
-        /* Chains */
-        .s-chain-l { stroke:#C17D3C; stroke-width:1.2; animation: drawS 0.22s ease forwards 0.85s; }
-        .s-chain-r { stroke:#C17D3C; stroke-width:1.2; animation: drawS 0.22s ease forwards 0.92s; }
+        /* ── Rupee text fade ── */
+        .d-rupee {
+          opacity: 0;
+          animation: fadeEl 0.3s ease forwards 1.68s;
+        }
+        @keyframes fadeEl { to { opacity: 1; } }
 
-        /* Pans */
-        .s-pan-l { stroke:#D4924A; stroke-width:1.8; animation: drawS 0.3s ease forwards 1.05s; }
-        .s-pan-r { stroke:#D4924A; stroke-width:1.8; animation: drawS 0.3s ease forwards 1.15s; }
+        /* ── Scales rocking: the beam group pivots around center-top ── */
+        .scales-beam-group {
+          transform-box: fill-box;
+          transform-origin: 50% 0%;
+        }
+        .scales-beam-group.rocking {
+          animation: scalesRock 2.2s cubic-bezier(.37,0,.63,1) infinite;
+        }
+        @keyframes scalesRock {
+          0%   { transform: rotate(-7deg); }
+          50%  { transform: rotate(7deg);  }
+          100% { transform: rotate(-7deg); }
+        }
 
-        /* Base */
-        .s-base { stroke:#D4924A; stroke-width:2.2; animation: drawS 0.2s ease forwards 1.35s; }
-
-        /* Details */
-        .s-doc1 { stroke:#E8A86A; stroke-width:1; opacity:0.6; animation: drawS 0.2s ease forwards 1.45s; }
-        .s-doc2 { stroke:#E8A86A; stroke-width:1; opacity:0.4; animation: drawS 0.2s ease forwards 1.52s; }
-        .s-coin1 { stroke:#E8A86A; stroke-width:1; opacity:0.7; animation: drawS 0.2s ease forwards 1.58s; }
-        .s-coin2 { stroke:#E8A86A; stroke-width:1; opacity:0.5; animation: drawS 0.2s ease forwards 1.65s; }
-
-        @keyframes drawS { to { stroke-dashoffset: 0; } }
-
-        /* ── Glow pulse on scales ── */
+        /* ── Glow pulse on full SVG ── */
+        .scales-glow {
+          animation: glowPulse 2.4s ease-in-out infinite;
+        }
         @keyframes glowPulse {
-          0%, 100% { filter: drop-shadow(0 0 6px rgba(184,116,46,0.3)); }
-          50%       { filter: drop-shadow(0 0 16px rgba(184,116,46,0.55)); }
+          0%,100% { filter: drop-shadow(0 0 5px rgba(184,116,46,0.25)); }
+          50%     { filter: drop-shadow(0 0 18px rgba(184,116,46,0.55)); }
         }
-        .scales-glow { animation: glowPulse 2.5s ease-in-out infinite; }
 
-        /* ── Horizontal sweep line ── */
-        @keyframes sweepIn {
-          from { transform: scaleX(0); opacity: 0; }
-          to   { transform: scaleX(1); opacity: 1; }
+        /* ── Separator sweep ── */
+        @keyframes sweepX {
+          from { transform: scaleX(0); }
+          to   { transform: scaleX(1); }
         }
-        .sweep-line {
-          animation: sweepIn 0.6s cubic-bezier(.16,1,.3,1) forwards;
+        .sep-line {
+          height: 1px;
+          background: linear-gradient(90deg, transparent 0%, #B8742E 30%, #E8C87A 50%, #B8742E 70%, transparent 100%);
           transform-origin: center;
+          animation: sweepX 0.7s cubic-bezier(.16,1,.3,1) forwards;
         }
 
-        /* ── Letter reveal ── */
-        @keyframes letterPop {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
+        /* ── Letter by letter ── */
+        @keyframes letterIn {
+          from { opacity:0; transform:translateY(6px); }
+          to   { opacity:1; transform:translateY(0); }
         }
-        .letter-char { display: inline-block; animation: letterPop 0.15s ease forwards; }
+        .ltr { display:inline-block; animation: letterIn 0.14s ease forwards; }
 
         /* ── Subtitle ── */
-        @keyframes subFade {
-          from { opacity: 0; letter-spacing: 0.25em; }
-          to   { opacity: 1; letter-spacing: 0.18em; }
+        @keyframes subIn {
+          from { opacity:0; letter-spacing:0.3em; }
+          to   { opacity:1; letter-spacing:0.2em; }
         }
-        .sub-text { animation: subFade 0.6s ease forwards; }
+        .sub { animation: subIn 0.6s ease forwards; }
 
-        /* ── Ambient particle dots ── */
+        /* ── Ambient particles ── */
         @keyframes floatDot {
-          0%, 100% { opacity: 0; transform: translateY(0px); }
-          50% { opacity: 0.4; transform: translateY(-12px); }
+          0%,100% { opacity:0; transform:translateY(0); }
+          50%     { opacity:0.35; transform:translateY(-14px); }
         }
       `}</style>
 
-      {/* ── Ambient background glow ── */}
+      {/* Ambient background glow */}
       <div style={{
-        position: "absolute", inset: 0, pointerEvents: "none",
-        background: "radial-gradient(ellipse 60% 40% at 50% 55%, rgba(184,116,46,0.07) 0%, transparent 70%)",
-      }} />
+        position:"absolute", inset:0, pointerEvents:"none",
+        background:"radial-gradient(ellipse 55% 38% at 50% 52%, rgba(184,116,46,0.08) 0%, transparent 70%)",
+      }}/>
 
-      {/* ── Horizontal separator line (first element to appear) ── */}
-      <div style={{ width: 260, height: 1, marginBottom: 48, position: "relative" }}>
-        {step >= 0 && (
-          <div className="sweep-line" style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(90deg, transparent 0%, #B8742E 30%, #E8A86A 50%, #B8742E 70%, transparent 100%)",
-          }} />
-        )}
+      {/* Top separator */}
+      <div style={{ width:280, marginBottom:44 }}>
+        {isDrawing && <div className="sep-line" />}
       </div>
 
-      {/* ── Scales SVG ── */}
-      <div
-        className={scalesVisible ? "scales-glow" : ""}
-        style={{
-          opacity: scalesVisible ? 1 : 0,
-          transition: "opacity 0.3s",
-          marginBottom: 32,
-        }}
-      >
+      {/* ─── Main Scales SVG ─────────────────── */}
+      <div className={isRocking ? "scales-glow" : ""} style={{ marginBottom:30 }}>
         <svg
           className="splash-svg"
-          viewBox="0 0 96 96"
-          width={110}
-          height={110}
+          viewBox="0 0 120 120"
+          width={118}
+          height={118}
         >
-          {/* Outer rings */}
-          <circle className="s-ring1" cx="48" cy="48" r="44" />
-          <circle className="s-ring2" cx="48" cy="48" r="38" />
+          {/* Fixed: rings, pillar, base — NOT in rocking group */}
+          <circle className="d-ring1" cx="60" cy="60" r="55" />
+          <circle className="d-ring2" cx="60" cy="60" r="47" />
+          <line  className="d-pillar" x1="60" y1="24" x2="60" y2="92" />
+          <line  className="d-base"   x1="50" y1="92" x2="70" y2="92" />
 
-          {/* Pillar */}
-          <line className="s-pillar" x1="48" y1="22" x2="48" y2="76" />
+          {/* ── Rocking group: beam + chains + pans + icons ── */}
+          <g className={`scales-beam-group${isRocking ? " rocking" : ""}`}>
+            {/* Beam */}
+            <line className="d-beam" x1="18" y1="42" x2="102" y2="42" />
 
-          {/* Top beam */}
-          <line className="s-beam" x1="20" y1="34" x2="76" y2="34" />
+            {/* Left chain */}
+            <line className="d-chl" x1="21" y1="42" x2="17" y2="62" />
+            {/* Right chain — longer so right pan hangs lower before rocking */}
+            <line className="d-chr" x1="99" y1="42" x2="103" y2="66" />
 
-          {/* Left chain */}
-          <line className="s-chain-l" x1="23" y1="34" x2="20" y2="50" />
-          {/* Right chain */}
-          <line className="s-chain-r" x1="73" y1="34" x2="76" y2="50" />
+            {/* Left pan (contract side — level) */}
+            <path className="d-panl" d="M9 62 Q17 70 25 62" />
+            {/* Right pan (money side — slightly lower) */}
+            <path className="d-panr" d="M95 66 Q103 74 111 66" />
 
-          {/* Left pan (level) */}
-          <path className="s-pan-l" d="M12 50 Q20 57 28 50" />
-          {/* Right pan (slightly lower = risk detected) */}
-          <path className="s-pan-r" d="M68 54 Q76 61 84 54" />
+            {/* ── Contract document on left pan ── */}
+            {/* Paper body */}
+            <rect className="d-doc-box" x="10.5" y="51" width="13" height="17" rx="1.5" />
+            {/* Folded corner */}
+            <path className="d-doc-box" d="M20.5 51 L23.5 54 L20.5 54 Z" />
+            {/* Text lines */}
+            <line className="d-doc-l1" x1="12.5" y1="57"   x2="21.5" y2="57" />
+            <line className="d-doc-l2" x1="12.5" y1="60.5" x2="21.5" y2="60.5" />
+            <line className="d-doc-l3" x1="12.5" y1="64"   x2="18.5" y2="64" />
+            {/* Seal / stamp */}
+            <circle className="d-doc-seal" cx="20" cy="64" r="1.8" />
 
-          {/* Base */}
-          <line className="s-base" x1="40" y1="76" x2="56" y2="76" />
-
-          {/* Left pan — document lines */}
-          <line className="s-doc1" x1="16" y1="51" x2="24" y2="51" />
-          <line className="s-doc2" x1="16" y1="53.5" x2="24" y2="53.5" />
-
-          {/* Right pan — coin circles */}
-          <ellipse className="s-coin1" cx="76" cy="55" rx="5" ry="1.5" />
-          <ellipse className="s-coin2" cx="76" cy="52.5" rx="5" ry="1.5" />
+            {/* ── Rupee ₹ on right pan ── */}
+            <text
+              className="d-rupee"
+              x="103" y="65"
+              textAnchor="middle"
+              fontSize="13"
+              fontFamily="'EB Garamond', Georgia, serif"
+              fontWeight="700"
+              fill="#E8A86A"
+            >₹</text>
+            {/* Rupee coin circle border */}
+            <circle className="d-doc-seal" cx="103" cy="62" r="7" strokeWidth="1" />
+          </g>
         </svg>
       </div>
 
-      {/* ── Brand name — letter by letter ── */}
+      {/* ─── Brand Name ──────────────────────── */}
       <div style={{
-        fontFamily: "'EB Garamond', Georgia, serif",
-        fontSize: "clamp(1.8rem, 4vw, 2.6rem)",
-        fontWeight: 500,
-        color: "#F5F0E8",
-        letterSpacing: "-0.02em",
-        lineHeight: 1,
-        height: "1.2em",
-        marginBottom: 14,
-        minWidth: 320,
-        textAlign: "center",
+        fontFamily:"'EB Garamond', Georgia, serif",
+        fontSize:"clamp(2rem,4.5vw,2.75rem)",
+        fontWeight:500,
+        letterSpacing:"-0.02em",
+        lineHeight:1,
+        height:"1.2em",
+        marginBottom:12,
+        minWidth:340,
+        textAlign:"center",
       }}>
-        {nameVisible && BRAND.split("").slice(0, letterIdx).map((ch, i) => (
-          <span key={i} className="letter-char" style={{ animationDelay: `${i * 0.001}s` }}>{ch}</span>
-        ))}
+        {isTyping && BRAND.split("").slice(0, letterIdx).map((ch, i) => {
+          const isSecondWord = i >= 8; // "Contract" = 8 chars
+          return (
+            <span key={i} className="ltr" style={{
+              color: isSecondWord ? "#D4924A" : "#F5F0E8",
+              fontStyle: isSecondWord ? "italic" : "normal",
+            }}>{ch}</span>
+          );
+        })}
       </div>
 
-      {/* ── Subtitle ── */}
-      <div style={{ height: 22 }}>
-        {subVisible && (
-          <div className="sub-text" style={{
-            fontSize: "0.65rem",
-            fontWeight: 700,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "#B8742E",
-            textAlign: "center",
+      {/* ─── Subtitle ────────────────────────── */}
+      <div style={{ height:22 }}>
+        {showSub && (
+          <div className="sub" style={{
+            fontSize:"0.63rem",
+            fontWeight:700,
+            letterSpacing:"0.2em",
+            textTransform:"uppercase",
+            color:"#B8742E",
+            textAlign:"center",
           }}>
-            Protecting Indian MSMEs · Since 2026
+            Protecting Indian MSMEs · Est. 2026
           </div>
         )}
       </div>
 
-      {/* ── Bottom separator ── */}
-      <div style={{ width: 260, height: 1, marginTop: 48 }}>
-        {step >= 0 && (
-          <div className="sweep-line" style={{
-            height: "100%",
-            background: "linear-gradient(90deg, transparent 0%, #B8742E 30%, #E8A86A 50%, #B8742E 70%, transparent 100%)",
-          }} />
-        )}
+      {/* Bottom separator */}
+      <div style={{ width:280, marginTop:44 }}>
+        {isDrawing && <div className="sep-line" style={{ animationDelay:"0.15s" }} />}
       </div>
 
-      {/* ── Floating ambient particles ── */}
-      {[...Array(6)].map((_, i) => (
+      {/* Ambient float dots */}
+      {[0,1,2,3,4,5].map(i => (
         <div key={i} style={{
-          position: "absolute",
-          width: 3, height: 3,
-          borderRadius: "50%",
-          background: "#B8742E",
-          left: `${15 + i * 14}%`,
-          bottom: `${20 + (i % 3) * 12}%`,
-          animation: `floatDot ${2.5 + i * 0.4}s ease-in-out infinite`,
-          animationDelay: `${i * 0.35}s`,
-          opacity: 0,
-        }} />
+          position:"absolute",
+          width:2.5, height:2.5, borderRadius:"50%",
+          background:"#B8742E",
+          left:`${14 + i*14}%`,
+          bottom:`${18 + (i%3)*10}%`,
+          animation:`floatDot ${2.5+i*0.4}s ease-in-out infinite`,
+          animationDelay:`${i*0.32}s`,
+          opacity:0,
+        }}/>
       ))}
     </div>
   );
