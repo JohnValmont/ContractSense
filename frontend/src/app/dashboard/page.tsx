@@ -62,9 +62,11 @@ export default function Dashboard() {
     formData.append("file", file);
     formData.append("language", language);
     try {
-      const defaultBackend = typeof window !== "undefined" && window.location.hostname !== "localhost" 
+      const defaultBackend = typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1" && !window.location.hostname.includes("vercel.app") && !window.location.hostname.includes("contractsense")
         ? `http://${window.location.hostname}:8000` 
-        : "http://localhost:8000";
+        : (typeof window !== "undefined" && (window.location.hostname.includes("vercel.app") || window.location.hostname.includes("contractsense"))
+           ? "https://contractsense-t00r.onrender.com"
+           : "http://localhost:8000");
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || defaultBackend;
       let endpoint: string;
       if (mode === "translate") {
