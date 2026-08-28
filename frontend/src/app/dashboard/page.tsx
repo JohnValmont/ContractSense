@@ -247,11 +247,16 @@ export default function Dashboard() {
 
       {/* ══ MAIN CONTENT ════════════════════════════════════════════ */}
       <main style={{ flex:1, overflowY:"auto", background:"var(--canvas)", scrollbarWidth:"none" }}>
-        {mode === "resources" ? (
-          <LegalResources uiLanguage={uiLanguage} />
-        ) : mode === "scheme" ? (
-          <SchemeMatch uiLanguage={uiLanguage} />
-        ) : (
+        <style>{`
+          @keyframes fadeSoft { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+          .fade-soft { animation: fadeSoft 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        `}</style>
+        <div key={mode} className="fade-soft" style={{ minHeight: "100%" }}>
+          {mode === "resources" ? (
+            <LegalResources uiLanguage={uiLanguage} />
+          ) : mode === "scheme" ? (
+            <SchemeMatch uiLanguage={uiLanguage} />
+          ) : (
           <div style={{ maxWidth: 1080, margin: "0 auto", padding: "3.5rem 3rem 4rem" }}>
 
             {/* Page heading */}
@@ -444,6 +449,7 @@ export default function Dashboard() {
 
           </div>
         )}
+        </div>
       </main>
 
       {/* Privacy Modal */}

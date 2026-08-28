@@ -499,25 +499,56 @@ export default function Home() {
               </div>
             </div>
             {/* Link cols */}
-            {[
-              { heading: "Product",   links: ["Dashboard","Risk Analysis","Translation","PDF Export","Legal Library"] },
-              { heading: "Resources", links: ["How It Works","MSMED Act Guide","Blog","API Docs","SIH 2024"] },
-              { heading: "Company",   links: ["About","Careers","Privacy Policy","Terms","Zero Retention Policy"] },
-            ].map(col => (
-              <div key={col.heading}>
-                <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "rgba(245,240,232,0.25)", marginBottom: "1rem" }}>{col.heading}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
-                  {col.links.map(link => (
-                    <a key={link} href="#" style={{ fontSize: "0.8rem", color: "rgba(245,240,232,0.45)", textDecoration: "none", transition: "color 0.15s" }}
-                      onMouseEnter={e => (e.currentTarget.style.color = "rgba(245,240,232,0.85)")}
-                      onMouseLeave={e => (e.currentTarget.style.color = "rgba(245,240,232,0.45)")}
-                    >{link}</a>
-                  ))}
-                </div>
+            <div>
+              <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,240,232,0.25)", marginBottom: "1rem" }}>Product</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                {[
+                  { label: "Dashboard", href: "/dashboard" },
+                  { label: "Risk Analysis", href: "/dashboard" },
+                  { label: "Translation", href: "/dashboard" },
+                  { label: "Legal Library", href: "/dashboard" },
+                ].map(link => (
+                  <Link key={link.label} href={link.href} style={{ fontSize: "0.8rem", color: "rgba(245,240,232,0.45)", textDecoration: "none", transition: "color 0.15s" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "rgba(245,240,232,0.85)")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "rgba(245,240,232,0.45)")}
+                  >{link.label}</Link>
+                ))}
               </div>
-            ))}
-          </div>
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "1.75rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            </div>
+            
+            <div>
+              <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,240,232,0.25)", marginBottom: "1rem" }}>Resources</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                {[
+                  { label: "How It Works", href: "#how-it-works" },
+                  { label: "Capabilities", href: "/capabilities" },
+                  { label: "Pricing", href: "/pricing" },
+                ].map(link => (
+                  <Link key={link.label} href={link.href} style={{ fontSize: "0.8rem", color: "rgba(245,240,232,0.45)", textDecoration: "none", transition: "color 0.15s" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "rgba(245,240,232,0.85)")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "rgba(245,240,232,0.45)")}
+                  >{link.label}</Link>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,240,232,0.25)", marginBottom: "1rem" }}>Company</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                {[
+                  { label: "About", href: "/" },
+                  { label: "Privacy Policy", href: "/" },
+                  { label: "Terms of Service", href: "/" },
+                  { label: "Zero Retention Policy", href: "/" },
+                ].map(link => (
+                  <Link key={link.label} href={link.href} style={{ fontSize: "0.8rem", color: "rgba(245,240,232,0.45)", textDecoration: "none", transition: "color 0.15s" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "rgba(245,240,232,0.85)")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "rgba(245,240,232,0.45)")}
+                  >{link.label}</Link>
+                ))}
+              </div>
+            </div>
+          </div>Content: "space-between" }}>
             <span style={{ fontSize: "0.72rem", color: "rgba(245,240,232,0.25)" }}>© 2026 ContractSense. All rights reserved. Built for Smart India Hackathon.</span>
             <div style={{ display: "flex", gap: "2rem" }}>
               {["MSME Compliance", "Zero Data Retention", "Indian Contract Act, 1872"].map(t => (
