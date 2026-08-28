@@ -472,9 +472,14 @@ def translate_contract():
         contract_text = contract_text[:300000] + "\n...[truncated for length]"
 
     if not build_fallback_chain():
+        if language == "Hindi":
+            demo_text = "डेमो मोड: कोई एपीआई कुंजी कॉन्फ़िगर नहीं की गई है। लाइव अनुवाद सक्षम करने के लिए backend/.env में एपीआई कुंजी जोड़ें।"
+        else:
+            demo_text = "Demo mode: no API keys configured. Add API keys to backend/.env to enable live translation."
+
         return jsonify({
             "translated_title": f"Demo Translation ({language})",
-            "translated_text": "Demo mode: no API keys configured. Add API keys to backend/.env to enable live translation."
+            "translated_text": demo_text
         })
 
     # ── Call AI with fallback chain ────────────
@@ -492,9 +497,15 @@ def translate_contract():
         return jsonify(attach_meta(result, "ai"))
     except Exception as e:
         print(f"[ContractSense] Translation API call failed, falling back to demo: {e}")
+        
+        if language == "Hindi":
+            demo_text = "यह एक डेमो अनुवाद है क्योंकि एपीआई कॉल विफल हो गया है। उत्पादन वातावरण में, यहां पूरा अनुबंध अनुवाद दिखाई देगा।"
+        else:
+            demo_text = f"This is a fallback demo response because the API call failed ({e}). In a production environment with active API keys, the full contract translation will appear here."
+
         demo_result = {
             "translated_title": f"Demo Translation ({language})",
-            "translated_text": f"This is a fallback demo response because the API call failed ({e}). In a production environment with active API keys, the full contract translation will appear here."
+            "translated_text": demo_text
         }
         return jsonify(attach_meta(demo_result, "demo"))
 

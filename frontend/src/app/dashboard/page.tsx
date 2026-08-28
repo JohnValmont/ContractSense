@@ -349,8 +349,10 @@ export default function Dashboard() {
             {/* ── Processing Mode Toggle ───────────────────────── */}
             {mode === "analyze" && (
               <div style={{ marginTop: "2rem" }}>
-                <div style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-subtle)", marginBottom: "1rem" }}>Processing Architecture</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-subtle)", marginBottom: "1rem" }}>
+                  {hi ? "प्रसंस्करण वास्तुकला" : "Processing Architecture"}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1rem" }}>
                   {/* Offline Option */}
                   <button
                     onClick={() => setProcessingMode("offline")}
@@ -364,10 +366,14 @@ export default function Dashboard() {
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.5rem" }}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={processingMode === "offline" ? "#16a34a" : "var(--ink-muted)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                      <span style={{ fontSize: "0.9rem", fontWeight: 600, color: processingMode === "offline" ? "#16a34a" : "var(--ink)", fontFamily: "var(--font-sans)" }}>Secure Offline</span>
+                      <span style={{ fontSize: "0.9rem", fontWeight: 600, color: processingMode === "offline" ? "#16a34a" : "var(--ink)", fontFamily: "var(--font-sans)" }}>
+                        {hi ? "सुरक्षित ऑफ़लाइन" : "Secure Offline"}
+                      </span>
                       {processingMode === "offline" && <span style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#16a34a" }} />}
                     </div>
-                    <div style={{ fontSize: "0.8rem", color: "var(--ink-muted)", lineHeight: 1.5, fontFamily: "var(--font-sans)" }}>Zero-knowledge heuristic engine. Financial data never leaves your device's memory.</div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--ink-muted)", lineHeight: 1.5, fontFamily: "var(--font-sans)" }}>
+                      {hi ? "जीरो-नॉलेज ह्यूरिस्टिक इंजन। डेटा कभी भी आपके डिवाइस की मेमोरी से बाहर नहीं जाता।" : "Zero-knowledge heuristic engine. Financial data never leaves your device's memory."}
+                    </div>
                   </button>
 
                   {/* AI Option */}
@@ -383,10 +389,14 @@ export default function Dashboard() {
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.5rem" }}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={processingMode === "ai" ? "var(--saffron)" : "var(--ink-muted)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                      <span style={{ fontSize: "0.9rem", fontWeight: 600, color: processingMode === "ai" ? "var(--saffron)" : "var(--ink)", fontFamily: "var(--font-sans)" }}>Cloud AI Enhanced</span>
+                      <span style={{ fontSize: "0.9rem", fontWeight: 600, color: processingMode === "ai" ? "var(--saffron)" : "var(--ink)", fontFamily: "var(--font-sans)" }}>
+                        {hi ? "क्लाउड एआई एन्हांस्ड" : "Cloud AI Enhanced"}
+                      </span>
                       {processingMode === "ai" && <span style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "var(--saffron)" }} />}
                     </div>
-                    <div style={{ fontSize: "0.8rem", color: "var(--ink-muted)", lineHeight: 1.5, fontFamily: "var(--font-sans)" }}>Advanced LLM contextual analysis. Requires transmitting document over TLS to secure endpoints.</div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--ink-muted)", lineHeight: 1.5, fontFamily: "var(--font-sans)" }}>
+                      {hi ? "उन्नत LLM प्रासंगिक विश्लेषण। सुरक्षित एंडपॉइंट्स पर दस्तावेज़ संचारित करने की आवश्यकता है।" : "Advanced LLM contextual analysis. Requires transmitting document over TLS to secure endpoints."}
+                    </div>
                   </button>
                 </div>
               </div>
