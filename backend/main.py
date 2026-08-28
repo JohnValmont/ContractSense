@@ -284,6 +284,8 @@ When analyzing this contract, systematically check for EACH of the following kno
 
 For each pattern found, report: which clause/section it appears in, a plain-language explanation of the specific risk, and a risk level (High/Medium/Low) based on severity and how disadvantageous it is relative to normal commercial practice. If you are uncertain whether something qualifies, include it as Low risk rather than omitting it — err toward flagging over silence. Write this explanation in {language}.
 
+Crucially, for every risk identified, you MUST explicitly cite the specific statutory section of the MSME Development Act, 2006, the Indian Contract Act, 1872, or the Sale of Goods Act, 1930 that is relevant. If no specific section applies, provide the general legal doctrine in the Indian context.
+
 Also provide a fair, specific redline suggestion to neutralize the risk. Write this in {language}.
 Finally, compute a brutal, realistic risk_score (0-100) based on how predatory the contract is overall.
 
@@ -299,6 +301,7 @@ Format:
       "content": "Exact text...",
       "risk_level": "High",
       "explanation": "Explanation in {language}...",
+      "msme_act_reference": "Section 15 of MSME Act, 2006 (or other relevant statute/doctrine)",
       "redline_suggestion": "Suggested redline in {language}..."
     }}
   ]

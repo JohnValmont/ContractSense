@@ -7,217 +7,248 @@
       "content": "The Warranty Period is defined in the definitions section as 36 months, but Article 8.2.1 later sets the actual warranty at only 6 months from dispatch or 4 months from installation, whichever is earlier.",
       "risk_level": "High",
       "explanation": "Internally inconsistent warranty terms create ambiguity that could be exploited by either party and undermine enforceability of the warranty provision.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 2.2.3",
       "content": "If the Vendor fails to acknowledge a Purchase Order within 3 Business Days, it is deemed accepted on the exact terms stated.",
       "risk_level": "Medium",
       "explanation": "Vendor can be bound to unfavorable or erroneous PO terms purely through inaction.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 2.2.4",
       "content": "Vendor must source raw materials only from Company-approved suppliers when specified.",
       "risk_level": "Low",
       "explanation": "Restricts Vendor's sourcing flexibility and may increase costs without a corresponding price adjustment mechanism.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
-      "title": "Article 2.6.1–2.6.3",
+      "title": "Article 2.6.1\u00e2\u20ac\u201c2.6.3",
       "content": "Company may unilaterally propose modifications to specifications, delivery dates, or quantities before dispatch/completion.",
       "risk_level": "Medium",
       "explanation": "While an 'equitable adjustment' is referenced, the Company retains unilateral initiation power over scope changes, creating planning and cost uncertainty for Vendor.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
-      "title": "Article 2.8.1–2.8.2",
+      "title": "Article 2.8.1\u00e2\u20ac\u201c2.8.2",
       "content": "The Agreement is non-exclusive, allowing the Company to source identical goods/services from any third party globally.",
       "risk_level": "Low",
       "explanation": "Vendor has no volume or exclusivity guarantee despite committing capacity, infrastructure, and IP assignment obligations to the Company.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 3.1.1",
       "content": "Prices are fixed for the duration of the Term with no price escalation or indexation mechanism.",
       "risk_level": "Medium",
       "explanation": "Vendor bears all raw material, energy, and inflation cost risk over a potentially long, auto-renewing term.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 3.3.1",
       "content": "Payment (120 days from invoice/delivery) is only triggered once the Company, in its 'sole and absolute discretion,' determines the Deliverable is satisfactorily completed.",
       "risk_level": "High",
       "explanation": "Combines an already long payment cycle with unilateral, undefined acceptance discretion, allowing the Company to indefinitely delay payment triggers.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 3.3.3",
       "content": "Company disclaims liability for interest or late fees on delayed payments, notwithstanding the MSMED Act or any other Applicable Law.",
       "risk_level": "High",
       "explanation": "Purports to contractually override a mandatory statutory protection (MSMED Act interest provisions for micro/small enterprises), which is likely unenforceable and exposes the clause to legal challenge.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
-      "title": "Article 3.4.1–3.4.2",
+      "title": "Article 3.4.1\u00e2\u20ac\u201c3.4.2",
       "content": "Company may unilaterally adjust delivery schedules, forecasts, or specifications, and such adjustments do not automatically entitle Vendor to price or timeline changes.",
       "risk_level": "High",
       "explanation": "Vendor must absorb operational impact of Company-driven changes with only discretionary (not guaranteed) compensation.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Section 15 of MSME Development Act, 2006"
     },
     {
       "title": "Article 3.5.1",
       "content": "Company may set off any amount owed by Vendor against payments due to Vendor, at any time, without prior notice.",
       "risk_level": "Medium",
       "explanation": "Unilateral, notice-free set-off rights create cash-flow unpredictability and potential for disputed deductions.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 4.1.2",
-      "content": "Agreement auto-renews for successive 3-year terms unless Vendor gives non-renewal notice in a narrow 90–120 day pre-expiry window.",
+      "content": "Agreement auto-renews for successive 3-year terms unless Vendor gives non-renewal notice in a narrow 90\u00e2\u20ac\u201c120 day pre-expiry window.",
       "risk_level": "Medium",
       "explanation": "A missed narrow notice window locks Vendor into another multi-year term on the same (potentially unfavorable) fixed pricing.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Section 15 of MSME Development Act, 2006"
     },
     {
       "title": "Article 4.2.2",
       "content": "Cure periods are asymmetric: Vendor must give the Company 60 days to cure a breach, while the Company need only give Vendor 30 days.",
       "risk_level": "Medium",
       "explanation": "Vendor has less time to remedy issues and avoid termination than the Company does, an unbalanced risk allocation.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
-      "title": "Article 4.3.1–4.3.2",
+      "title": "Article 4.3.1\u00e2\u20ac\u201c4.3.2",
       "content": "Company may terminate for convenience with only 15 days' notice and owes no compensation for work-in-progress, procured materials, unamortized investment, or unfulfilled commitments.",
       "risk_level": "High",
       "explanation": "Vendor can be left holding significant sunk costs (materials, tooling, capacity investment) with no recourse on short notice.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 5.1.2",
       "content": "Vendor must indemnify the Company broadly for IP infringement claims, product defects/liability, and any acts of its subcontractors or personnel.",
       "risk_level": "High",
       "explanation": "Broad, uncapped-in-scope indemnity obligations expose Vendor to significant third-party liability risk beyond its direct control (e.g., subcontractor conduct).",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 5.2.2",
       "content": "Vendor's liability is capped at 12 months' fees, but the cap explicitly does not apply to indemnities, confidentiality breaches, or gross negligence/willful misconduct.",
       "risk_level": "High",
       "explanation": "Because indemnities cover most realistic loss scenarios (IP, product liability), the carve-outs largely negate the liability cap, leaving Vendor effectively exposed to uncapped liability.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 5.2.3",
-      "content": "Company's liability to Vendor is capped at fees paid in the 3 months preceding the claim — a much shorter lookback than Vendor's 12-month cap.",
+      "content": "Company's liability to Vendor is capped at fees paid in the 3 months preceding the claim \u00e2\u20ac\u201d a much shorter lookback than Vendor's 12-month cap.",
       "risk_level": "High",
       "explanation": "Creates a significant asymmetry in liability exposure between the two parties, disadvantaging the Vendor if the Company causes loss.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
-      "title": "Article 5.3.1–5.3.2",
+      "title": "Article 5.3.1\u00e2\u20ac\u201c5.3.2",
       "content": "Company may audit Vendor's facilities, books, and IT systems as frequently as it deems necessary, including for 12 months post-termination.",
       "risk_level": "Medium",
       "explanation": "Open-ended, discretionary audit frequency imposes ongoing operational burden and potential exposure of sensitive Vendor information.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 6.1.2",
       "content": "Vendor grants the Company a worldwide, perpetual, irrevocable, royalty-free, sub-licensable license to Vendor's own pre-existing (Background) IP.",
       "risk_level": "High",
       "explanation": "Vendor permanently loses commercial control over its own pre-existing IP tied to the Deliverables, with no ability to revoke even after the relationship ends.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
-      "title": "Article 6.2.1–6.2.4",
+      "title": "Article 6.2.1\u00e2\u20ac\u201c6.2.4",
       "content": "All IP developed by Vendor in connection with the engagement (Foreground IP) vests exclusively and automatically in the Company, and Vendor is barred from using it elsewhere.",
       "risk_level": "High",
       "explanation": "Vendor forfeits all innovation value created during the engagement, even improvements with broader applicability outside this specific relationship.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 7.3.1 vs 7.3.2",
       "content": "Company's confidentiality obligations survive only 2 years post-termination, while Vendor's confidentiality obligations survive perpetually.",
       "risk_level": "High",
       "explanation": "Materially asymmetric confidentiality terms disadvantage Vendor, who faces indefinite exposure to breach claims with no reciprocal protection timeframe.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 7.4.2",
       "content": "Vendor must notify the Company of any confirmed or suspected data breach within 24 hours of becoming aware.",
       "risk_level": "Low",
       "explanation": "Very tight notification window may be operationally difficult to meet before facts are confirmed, risking inadvertent non-compliance.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 8.2.1",
       "content": "Actual warranty period is only 6 months from dispatch or 4 months from installation, whichever expires earlier.",
       "risk_level": "Medium",
       "explanation": "A short warranty window (and the earlier of two triggers) limits the Company's practical remedy period and conflicts with the 36-month period stated in definitions.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 8.3.1",
       "content": "Vendor disclaims all implied warranties beyond the express warranties listed, to the maximum extent permitted by law.",
       "risk_level": "Low",
       "explanation": "Standard but still narrows the Company's recourse for defects not explicitly covered by the express warranty language.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 9.2.1",
       "content": "Despite Force Majeure, Vendor must maintain disaster recovery, alternate sourcing, and backup manufacturing to avoid unilateral supply cessation.",
       "risk_level": "Medium",
       "explanation": "Effectively narrows the practical protection Force Majeure is meant to provide the Vendor, imposing continued performance obligations during disruption.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 9.2.2",
       "content": "Company is excused from payment/processing/acceptance obligations if its own operations are affected by a broadly defined Force Majeure Event, including market disruptions and currency fluctuations.",
       "risk_level": "High",
       "explanation": "Extends Force Majeure relief to the Company for ordinary commercial/financial risks (currency swings, market shocks) that are not typically considered true Force Majeure, letting the Company withhold payment broadly and without liability.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
-      "title": "Article 10.2.1–10.2.2",
+      "title": "Article 10.2.1\u00e2\u20ac\u201c10.2.2",
       "content": "Vendor is barred, for the Term plus 24 months after termination, from manufacturing, marketing, or supplying similar goods/services to anyone in the precision engineering/industrial automation sector in India or globally.",
       "risk_level": "High",
       "explanation": "An extremely broad, global, sector-wide non-compete on a non-exclusive supplier is likely to be an unreasonable restraint of trade under Indian law (Section 27, Indian Contract Act) and could be unenforceable while still chilling Vendor's business.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 10.1.1",
       "content": "Mutual 12-month non-solicitation of each other's key personnel following termination.",
       "risk_level": "Low",
       "explanation": "Reasonably standard, but still restricts Vendor's ability to hire experienced talent that has worked on this engagement.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 11.2.3",
       "content": "The sole arbitrator is appointed exclusively and unilaterally by the Company from its own internal panel.",
       "risk_level": "High",
       "explanation": "Unilateral appointment of an arbitrator by one party from its own panel undermines arbitral neutrality and is likely invalid under Indian Supreme Court precedent (e.g., TRF Ltd., Perkins Eastman) on unilateral appointments.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
-      "title": "Article 12.1.1–12.1.2",
+      "title": "Article 12.1.1\u00e2\u20ac\u201c12.1.2",
       "content": "Vendor cannot assign or subcontract without Company consent, while the Company has unrestricted rights to assign the Agreement to any Affiliate or in an M&A transaction.",
       "risk_level": "Medium",
       "explanation": "Asymmetric assignment rights mean Vendor could find itself contractually bound to an unknown successor entity with no equivalent flexibility of its own.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
-      "title": "Article 12.2.1–12.2.2",
+      "title": "Article 12.2.1\u00e2\u20ac\u201c12.2.2",
       "content": "Company may unilaterally amend the Agreement's terms, and Vendor's continued performance after notice is deemed acceptance of the changes.",
       "risk_level": "High",
       "explanation": "Allows the Company to alter binding contract terms without genuine mutual consent, with Vendor's ordinary course conduct treated as agreement even if it never affirmatively consented.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     },
     {
       "title": "Article 12.3.2",
       "content": "Notices from the Company to the Vendor are deemed received after 3 Business Days (courier/post) or upon transmission (email), regardless of actual receipt.",
       "risk_level": "Medium",
       "explanation": "Vendor could be deemed to have received time-sensitive notices (e.g., breach or termination) that it never actually saw, prejudicing its ability to respond within cure periods.",
-      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause."
+      "redline_suggestion": "Seek legal counsel to renegotiate or strike this clause.",
+      "msme_act_reference": "Indian Contract Act, 1872"
     }
   ]
 }

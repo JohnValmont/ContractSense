@@ -277,6 +277,12 @@ export default function Report() {
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
                   Statutory Analysis
                 </div>
+                {activeClause.msme_act_reference && (
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.4rem 0.75rem", background: "rgba(168,85,247,0.1)", borderRadius: 6, border: "1px solid rgba(168,85,247,0.25)", marginBottom: "1rem" }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#9333EA" }}>{activeClause.msme_act_reference}</span>
+                  </div>
+                )}
                 <div style={{ fontSize: "0.925rem", color: "#5A5048", lineHeight: 1.8 }}>
                   {activeClause.explanation}
                 </div>
