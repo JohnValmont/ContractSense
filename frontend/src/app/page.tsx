@@ -375,6 +375,35 @@ export default function Home() {
                 {/* Color band top */}
                 <div style={{ height: 160, background: w.color, position: "relative", overflow: "hidden" }}>
                   <div style={{ position: "absolute", inset: 0, background: `radial-gradient(circle at 70% 30%, rgba(184,116,46,0.3) 0%, transparent 60%)` }} />
+                  
+                  {/* Outline Drawings */}
+                  {i === 0 && (
+                    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.15)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", top: "50%", left: "75%", transform: "translate(-50%, -50%)" }}>
+                      <rect x="2" y="12" width="6" height="10" />
+                      <rect x="8" y="6" width="8" height="16" />
+                      <rect x="16" y="10" width="6" height="12" />
+                      <path d="M5 16h.01M5 19h.01M11 10h2M11 14h2M11 18h2M19 14h.01M19 18h.01" />
+                    </svg>
+                  )}
+                  {i === 1 && (
+                    <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.15)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", top: "50%", left: "75%", transform: "translate(-50%, -50%)" }}>
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                      <circle cx="10" cy="14" r="2" />
+                      <circle cx="14" cy="14" r="2" />
+                      <path d="M12 16v-4" />
+                    </svg>
+                  )}
+                  {i === 2 && (
+                    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.15)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", top: "50%", left: "75%", transform: "translate(-50%, -50%)" }}>
+                      <path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+                      <path d="M2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+                      <path d="M7 21h10" />
+                      <path d="M12 3v18" />
+                      <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" />
+                    </svg>
+                  )}
+
                   <div style={{ position: "absolute", bottom: 20, left: 24, fontFamily: "'EB Garamond', Georgia, serif", fontSize: "2.5rem", color: "rgba(245,240,232,0.12)", fontWeight: 500 }}>
                     {i === 0 ? "MSME" : i === 1 ? "PRO" : "LEGAL"}
                   </div>
