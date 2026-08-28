@@ -11,24 +11,28 @@ export default function Logo({ size = 32, className = "" }: { size?: number; cla
     >
       <defs>
         <linearGradient id="lPillar" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#5A3000"/>
+          <stop offset="0%" stopColor="#8A5A28"/>
           <stop offset="30%" stopColor="#E0A840"/>
           <stop offset="70%" stopColor="#C17D3C"/>
-          <stop offset="100%" stopColor="#3D1F00"/>
+          <stop offset="100%" stopColor="#6A3F18"/>
         </linearGradient>
         <linearGradient id="lBeam" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#F0D070"/>
           <stop offset="50%" stopColor="#C17D3C"/>
-          <stop offset="100%" stopColor="#5A2800"/>
+          <stop offset="100%" stopColor="#8A5A28"/>
         </linearGradient>
         <radialGradient id="lPan" cx="50%" cy="30%" r="70%">
-          <stop offset="0%" stopColor="#D4924A"/>
-          <stop offset="100%" stopColor="#2A1000"/>
+          <stop offset="0%" stopColor="#E0A840"/>
+          <stop offset="100%" stopColor="#5A3000"/>
         </radialGradient>
       </defs>
 
-      {/* Background glow circle */}
-      <circle cx="60" cy="60" r="50" fill="rgba(184,116,46,0.06)" />
+      {/* Dark premium seal background for contrast on light navbars */}
+      <circle cx="60" cy="60" r="58" fill="#18120A" />
+      <circle cx="60" cy="60" r="54" fill="none" stroke="#3A2D1C" strokeWidth="1.5" />
+      
+      {/* Background glow circle inside seal */}
+      <circle cx="60" cy="60" r="48" fill="rgba(224,168,64,0.08)" />
       
       {/* Pillar */}
       <rect x="56" y="20" width="8" height="80" rx="4" fill="url(#lPillar)" />
