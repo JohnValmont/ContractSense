@@ -45,7 +45,7 @@ def extract_pdf_text(file_stream) -> tuple[str, bool]:
             pdf_bytes = file_stream.read()
             images = convert_from_bytes(pdf_bytes, dpi=300)
             for img in images:
-                ocr_text = pytesseract.image_to_string(img, lang='eng')
+                ocr_text = pytesseract.image_to_string(img, lang='eng+hin')
                 if ocr_text:
                     text += ocr_text + "\n"
             used_ocr = True
@@ -433,25 +433,16 @@ def analyze_contract_offline():
     if len(contract_text) > 300000:
         contract_text = contract_text[:300000]
 
+    # analyze_contract_local now always returns a valid result (never None).
+    # It returns a clean-bill-of-health for safe contracts and a risk report for risky ones.
+    # We NEVER fall through to demo data for a real document upload.
     local_result = analyze_contract_local(contract_text, language)
-
-    if local_result:
-        local_result["_meta"] = {
-            "sha256": doc_fingerprint,
-            "ocr_used": used_ocr,
-            "processing_mode": "offline",
-        }
-        return jsonify(local_result)
-
-    # Static demo fallback
-    try:
-        filename = "demo_risk_analysis_hindi.json" if language.lower() == "hindi" else "demo_risk_analysis.json"
-        with open(filename, "r", encoding="utf-8") as f:
-            demo = json.load(f)
-            demo["_meta"] = {"sha256": doc_fingerprint, "ocr_used": used_ocr, "processing_mode": "demo"}
-            return jsonify(demo)
-    except Exception as e:
-        return jsonify({"detail": f"Offline analysis failed: {e}"}), 500
+    local_result["_meta"] = {
+        "sha256": doc_fingerprint,
+        "ocr_used": used_ocr,
+        "processing_mode": "offline",
+    }
+    return jsonify(local_result)
 
 @app.route("/api/translate", methods=["POST"])
 def translate_contract():
