@@ -11,6 +11,7 @@ interface Clause {
   risk_level: string;
   explanation: string;
   redline_suggestion: string | null;
+  msme_act_reference?: string;
 }
 
 interface AnalysisResult {
