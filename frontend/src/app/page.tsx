@@ -228,8 +228,7 @@ export default function Home() {
             ))}
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-            <Link href="/login" style={{ fontSize: "0.82rem", fontWeight: 600, color: "#18120A", padding: "0.48rem 1.1rem", borderRadius: 3, border: "1.5px solid rgba(24,18,10,0.2)", textDecoration: "none", transition: "all 0.2s" }}>Login</Link>
-            <Link href="/dashboard" style={{ fontSize: "0.82rem", fontWeight: 700, color: "#F5F0E8", padding: "0.48rem 1.2rem", borderRadius: 3, background: "#18120A", textDecoration: "none", transition: "all 0.2s" }}>Request a Demo</Link>
+            <Link href="/dashboard" style={{ fontSize: "0.82rem", fontWeight: 700, color: "#F5F0E8", padding: "0.48rem 1.2rem", borderRadius: 3, background: "#18120A", textDecoration: "none", transition: "all 0.2s" }}>Open Dashboard</Link>
           </div>
         </nav>
       </header>
