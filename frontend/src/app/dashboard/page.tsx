@@ -62,7 +62,10 @@ export default function Dashboard() {
     formData.append("file", file);
     formData.append("language", language);
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+      const defaultBackend = typeof window !== "undefined" && window.location.hostname !== "localhost" 
+        ? `http://${window.location.hostname}:8000` 
+        : "http://localhost:8000";
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || defaultBackend;
       let endpoint: string;
       if (mode === "translate") {
         endpoint = "/api/translate";
