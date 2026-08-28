@@ -218,8 +218,8 @@ export default function Dashboard() {
             borderRadius:"6px", color:"rgba(245,242,236,0.65)", cursor:"pointer",
             outline:"none", fontFamily:"var(--font-sans)", width:"100%",
           }}>
-            <option value="en">English</option>
-            <option value="hi">हिंदी</option>
+            <option value="en" style={{ color: "#18120A", background: "#fff" }}>English</option>
+            <option value="hi" style={{ color: "#18120A", background: "#fff" }}>हिंदी</option>
           </select>
           <Link href="/" style={{
             display:"flex", alignItems:"center", gap:"0.6rem",
