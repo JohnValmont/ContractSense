@@ -70,17 +70,30 @@ const ZIGZAG = [
   {
     eyebrow: "Statutory Compliance Engine", title: "31 predatory clause patterns. Every contract.", body: "The engine specifically isolates payment terms and benchmarks them against Section 15 of the MSMED Act 2006, instantly flagging anything exceeding the 45-day statutory limit. It cross-references the Indian Contract Act, 1872 for voidable clauses.",
     visual: (
-      <div style={{ background: "#0F0B06", borderRadius: 10, padding: "1.5rem", fontFamily: "monospace", fontSize: "0.775rem", lineHeight: 1.75, color: "rgba(255,255,255,0.65)" }}>
-        <div style={{ display: "flex", gap: "0.35rem", marginBottom: "1rem" }}>
-          {["#ff5f57","#febc2e","#28c840"].map(c => <div key={c} style={{ width: 10, height: 10, borderRadius: "50%", background: c }} />)}
+      <div style={{ background: "#FBF9F5", border: "1px solid rgba(24,18,10,0.08)", borderRadius: 10, padding: "1.75rem", position: "relative", overflow: "hidden" }}>
+        {/* Document Header */}
+        <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#A89C8F", marginBottom: "1rem", borderBottom: "1px solid rgba(24,18,10,0.06)", paddingBottom: "0.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span>Master Services Agreement</span>
+          <span style={{ color: "#DC2626", display: "flex", alignItems: "center", gap: "0.3rem" }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#DC2626", animation: "pulse2 2s infinite" }} />
+            High Risk
+          </span>
         </div>
-        <div style={{ color: "#6B9BFA" }}>const <span style={{ color: "#E8A86A" }}>payment_terms</span> = <span style={{ color: "#85E89D" }}>"90 days"</span>;</div>
-        <div style={{ color: "#6B9BFA" }}>if (terms &gt; <span style={{ color: "#F97583" }}>45</span>) {'{'}</div>
-        <div style={{ color: "#E8A86A", paddingLeft: "1rem" }}>flagViolation(<span style={{ color: "#85E89D" }}>MSMED_ACT_SEC_15</span>);</div>
-        <div style={{ color: "#6B9BFA" }}>{'}'}</div>
-        <div style={{ marginTop: "1rem", background: "rgba(220,38,38,0.12)", border: "1px solid rgba(220,38,38,0.3)", padding: "0.75rem", borderRadius: 6 }}>
-          <div style={{ color: "#F87171", fontSize: "0.7rem", fontWeight: 700, marginBottom: "0.25rem" }}>● HIGH RISK IDENTIFIED</div>
-          <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.72rem" }}>Payment term of 90 days violates statutory 45-day limit.<br />Clause is voidable under Section 15.</div>
+        {/* Document Body */}
+        <div style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: "0.95rem", color: "#4A4036", lineHeight: 1.6 }}>
+          <p style={{ marginBottom: "0.5rem", fontWeight: 600 }}>3.1 Invoicing and Payment Terms</p>
+          <p style={{ marginBottom: "0.5rem", color: "rgba(74,64,54,0.6)" }}>The Supplier shall submit undisputed invoices on a monthly basis.</p>
+          {/* Highlighted Predatory Clause */}
+          <div style={{ position: "relative", background: "rgba(220,38,38,0.06)", border: "1.5px solid rgba(220,38,38,0.4)", borderRadius: 6, padding: "0.6rem 0.75rem", margin: "1rem -0.5rem", zIndex: 5 }}>
+            "The Buyer shall remit payment within <strong>90 days</strong> of receipt of the invoice."
+            
+            {/* Pop-out Alert */}
+            <div style={{ position: "absolute", bottom: "-2rem", right: "-0.5rem", background: "#fff", border: "1px solid rgba(220,38,38,0.25)", borderRadius: 8, padding: "0.5rem 0.75rem", boxShadow: "0 12px 24px rgba(220,38,38,0.15)", display: "flex", alignItems: "center", gap: "0.5rem", zIndex: 10 }}>
+              <div style={{ width: 18, height: 18, borderRadius: "50%", background: "#DC2626", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem", fontWeight: 800 }}>!</div>
+              <div style={{ fontSize: "0.75rem", fontWeight: 600, color: "#991B1B" }}>Voidable: Exceeds MSMED 45-day limit</div>
+            </div>
+          </div>
+          <p style={{ color: "rgba(74,64,54,0.4)" }}>Any disputes regarding the invoice must be raised within 15 days.</p>
         </div>
       </div>
     ),
