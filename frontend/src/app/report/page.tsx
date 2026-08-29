@@ -236,6 +236,11 @@ export default function Report() {
               );
             })}
           </div>
+
+          {/* Legal Disclaimer */}
+          <div style={{ marginTop: "2rem", paddingTop: "1.5rem", borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "0.65rem", color: "rgba(245,240,232,0.4)", lineHeight: 1.6, textAlign: "center" }}>
+            <strong style={{ color: "rgba(245,240,232,0.6)" }}>Disclaimer:</strong> This algorithmic analysis provides risk insights based on standard Indian commercial law and the MSMED Act. It does not constitute formal legal advice. Please consult a qualified legal professional before executing any contracts.
+          </div>
         </div>
       </aside>
 
@@ -381,6 +386,11 @@ export default function Report() {
             )}
           </div>
         ))}
+        
+        {/* Print Legal Disclaimer */}
+        <div style={{ marginTop: "3rem", paddingTop: "1.5rem", borderTop: "1px solid #ccc", fontSize: "0.85rem", color: "#666", lineHeight: 1.5, textAlign: "center", fontStyle: "italic" }}>
+          <strong>Disclaimer:</strong> This algorithmic analysis provides risk insights based on standard Indian commercial law and the MSMED Act. It does not constitute formal legal advice. Please consult a qualified legal professional before executing any contracts.
+        </div>
       </div>
     </div>
   );
