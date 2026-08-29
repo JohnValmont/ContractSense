@@ -428,6 +428,7 @@ export default function Dashboard() {
                   <option value="Telugu">Telugu (తెలుగు)</option>
                   <option value="Marathi">Marathi (मराठी)</option>
                   <option value="Urdu">Urdu (اردو)</option>
+                  <option value="Assamese">Assamese (অসমীয়া)</option>
                 </select>
               </div>
 

@@ -215,7 +215,7 @@ def call_llm_with_fallback(prompt: str) -> dict:
                             "maxOutputTokens": 8192,
                         },
                     },
-                    timeout=60,
+                    timeout=20,
                 )
                 resp.raise_for_status()
                 raw = resp.json()["candidates"][0]["content"]["parts"][0]["text"]
@@ -242,7 +242,7 @@ def call_llm_with_fallback(prompt: str) -> dict:
                             {"role": "user", "content": prompt},
                         ],
                     },
-                    timeout=60,
+                    timeout=20,
                 )
                 resp.raise_for_status()
                 raw = resp.json()["choices"][0]["message"]["content"]

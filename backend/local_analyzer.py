@@ -1,10 +1,11 @@
 import re
 import json
 import os
+from translations import TRANSLATIONS
 
-# ──────────────────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
 # LANGUAGE PACKS — Offline engine speaks in the user's chosen language
-# ──────────────────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
 LANG = {
     "Hindi": {
         "summary_clean": "अनुबंध की ऑफलाइन समीक्षा पूर्ण। इस दस्तावेज़ में कोई स्पष्ट जोखिम खंड नहीं पाया गया। कृपया एआई मोड से पूर्ण विश्लेषण के लिए अनुरोध करें।",
@@ -15,6 +16,14 @@ LANG = {
         "summary_risky": lambda n: f"Offline Heuristic Analysis complete. The deterministic local engine scanned this document against an exhaustive library of 30+ Indian Commercial Law traps and found {n} predatory clause(s).",
     },
 }
+# Dynamically extend LANG from the TRANSLATIONS dict (Bengali, Marathi, Tamil, Telugu, Urdu, Assamese)
+for _lang, _data in TRANSLATIONS.items():
+    if _lang not in LANG:
+        LANG[_lang] = {
+            "summary_clean": _data["summary_clean"],
+            "summary_risky": _data["summary_risky"],
+        }
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # CLAUSE TRANSLATIONS — Hindi text for every clause type
@@ -207,36 +216,48 @@ def get_lang(language: str) -> dict:
 
 
 def localise_clause(clause: dict, language: str) -> dict:
-    """Apply Hindi translations to a clause dict if language is Hindi."""
-    if language != "Hindi":
+    """
+    Apply language-specific translations to a clause dict.
+    Supports: Hindi (via HINDI_CLAUSES), and Bengali/Marathi/Tamil/
+    Telugu/Urdu/Assamese (via TRANSLATIONS from translations.py).
+    """
+    if language == "English":
         return clause
-    
-    # Find the matching Hindi translation by checking the English title suffix
-    for key, hindi_data in HINDI_CLAUSES.items():
+
+    # Extract day count from English explanation once (used for Payment Terms lambdas)
+    day_match = re.search(r'(\d+) days', clause.get("explanation", ""))
+    days = int(day_match.group(1)) if day_match else 90
+
+    # ── Hindi: use the inline HINDI_CLAUSES dict ──────────────────────────
+    if language == "Hindi":
+        for key, data in HINDI_CLAUSES.items():
+            if key in clause.get("title", ""):
+                return _apply_translation(clause, data, days)
+        return clause
+
+    # ── Other languages: use the imported TRANSLATIONS dict ───────────────
+    lang_data = TRANSLATIONS.get(language)
+    if not lang_data:
+        return clause  # language not found, return untranslated
+
+    clause_map = lang_data.get("clauses", {})
+    for key, data in clause_map.items():
         if key in clause.get("title", ""):
-            localised = clause.copy()
-            # Replace article number prefix but keep it, just translate the name
-            original_title = clause["title"]
-            # Extract the "Article N:" prefix
-            prefix = original_title.split(":")[0] if ":" in original_title else ""
-            localised["title"] = f"{prefix}: {hindi_data['title_suffix']}" if prefix else hindi_data["title_suffix"]
-            
-            # Apply explanation (may be a lambda with days param)
-            exp = hindi_data["explanation"]
-            if callable(exp):
-                # Extract day count from English explanation for payment terms
-                import re as _re
-                day_match = _re.search(r'(\d+) days', clause.get("explanation", ""))
-                days = int(day_match.group(1)) if day_match else 90
-                localised["explanation"] = exp(days)
-            else:
-                localised["explanation"] = exp
-            
-            localised["msme_act_reference"] = hindi_data["msme_act_reference"]
-            localised["redline_suggestion"] = hindi_data["redline_suggestion"]
-            return localised
-    
+            return _apply_translation(clause, data, days)
+
     return clause
+
+
+def _apply_translation(clause: dict, data: dict, days: int) -> dict:
+    """Helper: apply a translation data dict onto a clause dict copy."""
+    localised = clause.copy()
+    prefix = clause["title"].split(":")[0] if ":" in clause["title"] else ""
+    localised["title"] = f"{prefix}: {data['title_suffix']}" if prefix else data["title_suffix"]
+    exp = data["explanation"]
+    localised["explanation"] = exp(days) if callable(exp) else exp
+    localised["msme_act_reference"] = data["msme_act_reference"]
+    localised["redline_suggestion"] = data["redline_suggestion"]
+    return localised
 
 
 def analyze_contract_local(contract_text: str, language: str = "English") -> dict:
