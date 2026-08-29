@@ -1,0 +1,81 @@
+MSME-COMPLIANT VENDOR / MASTER SERVICES AGREEMENT (MSA)
+ContractSense Template — Freely Usable
+
+────────────────────────────────────────────────────────
+This Master Services Agreement ("Agreement") is made on _______________ between:
+
+VENDOR (MSME):
+Name: _______________________
+UDYAM Reg. No.: _______________________
+Registered Address: _______________________
+GSTIN: _______________________
+Bank Account: _______________________   IFSC: _______________
+
+CLIENT (Enterprise/Buyer):
+Name: _______________________
+Registered Address: _______________________
+GSTIN: _______________________
+────────────────────────────────────────────────────────
+
+1. SCOPE OF SERVICES
+Vendor agrees to provide [describe services] as detailed in individual Purchase Orders / Statements of Work ("SOW") to be mutually agreed in writing. Each SOW shall form part of this Agreement.
+
+2. PAYMENT TERMS [SECTION 15, MSMED ACT 2006 — MANDATORY]
+(a) Client shall make payment for all invoices within FORTY-FIVE (45) DAYS of receipt of invoice, in strict compliance with Section 15 of the MSME Development Act, 2006.
+(b) Client shall not make payment conditional on any subjective acceptance criteria not expressly and objectively defined in the applicable SOW.
+(c) CLIENT ACKNOWLEDGES that any payment term beyond 45 days is void under Indian law.
+
+3. INTEREST ON DELAYED PAYMENT [SECTION 16, MSMED ACT 2006 — NON-WAIVABLE]
+(a) If Client fails to make payment by the due date, Client shall automatically owe compound interest at three (3) times the bank rate notified by the Reserve Bank of India, calculated from the date of supply to the date of actual payment.
+(b) This right to interest is a statutory right under Section 16 of the MSMED Act and CANNOT be waived by any contractual provision.
+
+4. INTELLECTUAL PROPERTY [MSME-PROTECTIVE]
+(a) All pre-existing intellectual property of Vendor ("Background IP") remains the sole and exclusive property of Vendor.
+(b) Client receives a non-exclusive, non-transferable, limited license to use Vendor's Background IP solely as required to use the deliverables under this Agreement, only for the term of this Agreement.
+(c) Intellectual Property developed specifically for Client under a SOW ("Foreground IP") shall be owned as specified in that SOW. In absence of such specification, Foreground IP shall remain with Vendor.
+
+5. LIABILITY [SYMMETRIC — MSME-PROTECTIVE]
+(a) NEITHER party's aggregate liability to the other shall exceed the total fees paid or payable to Vendor in the twelve (12) months preceding the claim giving rise to the liability.
+(b) NEITHER party shall be liable for indirect, consequential, incidental, or punitive damages.
+(c) These limitations apply equally to both parties (Mutuality).
+
+6. INDEMNIFICATION [MUTUAL — MSME-PROTECTIVE]
+Each Party ("Indemnifying Party") shall indemnify and hold harmless the other Party ("Indemnified Party") from any third-party claim arising directly from the Indemnifying Party's own gross negligence or willful misconduct. Vendor's indemnity obligation is strictly limited to components supplied by Vendor and caused by Vendor's own fault.
+
+7. TERMINATION [MSME-PROTECTIVE]
+(a) Either Party may terminate this Agreement for cause upon 30 days written notice if the other Party materially breaches this Agreement and fails to cure such breach within that notice period.
+(b) Termination for convenience: Either party may terminate with NINETY (90) days written notice. Upon termination for convenience by Client, Client shall pay Vendor for all work completed, work in progress at the pro-rata contract rate, and all committed third-party costs that cannot be cancelled.
+[MSME NOTE: Reject any clause giving only the Client the right to terminate for convenience without compensation.]
+
+8. NON-COMPETE [VOID UNDER INDIAN LAW — DELETED]
+No non-compete obligation shall apply to Vendor. Vendor retains the absolute right to provide similar services to any other client during and after this Agreement. [Section 27, Indian Contract Act, 1872 — agreements in restraint of trade are void.]
+
+9. ASSIGNMENT [SYMMETRIC]
+Neither Party may assign this Agreement without the prior written consent of the other Party. Such consent shall not be unreasonably withheld.
+
+10. FORCE MAJEURE [MUTUAL]
+Neither Party shall be liable for delays caused by events beyond their reasonable control (Force Majeure). Force Majeure relief applies equally to both delivery obligations AND payment obligations, and only for the duration of the Force Majeure event.
+
+11. DISPUTE RESOLUTION [MSME-PROTECTIVE]
+(a) Any dispute shall first be referred to the Micro and Small Enterprises Facilitation Council (MSEFC) under Section 18 of the MSMED Act, 2006, for conciliation.
+(b) If conciliation fails, the dispute shall proceed to arbitration under the MSEFC.
+(c) The Limitation Act, 1963 statutory periods shall apply. No contractual limitation shorter than the statutory period is valid.
+(d) Jurisdiction: Courts of [VENDOR'S city/state].
+
+12. GOVERNING LAW
+This Agreement shall be governed by the laws of India.
+
+13. ENTIRE AGREEMENT
+This Agreement constitutes the entire agreement and supersedes all prior discussions. Amendments require written signatures of both parties.
+
+IN WITNESS:
+Vendor (MSME):                          Client (Enterprise):
+Name: ___________________               Name: ___________________
+Designation: _______________            Designation: _______________
+Signature: _________________            Signature: _________________
+Date: ______________________            Date: ______________________
+
+────────────────────────────────────────────────────────
+GENERATED BY CONTRACTSENSE | contractsense.vercel.app
+This template is for reference only and does not constitute legal advice.
+────────────────────────────────────────────────────────

@@ -51,9 +51,9 @@ const translations: Record<string, any> = {
       { title: "Governing Law and Jurisdiction", text: "Specifies which state's laws apply to the contract and which courts have authority to hear disputes. MSMEs should negotiate for their local jurisdiction to avoid costly interstate litigation." }
     ],
     templates: [
-      { title: "Mutual Non-Disclosure (NDA)", desc: "A standard, balanced NDA protecting the confidential information of both the MSME and the Enterprise client.", format: "DOCX", size: "24 KB" },
-      { title: "MSME-Compliant Vendor Agreement", desc: "A master services agreement with built-in Section 15 payment terms and liability caps favoring the vendor.", format: "DOCX", size: "48 KB" },
-      { title: "IT & Software Services Agreement", desc: "Tailored for IT MSMEs, protecting IP rights and providing clear acceptance criteria to trigger the 45-day payment clock.", format: "DOCX", size: "52 KB" }
+      { title: "Mutual Non-Disclosure (NDA)", desc: "A standard, balanced NDA protecting the confidential information of both the MSME and the Enterprise client.", format: "TXT", size: "2 KB", filename: "mutual-nda.txt" },
+      { title: "MSME-Compliant Vendor Agreement", desc: "A master services agreement with built-in Section 15 payment terms and liability caps favoring the vendor.", format: "TXT", size: "3 KB", filename: "msme-vendor-agreement.txt" },
+      { title: "IT & Software Services Agreement", desc: "Tailored for IT MSMEs, protecting IP rights and providing clear acceptance criteria to trigger the 45-day payment clock.", format: "TXT", size: "3 KB", filename: "it-services-agreement.txt" }
     ]
   },
   hi: {
@@ -80,9 +80,9 @@ const translations: Record<string, any> = {
       { title: "शासी कानून और अधिकार क्षेत्र", text: "निर्दिष्ट करता है कि अनुबंध पर कौन से राज्य के कानून लागू होते हैं और किन अदालतों को विवाद सुनने का अधिकार है। MSME को महंगे अंतरराज्यीय मुकदमेबाजी से बचने के लिए अपने स्थानीय अधिकार क्षेत्र के लिए बातचीत करनी चाहिए।" }
     ],
     templates: [
-      { title: "म्यूचुअल नॉन-डिस्क्लोजर (NDA)", desc: "MSME और एंटरप्राइज क्लाइंट दोनों की गोपनीय जानकारी की रक्षा करने वाला एक मानक, संतुलित NDA।", format: "DOCX", size: "24 KB" },
-      { title: "MSME-अनुपालन विक्रेता समझौता", desc: "विक्रेता के पक्ष में अंतर्निहित धारा 15 भुगतान शर्तों और देयता कैप के साथ एक मास्टर सेवा समझौता।", format: "DOCX", size: "48 KB" },
-      { title: "आईटी और सॉफ्टवेयर सेवा समझौता", desc: "IT MSME के लिए तैयार, बौद्धिक संपदा अधिकारों की रक्षा करना और 45-दिन की भुगतान घड़ी को ट्रिगर करने के लिए स्पष्ट स्वीकृति मानदंड प्रदान करना।", format: "DOCX", size: "52 KB" }
+      { title: "म्यूचुअल नॉन-डिस्क्लोजर (NDA)", desc: "MSME और एंटरप्राइज क्लाइंट दोनों की गोपनीय जानकारी की रक्षा करने वाला एक मानक, संतुलित NDA।", format: "TXT", size: "2 KB", filename: "mutual-nda.txt" },
+      { title: "MSME-अनुपालन विक्रेता समझौता", desc: "विक्रेता के पक्ष में अंतर्निहित धारा 15 भुगतान शर्तों और देयता कैप के साथ एक मास्टर सेवा समझौता।", format: "TXT", size: "3 KB", filename: "msme-vendor-agreement.txt" },
+      { title: "आईटी और सॉफ्टवेयर सेवा समझौता", desc: "IT MSME के लिए तैयार, बौद्धिक संपदा अधिकारों की रक्षा करना और 45-दिन की भुगतान घड़ी को ट्रिगर करने के लिए स्पष्ट स्वीकृति मानदंड प्रदान करना।", format: "TXT", size: "3 KB", filename: "it-services-agreement.txt" }
     ]
   }
 };
@@ -109,6 +109,16 @@ export default function LegalResources({ uiLanguage = "en" }: Props) {
       case "templates": return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>;
     }
   };
+
+  const handleDownload = (filename: string) => {
+    const link = document.createElement('a');
+    link.href = `/templates/${filename}`;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
 
   return (
     <div style={{ maxWidth: 1080, margin: "0 auto", padding: "3rem", display: "flex", flexDirection: "column", gap: "2.5rem", minHeight: "100vh" }}>
@@ -235,7 +245,7 @@ export default function LegalResources({ uiLanguage = "en" }: Props) {
               {item.desc}
             </p>
             <button
-              onClick={() => alert("Downloading Secure Template...")}
+              onClick={() => handleDownload(item.filename)}
               style={{
                 width: "100%", padding: "0.75rem", marginTop: "0.5rem",
                 background: "var(--ink)", color: "var(--canvas)",
